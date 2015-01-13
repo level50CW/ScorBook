@@ -1,0 +1,16 @@
+// protected/data/auth.php
+
+return array(
+    'scorer' => array (
+        'type'=>CAuthItem::TYPE_ROLE,
+        'description'=>'scorer',
+        'bizRule'=>'',
+        'data'=>''
+   ),
+    'admins' => array (
+        'type'=>CAuthItem::TYPE_ROLE,
+        'description'=>'admin of the projec',
+        'bizRule'=>'',
+        'data'=>''
+   )
+);

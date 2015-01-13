@@ -1,0 +1,59 @@
+<?php
+/* @var $this UsersController */
+/* @var $model Users */
+/* @var $form CActiveForm */
+?>
+
+<div class="form">
+
+<?php $form=$this->beginWidget('CActiveForm', array(
+	'id'=>'users-form',
+	'enableAjaxValidation'=>false,
+)); ?>
+
+	<p class="note">Fields with <span class="required">*</span> are required.</p>
+
+	<?php echo $form->errorSummary($model); ?>
+
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'Firstname'); ?>
+		<?php echo $form->textField($model,'Firstname',array('size'=>45,'maxlength'=>45)); ?>
+		<?php echo $form->error($model,'Firstname'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'Lastname'); ?>
+		<?php echo $form->textField($model,'Lastname',array('size'=>45,'maxlength'=>45)); ?>
+		<?php echo $form->error($model,'Lastname'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'Email'); ?>
+		<?php echo $form->textField($model,'Email',array('size'=>60,'maxlength'=>150)); ?>
+		<?php echo $form->error($model,'Email'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'Password'); ?>
+		<?php echo $form->passwordField($model,'Password',array('size'=>35,'maxlength'=>35)); ?>
+		<?php echo $form->error($model,'Password'); ?>
+	</div>
+
+	<div class="row">
+		<?php echo $form->labelEx($model,'role'); ?>
+		<?php echo $form->dropDownList($model, 'role', 
+              array('scorer' => 'Scorer', 'admins' => 'Admins')); ?>
+			  
+		
+		
+		<?php echo $form->error($model,'role'); ?>
+	</div>
+
+	<div class="row buttons">
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Create' : 'Save'); ?>
+	</div>
+
+<?php $this->endWidget(); ?>
+
+</div><!-- form -->

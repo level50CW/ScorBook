@@ -1,0 +1,23 @@
+// protected/data/auth.php
+
+return array(
+    'scorer' => array (
+        'type'=>CAuthItem::TYPE_ROLE,
+        'description'=>'scorer',
+        'bizRule'=>'',
+        'data'=>''
+   ),
+   return array(
+       'roster' => array (
+           'type'=>CAuthItem::TYPE_ROLE,
+           'description'=>'roster',
+           'bizRule'=>'',
+           'data'=>''
+      ),
+    'admins' => array (
+        'type'=>CAuthItem::TYPE_ROLE,
+        'description'=>'admin of the projec',
+        'bizRule'=>'',
+        'data'=>''
+   )
+);

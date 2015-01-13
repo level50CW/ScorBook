@@ -1,0 +1,175 @@
+Update database zambezi 03-18-2013
+
+ALTER TABLE `zambezitool`.`zb_projects` ADD COLUMN `DATE` DATETIME NULL  AFTER `clientid` ;
+
+
+ALTER TABLE `zambezitool`.`zb_pages` ADD COLUMN `DATE` DATETIME NULL  AFTER `external` ;
+
+
+ALTER TABLE `zambezitool`.`zb_files` ADD COLUMN `DATE` DATETIME NULL  AFTER `page_id` ;
+
+
+
+jonathan 78842815248300fa6ae79f7776a5080a
+
+
+marshmallowfever@gmail.com     1af07b2b14feacdc1713f55f6b23f37f
+
+170.252.3.25
+
+save_path = /var/lib/php5
+name PHPSESSID
+path /
+
+fgutierrez@orbe.co.cr
+
+
+controladora 2
+
+ Software Version  : 09522000
+ Build Environment : lep
+
+BIST TE 0xB7 - SDRAM Configuration and Policy Memory Test
+    DIMM Slot 1 = 1024 MB
+    DIMM Slot 2 = 1024 MB
+    Total       = 2048 MB
+
+ RTC (TOY clock) test (BIST TE 0xbb)
+  RTC Memory test 
+
+ GLUE
+  Major.Minor Rev: 01.10
+
+
+
+ALTER TABLE `zambezitool`.`zb_clients` ADD COLUMN `DATE` DATETIME NULL  AFTER `name` ;
+
+
+
+
+
+w4WHNiWI5L1F
+
+
+    DIMM Slot 2 = 1024 MB
+    Total       = 2048 MB
+
+ RTC (TOY clock) test (BIST TE 0xbb)
+  RTC Memory test 
+
+ GLUE
+  Major.Minor Rev: 01.10
+
+ Images (code store) (BIST TE 0xbd)
+  T01:  boot image header EDC on flash
+  T02:  boot image EDC
+  T03:  func image header EDC
+----IMAGE FROM EMBEDDED----
+  T04:  func image EDC from flash (or card)
+  T05:  func image decompress from flash (or card) to SDRAM
+    - DECOMPRESS image 0104e580 bytes
+  T06:  func image EDC check from SDRAM
+  T07:  bootstrap image header EDC check from flash
+  T08:  bootstrap image EDC check
+ OFFLOAD PIC
+
+Offload General Info
+  rev         : 41
+  slot        : 02
+Battery System
+  this battery state      : 
+  this battery FW version : 50
+  other battery state     : 
+  battery capacity        : 188135 W-S [191]
+Power System
+  this power supply state : 
+  other power supply state: 
+  Riser FW version 6
+Reason for reset:  BOR
+
+This controller in  RIGHT  slot, other controller type = 0x1 (0x1b)
+
+
+->
+
+
+EVENT_INFO_CONTROLLER2_RUNNING
+
+TE  0.(00) - Pre-DOG Reporting 
+
+TE  2.(02) - HW code check 
+
+TE  4.(04) - PCI-e config 
+
+TE  6.(06) - Cache memory test 
+
+TE  8.(08) - Mirror test 
+
+TE 10.(0a) - Port 0 test (FP1)  
+
+TE 11.(0b) - Port 1 test (FP2)  
+
+TE 12.(0c) - Port 2 test (DP1A) 
+
+TE 13.(0d) - Port 3 test (DP1B) 
+
+TE 24.(18) - All ports test 
+
+TE 25.(19) - Port-to-port test 
+
+TE 26.(1a) - Tachyon func init 
+
+TE 28.(1c) - Offload PIC test 
+
+TE 31.(1f) - Revisions 
+MIST Complete.
+
+Completion Status: Passed
+ TE Mask: 97003d55 Completion Mask: 97003d55 BUD FLINK: 20e00000
+
+
+
+
+
+ALTER TABLE `zambezitool`.`zb_users` ADD COLUMN `DATE` DATETIME NULL  AFTER `expiration_date` ;
+
+
+
+u4zw6MtG65TWzQ
+
+4.5.07
+
+
+Felipe abellan
+Eduardo Araya
+
+
+Mantenimiento - Bases de datos - Webservices existentes - todo desde cero 
+
+
+Liga de Baseb pequenos
+16 equipos
+
+1 site por equipo 
+Disenos 
+1 mae en cada partido anotando
+
+1 mae batea -> strike, foul, que fue, a quien le cayo toda trayectoria
+
+
+  
+ye5UhQDtWe1vrV
+
+
+
+
+#	Name	PA	AB	R	H	2B	3B	HR	RBI	TB	BB	IBB	HP	SH	SF	SO	SB	CS	LOB	OE	FC	CO	DP	OBP	SLG	AVG	
+16	Jason Kubel	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	.000	.000	.000	
+	Totals	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	0	.000	.000	.000	
+
+
+
+
+
+LSG-0875 MAC109add56151c
+
