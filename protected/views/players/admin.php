@@ -18,7 +18,7 @@ $('.search-form form').submit(function(){
 
 ?>
 
-<h1>Rosters – Manage Players</h1>
+<h1>Team Rosters - Manage Players & Coaches</h1>
 <!--
 <?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
 <div class="search-form" style="display:none">
