@@ -93,7 +93,7 @@ class Games extends CActiveRecord
     {
         return array(
             'idgame' => 'Idgame',
-            'location' => 'Location',
+            'location' => 'Stadium',
             'season' => 'Season',
             'date' => 'Date Time',
             'comment' => 'Comment',
@@ -125,18 +125,18 @@ class Games extends CActiveRecord
 
         if (Yii::app()->session['role'] == 'admins') {
 
-        $criteria->compare('idgame',$this->idgame);
-        $criteria->compare('location',$this->location,true);
-        $criteria->compare('season',$this->season,true);
-        $criteria->compare('date',$this->date,true);
-        $criteria->compare('comment',$this->comment,true);
-        $criteria->compare('attendance',$this->attendance);
-        $criteria->compare('weather',$this->weather,true);
-        $criteria->compare('temperature',$this->temperature,true);
-        $criteria->compare('Teams_idteam_visiting',$this->Teams_idteam_visiting);
-        $criteria->compare('Teams_idteam_home',$this->Teams_idteam_home);
-        $criteria->compare('League_idleague_visiting',$this->League_idleague_visiting);
-        $criteria->compare('League_idleague_home',$this->League_idleague_home);
+            $criteria->compare('idgame',$this->idgame);
+            $criteria->compare('location',$this->location,true);
+            $criteria->compare('season',$this->season,true);
+            $criteria->compare('date',$this->dateFromAmericanFormat($this->date, false),true);
+            $criteria->compare('comment',$this->comment,true);
+            $criteria->compare('attendance',$this->attendance);
+            $criteria->compare('weather',$this->weather,true);
+            $criteria->compare('temperature',$this->temperature,true);
+            $criteria->compare('Teams_idteam_visiting',$this->Teams_idteam_visiting);
+            $criteria->compare('Teams_idteam_home',$this->Teams_idteam_home);
+            $criteria->compare('League_idleague_visiting',$this->League_idleague_visiting);
+            $criteria->compare('League_idleague_home',$this->League_idleague_home);
 
         } else if (Yii::app()->session['role'] == 'roster') {
 
@@ -145,7 +145,7 @@ class Games extends CActiveRecord
             $criteria->compare('idgame',$this->idgame);
             $criteria->compare('location',$this->location,true);
             $criteria->compare('season',$this->season,true); 
-            $criteria->compare('date',$this->date,true);
+            $criteria->compare('date',$this->dateFromAmericanFormat($this->date, false),true);
             $criteria->compare('comment',$this->comment,true);
             $criteria->compare('attendance',$this->attendance);
             $criteria->compare('weather',$this->weather,true);
@@ -231,5 +231,48 @@ class Games extends CActiveRecord
         return new CActiveDataProvider($this, array(
             'criteria'=>$criteria,
         ));
+    }
+
+    protected function dateToAmericanFormat($date, $includeTime = true)
+    {
+        if (empty($date)) {
+            return $date;
+        }
+        $formatFrom = 'Y-m-d' . ($includeTime ? '  H:i:s' : '');
+        $dateObj = DateTime::createFromFormat($formatFrom, $date);
+        if ($dateObj) {
+            $formatTo = 'm-d-Y' . ($includeTime ? '  H:i:s' : '');
+            $date = $dateObj->format($formatTo);
+        }
+        return $date;
+    }
+
+    protected function afterFind()
+    {
+        // convert to display format
+        $this->date = $this->dateToAmericanFormat($this->date);
+        parent::afterFind();
+    }
+
+    protected function dateFromAmericanFormat($date, $includeTime = true)
+    {
+        if (empty($date)) {
+            return $date;
+        }
+        $formatFrom = 'm-d-Y' . ($includeTime ? '  H:i:s' : '');
+        $dateObj = DateTime::createFromFormat($formatFrom, $date);
+        if ($dateObj) {
+            $formatTo = 'Y-m-d' . ($includeTime ? '  H:i:s' : '');
+            $date = $dateObj->format($formatTo);
+        }
+        return $date;
+    }
+
+    protected function beforeValidate()
+    {
+        // convert to storage format
+        // Not used yet as validation for date is not set in current implementation
+        $this->date = $this->dateFromAmericanFormat($this->date);
+        return parent::beforeValidate ();
     }
 }
