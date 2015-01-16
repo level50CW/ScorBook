@@ -78,9 +78,6 @@ if (Yii::app()->session['role'] == 'admins') {
 
 
         <?php
-        $date = new DateTime($model->date);
-        $model->date = date_format($date, 'Y-m-d H:i'); 
-
         if( isset($disabled) && $disabled ){
             echo $form->textField($model, 'date', array_merge($disabledArray,array('size' => 60, 'maxlength' => 200)));
         }
@@ -156,7 +153,7 @@ if (Yii::app()->session['role'] == 'admins') {
     </div>
 </div>
 <div class="rowdiv">
-    <div class="green"> Location <span class="required">*</span></div>
+    <div class="green"> Stadium <span class="required">*</span></div>
     <div class="gray">
         <?php
             $tmpLocList = CHtml::listData(Teams::model()->findAll(),'location','idteam');
