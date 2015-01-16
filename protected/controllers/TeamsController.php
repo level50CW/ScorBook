@@ -179,12 +179,24 @@ class TeamsController extends Controller
 	{
 		$model=new Teams('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Teams']))
-			$model->attributes=$_GET['Teams'];
+		
+		$this->updateCurrentState('Teams', $model);
 
 		$this->render('admin',array(
 			'model'=>$model,
 		));
+	}
+	
+	private function updateCurrentState($controllerName, $model)
+	{
+		if(isset($_GET[$controllerName]))
+			Yii::app()->session[$controllerName.'_attributes'] = $_GET[$controllerName];
+		
+		Yii::app()->session[$controllerName.'_page'] = $_GET[$controllerName.'_page'];
+		
+		$attr = Yii::app()->session[$controllerName.'_attributes'];
+		if(isset($attr))
+			$model->attributes=$attr;
 	}
 
 	/**

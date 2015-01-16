@@ -128,12 +128,12 @@ if( isset($disabled) && $disabled ){
 <br />
     <div class="rowdiv">
         <?php if( isset($disabled) && $disabled ){
-            echo CHtml::linkButton('Close',array('submit'=>array('teams/admin'),'class'=>'save-form-btn'));
+            echo CHtml::linkButton('Close',array('submit'=>array('teams/admin','Teams_page'=>isset(Yii::app()->session['Teams_page']) ? Yii::app()->session['Teams_page'] : 1),'class'=>'save-form-btn'));
         }
         else{
             echo CHtml::submitButton($model->isNewRecord ? 'Add' : 'Update',array("class"=>"save-form-btn",'style'=>'margin-top: 0;'));
             echo "&nbsp;";
-            echo CHtml::linkButton('Cancel',array('submit'=>array('teams/admin'),'class'=>'save-form-btn'));
+            echo CHtml::linkButton('Cancel',array('submit'=>array('teams/admin','Teams_page'=>isset(Yii::app()->session['Teams_page']) ? Yii::app()->session['Teams_page'] : 1),'class'=>'save-form-btn'));
         } ?>
     </div>
 

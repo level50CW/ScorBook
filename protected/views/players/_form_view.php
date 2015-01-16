@@ -205,5 +205,9 @@ $disabledArray= array(
 </div><!-- form -->
 <br/>
 <div class="rowdiv">
-        <?php echo CHtml::linkButton('Close',array('submit'=>array('players/admin'),'class'=>'save-form-btn'));?>
+        <?php echo CHtml::linkButton('Close',array(
+			'submit'=>array(
+				'players/admin',
+				'Players_page'=>isset(Yii::app()->session['Players_page']) ? Yii::app()->session['Players_page'] : 1),
+			'class'=>'save-form-btn'));?>
 </div>
