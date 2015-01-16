@@ -88,6 +88,7 @@ if (Yii::app()->session['role'] == 'admins') {
                 'options' => array(
                     'showOn'=>'focus',
                     'timeFormat'=>'hh:mm',
+                    'dateFormat' => 'mm-dd-yy'
                 ),
             ));
         }
