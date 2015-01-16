@@ -83,7 +83,7 @@ class Teams extends CActiveRecord
         return array(
             'idteam' => 'Idteam',
             'Name' => 'Team Name',
-            'location' => 'Location',
+            'location' => 'Stadium',
             'League_idleague' => 'League Idleague',
             'uploadfile' => 'uploadfile',
         );

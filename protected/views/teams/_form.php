@@ -61,7 +61,7 @@ if( isset($disabled) && $disabled ){
     </div>
 
     <div class="rowdiv">
-        <div class="green"  >Location</div>
+        <div class="green"  >Stadium</div>
             <div class="gray" >
         <?php echo $form->textField($model,'location',array_merge($disabledArray,array('size'=>60,'maxlength'=>100))); ?>
         <?php echo $form->error($model,'location'); ?>
