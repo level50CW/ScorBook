@@ -1,6 +1,6 @@
 <?php
 
-class TeamsController extends Controller
+class LeagueController extends Controller
 {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
@@ -33,7 +33,7 @@ class TeamsController extends Controller
 			),
 			array('allow', // allow authenticated user to perform 'create' and 'update' actions
 				'actions'=>array('create','update'),
-				'users'=>array('@'),
+				'roles'=>array('admins'),
 			),
 			array('allow', // allow admin user to perform 'admin' and 'delete' actions
 				'actions'=>array('admin','delete'),
@@ -62,34 +62,16 @@ class TeamsController extends Controller
 	 */
 	public function actionCreate()
 	{
-		$model=new Teams;
+		$model=new League;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if(isset($_POST['Teams']))
+		if(isset($_POST['League']))
 		{
-			$model->attributes=$_POST['Teams'];
-			$model->RGB = $_POST['RGB'];
-			$model->logo = '';
-
-			$file = CUploadedFile::getInstance($model,'uploadfile');
-
-			echo Yii::trace(CVarDumper::dumpAsString( $file),'imagevar');
-
-			if($model->validate()){
-				$model->save();
-				if ($file->name != "") {
-					$model->logo = 'images/team_logo/'.$model->primaryKey.$file->name;
-					$model->thumb = $model->primaryKey.$file->name;
-					$file->saveAs($model->logo);
-
-				}
-				$model->save();
-				$this->redirect(array('view','id'=>$model->idteam));
-			}
-
-
+			$model->attributes=$_POST['League'];
+			if($model->save())
+				$this->redirect(array('view','id'=>$model->idleague));
 		}
 
 		$this->render('create',array(
@@ -108,34 +90,12 @@ class TeamsController extends Controller
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
-		$logoOri = $model->logo;
 
-		if(isset($_POST['Teams']))
+		if(isset($_POST['League']))
 		{
-
-			$model->attributes=$_POST['Teams'];
-			$model->uploadfile = $_POST['Teams']['uploadfile'];
-			$model->RGB = $_POST['RGB'];
-			$model->logo = '';
-
-
-			$file = CUploadedFile::getInstance($model,'uploadfile');
-
-			echo Yii::trace(CVarDumper::dumpAsString( $file),'imagevar');
-
-			if ($model->validate()) {
-
-				if ($file && ($file->name != "")) {
-
-					$model->logo = 'images/team_logo/'.$model->primaryKey.$file->name;
-					$model->thumb = $model->primaryKey.$file->name;
-					if ($logoOri) unlink($logoOri);
-					$file->saveAs($model->logo);
-				}
-				$model->save();
-				$this->redirect(array('view','id'=>$model->idteam));
-			}
-
+			$model->attributes=$_POST['League'];
+			if($model->save())
+				$this->redirect(array('view','id'=>$model->idleague));
 		}
 
 		$this->render('update',array(
@@ -150,11 +110,7 @@ class TeamsController extends Controller
 	 */
 	public function actionDelete($id)
 	{
-		$model = $this->loadModel($id);
-
-		if ($model->logo) unlink($model->logo);
-
-		$model->delete();
+		$this->loadModel($id)->delete();
 
 		// if AJAX request (triggered by deletion via admin grid view), we should not redirect the browser
 		if(!isset($_GET['ajax']))
@@ -166,7 +122,7 @@ class TeamsController extends Controller
 	 */
 	public function actionIndex()
 	{
-		$dataProvider=new CActiveDataProvider('Teams');
+		$dataProvider=new CActiveDataProvider('League');
 		$this->render('index',array(
 			'dataProvider'=>$dataProvider,
 		));
@@ -177,10 +133,10 @@ class TeamsController extends Controller
 	 */
 	public function actionAdmin()
 	{
-		$model=new Teams('search');
+		$model=new League('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Teams']))
-			$model->attributes=$_GET['Teams'];
+		if(isset($_GET['League']))
+			$model->attributes=$_GET['League'];
 
 		$this->render('admin',array(
 			'model'=>$model,
@@ -191,12 +147,12 @@ class TeamsController extends Controller
 	 * Returns the data model based on the primary key given in the GET variable.
 	 * If the data model is not found, an HTTP exception will be raised.
 	 * @param integer $id the ID of the model to be loaded
-	 * @return Teams the loaded model
+	 * @return League the loaded model
 	 * @throws CHttpException
 	 */
 	public function loadModel($id)
 	{
-		$model=Teams::model()->findByPk($id);
+		$model=League::model()->findByPk($id);
 		if($model===null)
 			throw new CHttpException(404,'The requested page does not exist.');
 		return $model;
@@ -204,11 +160,11 @@ class TeamsController extends Controller
 
 	/**
 	 * Performs the AJAX validation.
-	 * @param Teams $model the model to be validated
+	 * @param League $model the model to be validated
 	 */
 	protected function performAjaxValidation($model)
 	{
-		if(isset($_POST['ajax']) && $_POST['ajax']==='teams-form')
+		if(isset($_POST['ajax']) && $_POST['ajax']==='league-form')
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();

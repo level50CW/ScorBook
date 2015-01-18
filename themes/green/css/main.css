@@ -1449,6 +1449,24 @@ color: #680102;
     background-color: #fff;
 }
 
+#league-form input[type="text"],
+#league-form input[type="password"],
+#league-form .ui-autocomplete-input,
+#league-form textarea,
+#league-form select,
+#league-form .uneditable-input {
+	display: inline-block;
+	padding: 4px;
+	font-size: 13px;
+	line-height: 18px;
+	color: #000 !important;
+	border: 1px solid #000 !important;
+	-webkit-border-radius: 3px;
+	-moz-border-radius: 3px;
+	border-radius: 3px;
+	background-color: #fff;
+}
+
 #games-form input[type="text"],
 #games-form input[type="password"],
 #games-form .ui-autocomplete-input,

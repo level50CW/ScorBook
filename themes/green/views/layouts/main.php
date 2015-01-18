@@ -208,6 +208,8 @@ function finalizeGame(){
                             'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
                             array('label'=>'Manage Divisions', 'url'=>array('division/admin')),
                             array('label'=>'Add New Division', 'url'=>array('division/create')),
+                            array('label'=>'Manage Leagues', 'url'=>array('league/admin')),
+                            array('label'=>'Add New League', 'url'=>array('league/create')),
                         )),
                         array('label'=>'Teams', 
                             'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(

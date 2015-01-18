@@ -15,7 +15,7 @@
 
 
 <br/>
-<div class="blacktitle"><?php echo isset($type) ? $type: 'Division'; ?></div>
+<div class="blacktitle">Division</div>
 <div class="rowdiv">
 
     <div class="green" style="padding: 10px 0;"> Name</div>
