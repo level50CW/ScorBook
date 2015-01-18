@@ -1,6 +1,6 @@
 <?php
-/* @var $this LeagueController */
-/* @var $model League */
+/* @var $this DivisionController */
+/* @var $model Division */
 
 /*Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
@@ -8,7 +8,7 @@ $('.search-button').click(function(){
 	return false;
 });
 $('.search-form form').submit(function(){
-	$('#league-grid').yiiGridView('update', {
+	$('#division-grid').yiiGridView('update', {
 		data: $(this).serialize()
 	});
 	return false;
@@ -22,10 +22,10 @@ $('.search-form form').submit(function(){
 
 
 <?php $this->widget('zii.widgets.grid.CGridView', array(
-	'id'=>'league-grid',
+	'id'=>'division-grid',
 	'dataProvider'=>$model->search(),
 	'columns'=>array(
-		//'idleague',
+		//'iddivision',
 		'Name',
 		array(
 			'class'=>'CButtonColumn',

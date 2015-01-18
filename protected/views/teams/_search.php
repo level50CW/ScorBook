@@ -19,11 +19,11 @@
 
 	<div class="row">
 		<? 
-		$league = new League;
+		$division = new Division;
 		
 		?>
-		<?php echo $form->label($league,'League'); ?>
-		<?php echo $form->textField($league,'Name'); ?>
+		<?php echo $form->label($division,'Division'); ?>
+		<?php echo $form->textField($division,'Name'); ?>
 	</div>
 
 	<div class="row buttons">

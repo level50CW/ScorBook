@@ -33,19 +33,19 @@ $team_selected = Yii::app()->session['team'];
 
 if (Yii::app()->session['role'] == 'admins') {
 
-    $leagues = League::model()->findAll(array("condition" => "type='division'"));
-    $leaguesListHome = CHtml::ListData($leagues, 'idleague', 'Name');
+    $divisions = Division::model()->findAll(array("condition" => "type='division'"));
+    $divisionsListHome = CHtml::ListData($divisions, 'iddivision', 'Name');
 
-    $leagues = League::model()->findAll(array("condition" => "type='division'"));
-    $leaguesList = CHtml::ListData($leagues, 'idleague', 'Name');
+    $divisions = Division::model()->findAll(array("condition" => "type='division'"));
+    $divisionsList = CHtml::ListData($divisions, 'iddivision', 'Name');
 
 }else if (Yii::app()->session['role'] == 'roster') {
 
-    $leagues = League::model()->findAllBySql("SELECT l.idleague,l.Name FROM League as l INNER JOIN Teams t ON(l.idleague = t.League_idleague) WHERE l.type = 'division' AND idteam=:a",array(':a' => $team_selected,));
-    $leaguesListHome = CHtml::ListData($leagues, 'idleague', 'Name');
+    $divisions = Division::model()->findAllBySql("SELECT l.iddivision,l.Name FROM Division as l INNER JOIN Teams t ON(l.iddivision = t.Division_iddivision) WHERE l.type = 'division' AND idteam=:a",array(':a' => $team_selected,));
+    $divisionsListHome = CHtml::ListData($divisions, 'iddivision', 'Name');
 
-    $leagues = League::model()->findAll(array("condition" => "type='division'"));
-    $leaguesList = CHtml::ListData($leagues, 'idleague', 'Name');
+    $divisions = Division::model()->findAll(array("condition" => "type='division'"));
+    $divisionsList = CHtml::ListData($divisions, 'iddivision', 'Name');
 
 }
 
@@ -121,11 +121,11 @@ if (Yii::app()->session['role'] == 'admins') {
     <div class="green"> Division</div>
     <div class="gray">
         <?
-        echo $form->dropDownList($model, 'League_idleague_home', $leaguesListHome,
+        echo $form->dropDownList($model, 'Division_iddivision_home', $divisionsListHome,
             array_merge($disabledArray,
             array(
                 'style' => 'width:216px !important; text-align:center',
-                'empty' => 'Select the league',
+                'empty' => 'Select the division',
                 'ajax' => array(
                     'type' => 'POST', //request type
                     'url' => CController::createUrl('games/dynamicteamsHome'), //url to call.
@@ -135,7 +135,7 @@ if (Yii::app()->session['role'] == 'admins') {
                     //leave out the data key to pass all form values through
                 ))));
         ?>
-        <?php echo $form->error($model, 'League_idleague_home'); ?>
+        <?php echo $form->error($model, 'Division_iddivision_home'); ?>
     </div>
 </div>
 
@@ -164,11 +164,11 @@ if (Yii::app()->session['role'] == 'admins') {
     <div class="green"> Division</div>
     <div class="gray">
         <?
-        echo $form->dropDownList($model, 'League_idleague_visiting', $leaguesList,
+        echo $form->dropDownList($model, 'Division_iddivision_visiting', $divisionsList,
             array_merge($disabledArray,
             array(
                  'style' => 'width:216px !important; text-align:center',
-                'empty' => 'Select the league',
+                'empty' => 'Select the division',
                 'ajax' => array(
                     'type' => 'POST', //request type
                     'url' => CController::createUrl('games/dynamicteamsVisiting'), //url to call.
@@ -178,7 +178,7 @@ if (Yii::app()->session['role'] == 'admins') {
                     //leave out the data key to pass all form values through
                 ))));
         ?>
-        <?php echo $form->error($model, 'League_idleague_visiting'); ?>
+        <?php echo $form->error($model, 'Division_iddivision_visiting'); ?>
     </div>
 </div>
 

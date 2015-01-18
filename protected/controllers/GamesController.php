@@ -112,8 +112,8 @@ class GamesController extends Controller
 			if($model->save()){
 				Yii::app()->user->setState('idteamhome', $_POST['Games']['Teams_idteam_home']);
 				Yii::app()->user->setState('idteamvisiting', $_POST['Games']['Teams_idteam_visiting']);
-				Yii::app()->user->setState('idleaguehome', $_POST['Games']['League_idleague_home']);
-				Yii::app()->user->setState('idleaguevisiting', $_POST['Games']['League_idleague_visiting']);
+				Yii::app()->user->setState('iddivisionhome', $_POST['Games']['Division_iddivision_home']);
+				Yii::app()->user->setState('iddivisionvisiting', $_POST['Games']['Division_iddivision_visiting']);
 				//echo Yii::trace(CVarDumper::dumpAsString($model->idgame),'vardadd1');
 				Yii::app()->user->setState('idgame', $model->idgame);
 				
@@ -148,8 +148,8 @@ class GamesController extends Controller
 			if($model->save())
 				Yii::app()->user->setState('idteamhome', $_POST['Games']['Teams_idteam_home']);
 				Yii::app()->user->setState('idteamvisiting', $_POST['Games']['Teams_idteam_visiting']);
-				Yii::app()->user->setState('idleaguehome', $_POST['Games']['League_idleague_home']);
-				Yii::app()->user->setState('idleaguevisiting', $_POST['Games']['League_idleague_visiting']);
+				Yii::app()->user->setState('iddivisionhome', $_POST['Games']['Division_iddivision_home']);
+				Yii::app()->user->setState('iddivisionvisiting', $_POST['Games']['Division_iddivision_visiting']);
 				//echo Yii::trace(CVarDumper::dumpAsString($model->idgame),'vardadd1');
 				Yii::app()->user->setState('idgame', $model->idgame);
 				
@@ -280,8 +280,8 @@ class GamesController extends Controller
 	{
 
         if (Yii::app()->session['role'] == 'admins') {
-//array(':League_idleague'=>(int) $_POST['Games']['League_idleague_home'])
-            $data=Teams::model()->findAll(array("condition" => "League_idleague = ".(int) $_POST['Games']['League_idleague_home'],'order' => 'Name'));
+//array(':Division_iddivision'=>(int) $_POST['Games']['Division_iddivision_home'])
+            $data=Teams::model()->findAll(array("condition" => "Division_iddivision = ".(int) $_POST['Games']['Division_iddivision_home'],'order' => 'Name'));
 
 
         }else if (Yii::app()->session['role'] == 'roster') {
@@ -302,8 +302,8 @@ class GamesController extends Controller
 	public function actiondynamicteamsVisiting()
 	{
 		
-	    $data=Teams::model()->findAll('League_idleague=:League_idleague', 
-	                  array(':League_idleague'=>(int) $_POST['Games']['League_idleague_visiting']));
+	    $data=Teams::model()->findAll('Division_iddivision=:Division_iddivision',
+	                  array(':Division_iddivision'=>(int) $_POST['Games']['Division_iddivision_visiting']));
 	 
 	    $data=CHtml::listData($data,'idteam','Name');
 	    foreach($data as $value=>$name)

@@ -65,7 +65,7 @@ class PrincipalController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider=new CActiveDataProvider('League');
+        $dataProvider=new CActiveDataProvider('Division');
         $this->render('index',array(
             'dataProvider'=>$dataProvider,
         ));
@@ -76,10 +76,10 @@ class PrincipalController extends Controller
      */
     public function actionAdmin()
     {
-        $model=new League('search');
+        $model=new Division('search');
         $model->unsetAttributes();  // clear any default values
-        if(isset($_GET['League']))
-            $model->attributes=$_GET['League'];
+        if(isset($_GET['Division']))
+            $model->attributes=$_GET['Division'];
 
         $this->render('admin',array(
             'model'=>$model,
@@ -90,12 +90,12 @@ class PrincipalController extends Controller
      * Returns the data model based on the primary key given in the GET variable.
      * If the data model is not found, an HTTP exception will be raised.
      * @param integer $id the ID of the model to be loaded
-     * @return League the loaded model
+     * @return Division the loaded model
      * @throws CHttpException
      */
     /*public function loadModel($id)
     {
-        $model=League::model()->findByPk($id);
+        $model=Division::model()->findByPk($id);
         if($model===null)
             throw new CHttpException(404,'The requested page does not exist.');
         return $model;
@@ -103,11 +103,11 @@ class PrincipalController extends Controller
 
     /**
      * Performs the AJAX validation.
-     * @param League $model the model to be validated
+     * @param Division $model the model to be validated
      */
     protected function performAjaxValidation($model)
     {
-        if(isset($_POST['ajax']) && $_POST['ajax']==='league-form')
+        if(isset($_POST['ajax']) && $_POST['ajax']==='division-form')
         {
             echo CActiveForm::validate($model);
             Yii::app()->end();

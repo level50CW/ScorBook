@@ -1,6 +1,6 @@
 <?php
-/* @var $this LeagueController */
-/* @var $model League */
+/* @var $this DivisionController */
+/* @var $model Division */
 ?>
 
 <h1>Divisions – Update <?php echo $model->Name; ?></h1>

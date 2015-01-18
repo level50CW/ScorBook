@@ -206,8 +206,8 @@ function finalizeGame(){
                         )),
                         array('label'=>'Divisions', 
                             'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
-                            array('label'=>'Manage Divisions', 'url'=>array('league/admin')),
-                            array('label'=>'Add New Division', 'url'=>array('league/create')),
+                            array('label'=>'Manage Divisions', 'url'=>array('division/admin')),
+                            array('label'=>'Add New Division', 'url'=>array('division/create')),
                         )),
                         array('label'=>'Teams', 
                             'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
@@ -227,7 +227,6 @@ function finalizeGame(){
                         array('label'=>'Settings',
                               'submenuOptions'=>array('class'=>'nav-sub'),
                               'items'=>array(
-                                array('label'=>'League', 'url'=>array('league/createl')),
                                 array(
                                     'label' => 'Logout',
                                     'url' => array('site/logout'),

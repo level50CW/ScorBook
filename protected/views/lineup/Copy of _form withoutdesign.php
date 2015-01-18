@@ -14,8 +14,8 @@ if ($_GET['team']) {
 
 } else $model->Teams_idteam = Yii::app()->user->getState('idteamhome');
 
-//Yii::app()->user->setState('idleaguehome', $_POST['Games']['League_idleague_home']);
-//Yii::app()->user->setState('idleaguevisiting', $_POST['Games']['League_idleague_visiting']);
+//Yii::app()->user->setState('iddivisionhome', $_POST['Games']['Division_iddivision_home']);
+//Yii::app()->user->setState('iddivisionvisiting', $_POST['Games']['Division_iddivision_visiting']);
 
 $model->Games_idgame = Yii::app()->user->getState('idgame');
 

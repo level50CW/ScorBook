@@ -1,13 +1,13 @@
 <?php
-/* @var $this LeagueController */
-/* @var $model League */
+/* @var $this DivisionController */
+/* @var $model Division */
 /* @var $form CActiveForm */
 ?>
 
 <div class="form">
 
 <?php $form=$this->beginWidget('CActiveForm', array(
-	'id'=>'league-form',
+	'id'=>'division-form',
 	'enableAjaxValidation'=>false,
 )); ?>
 
@@ -26,8 +26,8 @@
 </div>
 <br/>
 	<div class="rowdiv">
-		<?php echo CHtml::submitButton($model->isNewRecord ? 'Add' : 'Update',array("class"=>"save-form-btn",'style'=>'margin-top: 0;','onClick'=> $model->isNewRecord ? 'alert("Division "+$(\'input[name="League[Name]"]\').val()+" successfully Added.")' : '')); ?>
-		<?php echo CHtml::linkButton('Cancel',array('submit'=>array(isset($type) ? 'players/admin':'league/admin'),'class'=>'save-form-btn'));?>
+		<?php echo CHtml::submitButton($model->isNewRecord ? 'Add' : 'Update',array("class"=>"save-form-btn",'style'=>'margin-top: 0;','onClick'=> $model->isNewRecord ? 'alert("Division "+$(\'input[name="Division[Name]"]\').val()+" successfully Added.")' : '')); ?>
+		<?php echo CHtml::linkButton('Cancel',array('submit'=>array(isset($type) ? 'players/admin':'division/admin'),'class'=>'save-form-btn'));?>
 	</div>
 
 <?php $this->endWidget(); ?>

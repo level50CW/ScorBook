@@ -38,12 +38,12 @@
 	<?php echo CHtml::encode($data->Teams_idteam_home); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('League_idleague_visiting')); ?>:</b>
-	<?php echo CHtml::encode($data->League_idleague_visiting); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('Division_iddivision_visiting')); ?>:</b>
+	<?php echo CHtml::encode($data->Division_iddivision_visiting); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('League_idleague_home')); ?>:</b>
-	<?php echo CHtml::encode($data->League_idleague_home); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('Division_iddivision_home')); ?>:</b>
+	<?php echo CHtml::encode($data->Division_iddivision_home); ?>
 	<br />
 
 	*/ ?>

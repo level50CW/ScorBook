@@ -74,8 +74,8 @@ $('.search-form form').submit(function(){
 		/*
 		'Teams_idteam_visiting',
 		'Teams_idteam_home',
-		'League_idleague_visiting',
-		'League_idleague_home',
+		'Division_iddivision_visiting',
+		'Division_iddivision_home',
 		*/
 		array(
 			'class'=>'CButtonColumn',

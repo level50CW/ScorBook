@@ -12,15 +12,15 @@
  * @property string $weather
  * @property integer $Teams_idteam_visiting
  * @property integer $Teams_idteam_home
- * @property integer $League_idleague_visiting
- * @property integer $League_idleague_home
+ * @property integer $Division_iddivision_visiting
+ * @property integer $Division_iddivision_home
  *
  * The followings are the available model relations:
  * @property GameOfficials[] $gameOfficials
  * @property Teams $teamsIdteamVisiting
  * @property Teams $teamsIdteamHome
- * @property League $leagueIdleagueVisiting
- * @property League $leagueIdleagueHome
+ * @property Division $divisionIddivisionVisiting
+ * @property Division $divisionIddivisionHome
  * @property Lineup[] $lineups
  */
 class Games extends CActiveRecord
@@ -53,8 +53,8 @@ class Games extends CActiveRecord
         return array(
             
 
-            array('Teams_idteam_visiting, Teams_idteam_home, League_idleague_visiting, League_idleague_home,season', 'required'),
-            array('idgame, attendance, Teams_idteam_visiting, Teams_idteam_home, League_idleague_visiting, League_idleague_home, Users_iduser, status, regulation, last_inning, temperature', 'numerical', 'integerOnly'=>true),
+            array('Teams_idteam_visiting, Teams_idteam_home, Division_iddivision_visiting, Division_iddivision_home,season', 'required'),
+            array('idgame, attendance, Teams_idteam_visiting, Teams_idteam_home, Division_iddivision_visiting, Division_iddivision_home, Users_iduser, status, regulation, last_inning, temperature', 'numerical', 'integerOnly'=>true),
             array('location, comment, Plateump, Fieldump1, Fieldump2, Fieldump3, Fieldump4, Fieldump5 ', 'length', 'max'=>200),
             array('weather', 'length', 'max'=>150),
             array('temperature', 'length', 'max'=>4),
@@ -63,8 +63,8 @@ class Games extends CActiveRecord
             array('date, end_date', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('idgame, location, date, comment, attendance, weather, temperature, Teams_idteam_visiting, Teams_idteam_home, League_idleague_visiting, League_idleague_home, season', 'safe', 'on'=>'search'),
-            array('idgame, location, date, comment, attendance, weather, temperature, Teams_idteam_visiting, Teams_idteam_home, League_idleague_visiting, League_idleague_home, season', 'safe', 'on'=>'searchTodayGames'),
+            array('idgame, location, date, comment, attendance, weather, temperature, Teams_idteam_visiting, Teams_idteam_home, Division_iddivision_visiting, Division_iddivision_home, season', 'safe', 'on'=>'search'),
+            array('idgame, location, date, comment, attendance, weather, temperature, Teams_idteam_visiting, Teams_idteam_home, Division_iddivision_visiting, Division_iddivision_home, season', 'safe', 'on'=>'searchTodayGames'),
         );
     }
 
@@ -79,8 +79,8 @@ class Games extends CActiveRecord
             'gameOfficials' => array(self::HAS_MANY, 'GameOfficials', 'Games_idgame'),
             'teamsIdteamVisiting' => array(self::BELONGS_TO, 'Teams', 'Teams_idteam_visiting'),
             'teamsIdteamHome' => array(self::BELONGS_TO, 'Teams', 'Teams_idteam_home'),
-            'leagueIdleagueVisiting' => array(self::BELONGS_TO, 'League', 'League_idleague_visiting','on'=>'leagueIdleagueVisiting.type="division"'),
-            'leagueIdleagueHome' => array(self::BELONGS_TO, 'League', 'League_idleague_home','on'=>'leagueIdleagueVisiting.type="division"'),
+            'divisionIddivisionVisiting' => array(self::BELONGS_TO, 'Division', 'Division_iddivision_visiting','on'=>'divisionIddivisionVisiting.type="division"'),
+            'divisionIddivisionHome' => array(self::BELONGS_TO, 'Division', 'Division_iddivision_home','on'=>'divisionIddivisionVisiting.type="division"'),
             'usersiduser' => array(self::BELONGS_TO, 'Users', 'Users_iduser'),
             'lineups' => array(self::HAS_MANY, 'Lineup', 'Games_idgame'),
         );
@@ -102,12 +102,12 @@ class Games extends CActiveRecord
             'temperature'=>'temperature',
             'Teams_idteam_visiting' => 'Visiting team',
             'Teams_idteam_home' => 'Home team',
-            'League_idleague_visiting' => 'Visiting league',
-            'League_idleague_home' => 'Home league',
+            'Division_iddivision_visiting' => 'Visiting division',
+            'Division_iddivision_home' => 'Home division',
             'Teams_name_team_visiting' => 'Visiting team',
             'Teams_name_team_home' => 'Home team',
-            'League_name_league_visiting' => 'Visiting league',
-            'League_name_league_home' => 'Home league',
+            'Division_name_division_visiting' => 'Visiting division',
+            'Division_name_division_home' => 'Home division',
             'Users_iduser' => 'Scorekeeper',
         );
     }
@@ -135,8 +135,8 @@ class Games extends CActiveRecord
             $criteria->compare('temperature',$this->temperature,true);
             $criteria->compare('Teams_idteam_visiting',$this->Teams_idteam_visiting);
             $criteria->compare('Teams_idteam_home',$this->Teams_idteam_home);
-            $criteria->compare('League_idleague_visiting',$this->League_idleague_visiting);
-            $criteria->compare('League_idleague_home',$this->League_idleague_home);
+            $criteria->compare('Division_iddivision_visiting',$this->Division_iddivision_visiting);
+            $criteria->compare('Division_iddivision_home',$this->Division_iddivision_home);
 
         } else if (Yii::app()->session['role'] == 'roster') {
 
@@ -152,8 +152,8 @@ class Games extends CActiveRecord
             $criteria->compare('temperature',$this->temperature,true);
             $criteria->compare('Teams_idteam_visiting',$this->Teams_idteam_visiting);
             $criteria->compare('Teams_idteam_home',$teamid);
-            $criteria->compare('League_idleague_visiting',$this->League_idleague_visiting);
-            $criteria->compare('League_idleague_home',$this->League_idleague_home);
+            $criteria->compare('Division_iddivision_visiting',$this->Division_iddivision_visiting);
+            $criteria->compare('Division_iddivision_home',$this->Division_iddivision_home);
         } else if (Yii::app()->session['role'] == 'scorer') {
             $teamid = Yii::app()->session['team'];
             $criteria->compare('idgame',$this->idgame);
@@ -166,8 +166,8 @@ class Games extends CActiveRecord
             $criteria->compare('temperature',$this->temperature,true);
             $criteria->compare('Teams_idteam_visiting',$this->Teams_idteam_visiting);
             $criteria->compare('Teams_idteam_home',$teamid);
-            $criteria->compare('League_idleague_visiting',$this->League_idleague_visiting);
-            $criteria->compare('League_idleague_home',$this->League_idleague_home);
+            $criteria->compare('Division_iddivision_visiting',$this->Division_iddivision_visiting);
+            $criteria->compare('Division_iddivision_home',$this->Division_iddivision_home);
         }
 
         $criteria->order = 'date';
@@ -195,8 +195,8 @@ class Games extends CActiveRecord
         $criteria->compare('temperature',$this->temperature,true);
         $criteria->compare('Teams_idteam_visiting',$this->Teams_idteam_visiting);
         $criteria->compare('Teams_idteam_home',$this->Teams_idteam_home);
-        $criteria->compare('League_idleague_visiting',$this->League_idleague_visiting);
-        $criteria->compare('League_idleague_home',$this->League_idleague_home);
+        $criteria->compare('Division_iddivision_visiting',$this->Division_iddivision_visiting);
+        $criteria->compare('Division_iddivision_home',$this->Division_iddivision_home);
 
         } else if (Yii::app()->session['role'] == 'roster') {
 
@@ -211,8 +211,8 @@ class Games extends CActiveRecord
             $criteria->compare('temperature',$this->temperature,true);
             $criteria->compare('Teams_idteam_visiting',$this->Teams_idteam_visiting);
             $criteria->compare('Teams_idteam_home',$teamid);
-            $criteria->compare('League_idleague_visiting',$this->League_idleague_visiting);
-            $criteria->compare('League_idleague_home',$this->League_idleague_home);
+            $criteria->compare('Division_iddivision_visiting',$this->Division_iddivision_visiting);
+            $criteria->compare('Division_iddivision_home',$this->Division_iddivision_home);
         } else if (Yii::app()->session['role'] == 'scorer') {
             $teamid = Yii::app()->session['team'];
             $criteria->compare('idgame',$this->idgame);
@@ -223,8 +223,8 @@ class Games extends CActiveRecord
             $criteria->compare('weather',$this->weather,true);
             $criteria->compare('Teams_idteam_visiting',$this->Teams_idteam_visiting);
             $criteria->compare('Teams_idteam_home',$teamid);
-            $criteria->compare('League_idleague_visiting',$this->League_idleague_visiting);
-            $criteria->compare('League_idleague_home',$this->League_idleague_home);
+            $criteria->compare('Division_iddivision_visiting',$this->Division_iddivision_visiting);
+            $criteria->compare('Division_iddivision_home',$this->Division_iddivision_home);
         }
 
         

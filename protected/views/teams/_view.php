@@ -13,8 +13,8 @@
 	<?php echo CHtml::encode($data->Name); ?>
 	<br />
 
-	<b><?php echo CHtml::encode($data->getAttributeLabel('League_idleague')); ?>:</b>
-	<?php echo CHtml::encode($data->League_idleague); ?>
+	<b><?php echo CHtml::encode($data->getAttributeLabel('Division_iddivision')); ?>:</b>
+	<?php echo CHtml::encode($data->Division_iddivision); ?>
 	<br />
 	
 	

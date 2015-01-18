@@ -1431,12 +1431,12 @@ color: #680102;
     background-color: #fff;
 }
 
-#league-form input[type="text"],
-#league-form input[type="password"],
-#league-form .ui-autocomplete-input,
-#league-form textarea,
-#league-form select,
-#league-form .uneditable-input {
+#division-form input[type="text"],
+#division-form input[type="password"],
+#division-form .ui-autocomplete-input,
+#division-form textarea,
+#division-form select,
+#division-form .uneditable-input {
     display: inline-block;
     padding: 4px;
     font-size: 13px;

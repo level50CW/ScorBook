@@ -32,7 +32,7 @@ $('.search-form form').submit(function(){
         //'idteam',
         array(
             'header' => 'Division',
-            'name'=>'leagueIdleague.Name',
+            'name'=>'divisionIddivision.Name',
             'type'=>'raw',
             //'value'=> 'CHtml::link($data->name,array("zbProjects/show&id=$data->id"))',
 

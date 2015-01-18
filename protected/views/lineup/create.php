@@ -38,8 +38,8 @@ if ($_GET['team']) {
     $model->Teams_idteam = Yii::app()->user->getState('idteamhome');
 }
 
-//Yii::app()->user->setState('idleaguehome', $_POST['Games']['League_idleague_home']);
-//Yii::app()->user->setState('idleaguevisiting', $_POST['Games']['League_idleague_visiting']);
+//Yii::app()->user->setState('iddivisionhome', $_POST['Games']['Division_iddivision_home']);
+//Yii::app()->user->setState('iddivisionvisiting', $_POST['Games']['Division_iddivision_visiting']);
 
 $team = Teams::model()->findByPk($model->Teams_idteam);
 $header = $_GET['team'] == 'home' ?

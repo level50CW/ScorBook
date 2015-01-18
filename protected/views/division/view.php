@@ -1,19 +1,19 @@
 <?php
-/* @var $this LeagueController */
-/* @var $model League */
+/* @var $this DivisionController */
+/* @var $model Division */
 
 $this->breadcrumbs=array(
-	'Leagues'=>array('index'),
+	'Divisions'=>array('index'),
 	$model->Name,
 );
 ?>
 
-<h1>Divisions – <?php echo $model->idleague; ?></h1>
+<h1>Divisions – <?php echo $model->iddivision; ?></h1>
 
 <?php $this->widget('zii.widgets.CDetailView', array(
 	'data'=>$model,
 	'attributes'=>array(
-		'idleague',
+		'iddivision',
 		'Name',
 	),
 )); ?>

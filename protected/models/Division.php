@@ -1,10 +1,10 @@
 <?php
 
 /**
- * This is the model class for table "League".
+ * This is the model class for table "Division".
  *
- * The followings are the available columns in table 'League':
- * @property integer $idleague
+ * The followings are the available columns in table 'Division':
+ * @property integer $iddivision
  * @property string $Name
  *
  * The followings are the available model relations:
@@ -12,12 +12,12 @@
  * @property Games[] $games1
  * @property Teams[] $teams
  */
-class League extends CActiveRecord
+class Division extends CActiveRecord
 {
 	/**
 	 * Returns the static model of the specified AR class.
 	 * @param string $className active record class name.
-	 * @return League the static model class
+	 * @return Division the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{
@@ -29,7 +29,7 @@ class League extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'League';
+		return 'Division';
 	}
 
 	/**
@@ -40,11 +40,11 @@ class League extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('idleague', 'numerical', 'integerOnly'=>true),
+			array('iddivision', 'numerical', 'integerOnly'=>true),
 			array('Name', 'length', 'max'=>150),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('idleague, Name, type', 'safe', 'on'=>'search'),
+			array('iddivision, Name, type', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -56,9 +56,9 @@ class League extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-			'games' => array(self::HAS_MANY, 'Games', 'League_idleague_visiting'),
-			'games1' => array(self::HAS_MANY, 'Games', 'League_idleague_home'),
-			'teams' => array(self::HAS_MANY, 'Teams', 'League_idleague'),
+			'games' => array(self::HAS_MANY, 'Games', 'Division_iddivision_visiting'),
+			'games1' => array(self::HAS_MANY, 'Games', 'Division_iddivision_home'),
+			'teams' => array(self::HAS_MANY, 'Teams', 'Division_iddivision'),
 		);
 	}
 
@@ -68,9 +68,8 @@ class League extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'idleague' => 'Idleague',
-			'Name' => 'Name',
-			'type' => 'Type'
+			'iddivision' => 'Iddivision',
+			'Name' => 'Name'
 		);
 	}
 
@@ -85,9 +84,8 @@ class League extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('idleague',$this->idleague);
+		$criteria->compare('iddivision',$this->iddivision);
 		$criteria->compare('Name',$this->Name,true);
-		$criteria->compare('type','division',true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

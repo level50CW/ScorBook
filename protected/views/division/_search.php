@@ -1,6 +1,6 @@
 <?php
-/* @var $this LeagueController */
-/* @var $model League */
+/* @var $this DivisionController */
+/* @var $model Division */
 /* @var $form CActiveForm */
 ?>
 

@@ -1,6 +1,6 @@
 <?php
-/* @var $this LeagueController */
-/* @var $model League */
+/* @var $this DivisionController */
+/* @var $model Division */
 
 
 Yii::app()->clientScript->registerScript('search', "
@@ -9,7 +9,7 @@ $('.search-button').click(function(){
 	return false;
 });
 $('.search-form form').submit(function(){
-	$('#league-grid').yiiGridView('update', {
+	$('#division-grid').yiiGridView('update', {
 		data: $(this).serialize()
 	});
 	return false;
@@ -24,7 +24,7 @@ $('.search-form form').submit(function(){
     <div class="score-in"><a href="<?=Yii::app()->createUrl('players/admin'); ?>"><img src="images/rosters.jpg" border="0"/></a> </div>
     <div class="score-in"><a href="<?=Yii::app()->createUrl('games/admin'); ?>"><img src="images/schedule.jpg" border="0"/></a> </div>
     <div class="score-in"><a href="<?=Yii::app()->createUrl('games/create'); ?>"><img src="images/score_game.jpg" border="0"/></a> </div>
-    <div class="score-in"><a href="<?=Yii::app()->createUrl('league/admin'); ?>"><img src="images/leagues.jpg" border="0"/></a> </div>
+    <div class="score-in"><a href="<?=Yii::app()->createUrl('division/admin'); ?>"><img src="images/divisions.jpg" border="0"/></a> </div>
     <div class="score-in"><a href="<?=Yii::app()->createUrl('games/admin'); ?>"><img src="images/statistics.jpg" border="0"/></a> </div>
 
     <?php }else if(Yii::app()->session['role']  == 'roster'){ ?>

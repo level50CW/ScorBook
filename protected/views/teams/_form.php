@@ -32,15 +32,15 @@ if( isset($disabled) && $disabled ){
     <?php echo $form->errorSummary($model); ?>
 
     <?php
-        $leagues = League::model()->findAll();
-        $listLeague = CHtml::listData($leagues,'idleague', 'Name');
+        $divisions = Division::model()->findAll();
+        $listDivision = CHtml::listData($divisions,'iddivision', 'Name');
     ?>
 
     <div class="rowdiv">
         <div class="green" style="padding-top:30px;" > Division  </div>
             <div class="gray" style="padding-top:30px;" >
-            <?php echo $form->dropDownList($model,'League_idleague',$listLeague,array_merge($disabledArray,array('empty' => 'Select Division','style' => 'width:216px !important; text-align:center')));?>
-            <?php echo $form->error($model,'League_idleague'); ?>
+            <?php echo $form->dropDownList($model,'Division_iddivision',$listDivision,array_merge($disabledArray,array('empty' => 'Select Division','style' => 'width:216px !important; text-align:center')));?>
+            <?php echo $form->error($model,'Division_iddivision'); ?>
             </div>
     </div>
 

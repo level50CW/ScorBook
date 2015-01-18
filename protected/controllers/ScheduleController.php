@@ -74,8 +74,8 @@ class ScheduleController extends Controller
                 if($model->save()){
                     Yii::app()->user->setState('idteamhome',       $_POST['Games']['Teams_idteam_home']);
                     Yii::app()->user->setState('idteamvisiting',   $_POST['Games']['Teams_idteam_visiting']);
-                    Yii::app()->user->setState('idleaguehome',     $_POST['Games']['League_idleague_home']);
-                    Yii::app()->user->setState('idleaguevisiting', $_POST['Games']['League_idleague_visiting']);
+                    Yii::app()->user->setState('iddivisionhome',     $_POST['Games']['Division_iddivision_home']);
+                    Yii::app()->user->setState('iddivisionvisiting', $_POST['Games']['Division_iddivision_visiting']);
                     Yii::app()->user->setState('idgame', Yii::app()->db->lastInsertID);
                 }
                 if ($_POST['link']){

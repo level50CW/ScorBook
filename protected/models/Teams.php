@@ -6,13 +6,13 @@
  * The followings are the available columns in table 'Teams':
  * @property integer $idteam
  * @property string $Name
- * @property integer $League_idleague
+ * @property integer $Division_iddivision
  *
  * The followings are the available model relations:
  * @property Games[] $games
  * @property Games[] $games1
  * @property Players[] $players
- * @property League $leagueIdleague
+ * @property Division $divisionIddivision
  */
 class Teams extends CActiveRecord
 {
@@ -22,7 +22,7 @@ class Teams extends CActiveRecord
      * @return Teams the static model class
      */
 
-    public $league;
+    public $division;
     public $uploadfile;
 
     public static function model($className=__CLASS__)
@@ -46,9 +46,9 @@ class Teams extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('League_idleague', 'required'),
+            array('Division_iddivision', 'required'),
             array('uploadfile', 'file', 'types'=>'jpg, jpeg, gif, png','safe'=>true, 'maxSize'=>30*1024*1024, 'allowEmpty'=>true, 'tooLarge'=>'{attribute} is too large to be uploaded. Maximum size is 30MB.'),
-            array('idteam, League_idleague', 'numerical', 'integerOnly'=>true),
+            array('idteam, Division_iddivision', 'numerical', 'integerOnly'=>true),
             array('Name', 'length', 'max'=>100),
             array('location', 'length', 'max'=>100),
             array('Abv', 'length', 'max'=>5),
@@ -56,7 +56,7 @@ class Teams extends CActiveRecord
             array('logo', 'length', 'max'=>150),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('idteam, Name, League_idleague, league, location', 'safe', 'on'=>'search'),
+            array('idteam, Name, Division_iddivision, division, location', 'safe', 'on'=>'search'),
         );
     }
 
@@ -71,7 +71,7 @@ class Teams extends CActiveRecord
             'games' => array(self::HAS_MANY, 'Games', 'Teams_idteam_visiting'),
             'games1' => array(self::HAS_MANY, 'Games', 'Teams_idteam_home'),
             'players' => array(self::HAS_MANY, 'Players', 'Teams_idteam'),
-            'leagueIdleague' => array(self::BELONGS_TO, 'League', 'League_idleague'),
+            'divisionIddivision' => array(self::BELONGS_TO, 'Division', 'Division_iddivision'),
         );
     }
 
@@ -84,7 +84,7 @@ class Teams extends CActiveRecord
             'idteam' => 'Idteam',
             'Name' => 'Team Name',
             'location' => 'Stadium',
-            'League_idleague' => 'League Idleague',
+            'Division_iddivision' => 'Division Iddivision',
             'uploadfile' => 'uploadfile',
         );
     }
@@ -99,16 +99,16 @@ class Teams extends CActiveRecord
         // should not be searched.
 
         $criteria=new CDbCriteria;
-        $criteria->with = array('leagueIdleague');
+        $criteria->with = array('divisionIddivision');
         $criteria->compare('idteam',$this->idteam);
         $criteria->compare('t.Name',$this->Name,true);
         $criteria->order= 't.Name ASC';
 
-        if ( isset ( $_GET['League'] )) {
-            $criteria->compare('leagueIdleague.Name',$_GET['League']['Name'], true);
+        if ( isset ( $_GET['Division'] )) {
+            $criteria->compare('divisionIddivision.Name',$_GET['Division']['Name'], true);
         }
-        $criteria->order= 'leagueIdleague.Name ASC, t.Name ASC';
-        echo Yii::trace(CVarDumper::dumpAsString($this->league['Name']),'idlineup');
+        $criteria->order= 'divisionIddivision.Name ASC, t.Name ASC';
+        echo Yii::trace(CVarDumper::dumpAsString($this->division['Name']),'idlineup');
 
 
         return new CActiveDataProvider($this, array(

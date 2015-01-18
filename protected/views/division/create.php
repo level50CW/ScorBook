@@ -1,6 +1,6 @@
 <?php
-/* @var $this LeagueController */
-/* @var $model League */
+/* @var $this DivisionController */
+/* @var $model Division */
 ?>
 
 <h1>Division - Add New Division</h1>
