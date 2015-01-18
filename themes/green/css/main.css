@@ -1540,6 +1540,18 @@ ul.yiiPager .last
 	margin: 0 5px;
 }
 
+ul.yiiPager .previous > a
+{
+	float: none;
+	margin-left: -55px;
+	margin-right: 55px;
+}
+
+ul.yiiPager .first > a
+{
+	margin-right: -77px;
+}
+
 #ui-datepicker-div{
 	width: 21em;
 	display: none;
