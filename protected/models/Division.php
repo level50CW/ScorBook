@@ -6,8 +6,10 @@
  * The followings are the available columns in table 'Division':
  * @property integer $iddivision
  * @property string $Name
+ * @property integer $league_idleague
  *
  * The followings are the available model relations:
+ * @property League $leagueIdleague
  * @property Games[] $games
  * @property Games[] $games1
  * @property Teams[] $teams
@@ -41,10 +43,12 @@ class Division extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('iddivision', 'numerical', 'integerOnly'=>true),
+			array('league_idleague', 'required'),
+			array('league_idleague', 'numerical', 'integerOnly'=>true),
 			array('Name', 'length', 'max'=>150),
 			// The following rule is used by search().
-			// Please remove those attributes that should not be searched.
-			array('iddivision, Name, type', 'safe', 'on'=>'search'),
+			// @todo Please remove those attributes that should not be searched.
+			array('iddivision, Name, league_idleague', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -56,6 +60,7 @@ class Division extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
+			'leagueIdleague' => array(self::BELONGS_TO, 'League', 'league_idleague'),
 			'games' => array(self::HAS_MANY, 'Games', 'Division_iddivision_visiting'),
 			'games1' => array(self::HAS_MANY, 'Games', 'Division_iddivision_home'),
 			'teams' => array(self::HAS_MANY, 'Teams', 'Division_iddivision'),
@@ -69,7 +74,8 @@ class Division extends CActiveRecord
 	{
 		return array(
 			'iddivision' => 'Iddivision',
-			'Name' => 'Name'
+			'Name' => 'Name',
+			'league_idleague' => 'League Idleague',
 		);
 	}
 
@@ -79,13 +85,13 @@ class Division extends CActiveRecord
 	 */
 	public function search()
 	{
-		// Warning: Please modify the following code to remove attributes that
-		// should not be searched.
+		// @todo Please modify the following code to remove attributes that should not be searched.
 
 		$criteria=new CDbCriteria;
 
 		$criteria->compare('iddivision',$this->iddivision);
 		$criteria->compare('Name',$this->Name,true);
+		$criteria->compare('league_idleague',$this->league_idleague);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,

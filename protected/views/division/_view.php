@@ -13,5 +13,9 @@
 	<?php echo CHtml::encode($data->Name); ?>
 	<br />
 
+	<b><?php echo CHtml::encode($data->getAttributeLabel('league_idleague')); ?>:</b>
+	<?php echo CHtml::encode($data->league_idleague); ?>
+	<br />
+
 
 </div>

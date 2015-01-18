@@ -15,5 +15,6 @@ $this->breadcrumbs=array(
 	'attributes'=>array(
 		'iddivision',
 		'Name',
+		'league_idleague',
 	),
 )); ?>
