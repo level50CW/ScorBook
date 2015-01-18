@@ -1,5 +1,5 @@
 RENAME TABLE `League` TO  `Division`;
-ALTER TABLE 'Division' DROP 'type';
+ALTER TABLE `division` DROP `type`;
 ALTER TABLE  `Division` CHANGE  `idleague`  `iddivision` INT( 11 ) NOT NULL AUTO_INCREMENT;
 ALTER TABLE  `Games` CHANGE  `League_idleague_visiting`  `Division_iddivision_visiting` INT( 11 ) NOT NULL;
 ALTER TABLE  `Games` CHANGE  `League_idleague_home`  `Division_iddivision_home` INT( 11 ) NOT NULL;
