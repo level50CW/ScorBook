@@ -37,7 +37,10 @@ $('.search-form form').submit(function(){
             //'value'=> 'CHtml::link($data->name,array("zbProjects/show&id=$data->id"))',
 
         ),
-        'Name',
+		array(
+            'name'=>'Name',
+			'filter'=> CHtml::activeTextField($model, 'Name',array("placeholder"=>"Search")),
+        ),
         array(
             'class'=>'CButtonColumn',
             'deleteConfirmation'=>"js: 'Are you sure you want to delete this Team?'"
