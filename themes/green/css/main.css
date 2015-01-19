@@ -1543,13 +1543,19 @@ ul.yiiPager .last
 ul.yiiPager .previous > a
 {
 	float: none;
-	margin-left: -55px;
-	margin-right: 55px;
+	margin-left: -124px;
+	margin-right: 58px;
 }
 
 ul.yiiPager .first > a
 {
-	margin-right: -77px;
+	margin-right: -10px;
+}
+
+ul.yiiPager .hidden > a
+{
+    pointer-events: none;
+    cursor: default;
 }
 
 #ui-datepicker-div{
