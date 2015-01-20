@@ -45,24 +45,12 @@ class ScheduleController extends Controller
         $model = new Games('search');
         $model->unsetAttributes();
 		
-		$this->updateCurrentState('Games', $model);
+		$this->updateCurrentState($model, 'Games');
 
         $this->render('admin',array(
             'model'=>$model,
         ));
     }
-	
-	private function updateCurrentState($controllerName, $model)
-	{
-		if(isset($_GET[$controllerName]))
-			Yii::app()->session[$controllerName.'_attributes'] = $_GET[$controllerName];
-		
-		Yii::app()->session[$controllerName.'_page'] = $_GET[$controllerName.'_page'];
-		
-		$attr = Yii::app()->session[$controllerName.'_attributes'];
-		if(isset($attr))
-			$model->attributes=$attr;
-	}
 
     public function actionUpdate()
     {

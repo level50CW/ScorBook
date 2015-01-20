@@ -144,25 +144,13 @@ class UsersController extends Controller
         $model=new Users('search');
         $model->unsetAttributes();  // clear any default values
         
-		$this->updateCurrentState('Users', $model);
+		$this->updateCurrentState($model);
 
         $this->render('admin',array(
             'model'=>$model,
         ));
     }
 	
-	private function updateCurrentState($controllerName, $model)
-	{
-		if(isset($_GET[$controllerName]))
-			Yii::app()->session[$controllerName.'_attributes'] = $_GET[$controllerName];
-		
-		Yii::app()->session[$controllerName.'_page'] = $_GET[$controllerName.'_page'];
-		
-		$attr = Yii::app()->session[$controllerName.'_attributes'];
-		if(isset($attr))
-			$model->attributes=$attr;
-	}
-
     /**
      * Returns the data model based on the primary key given in the GET variable.
      * If the data model is not found, an HTTP exception will be raised.

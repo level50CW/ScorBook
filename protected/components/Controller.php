@@ -20,4 +20,22 @@ class Controller extends CController
 	 * for more details on how to specify this property.
 	 */
 	public $breadcrumbs=array();
+	
+	protected function updateCurrentState($model, $controllerName = null)
+	{
+		if (!isset($controllerName))
+		{
+			$controllerName = ucfirst(Yii::app()->controller->id);
+		}
+				
+		if(isset($_GET[$controllerName]))
+		{
+			Yii::app()->session[$controllerName.'_attributes'] = $_GET[$controllerName];
+		}
+		
+		Yii::app()->session[$controllerName.'_page'] = isset($_GET[$controllerName.'_page']) ? $_GET[$controllerName.'_page'] : null;
+		
+		if(isset(Yii::app()->session[$controllerName.'_attributes']))
+			$model->attributes=Yii::app()->session[$controllerName.'_attributes'];
+	}
 }
