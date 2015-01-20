@@ -115,6 +115,7 @@ class Players extends CActiveRecord
         if (Yii::app()->session['role'] == 'admins') {
             $criteria->with = array('teamsIdteam');
             $criteria->order= 'teamsIdteam.Name ASC';
+            $criteria->compare('teamsIdteam.Name', $this->teamname, true);
             $criteria->compare('idplayer', $this->idplayer);
             $criteria->compare('Firstname', $this->Firstname, true);
             $criteria->compare('Lastname', $this->Lastname, true);
