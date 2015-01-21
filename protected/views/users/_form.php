@@ -77,11 +77,11 @@ if( isset($disabled) && $disabled ){
 
 <div class="rowdiv">
     <?php if( isset($disabled) && $disabled ){
-        echo CHtml::linkButton('Close',array('submit'=>array('users/admin'),'class'=>'save-form-btn'));
+        echo CHtml::linkButton('Close',array('submit'=>array('users/admin', 'Users_page'=>isset(Yii::app()->session['Users_page']) ? Yii::app()->session['Users_page'] : 1),'class'=>'save-form-btn'));
     }
     else{
         echo CHtml::submitButton($model->isNewRecord ? 'Add' : 'Update', array("class"=>"save-form-btn" , 'style'=>'margin: -10px 10px 0 0;'));
-        echo CHtml::linkButton('Cancel',array('submit'=>array('users/admin'),'class'=>'save-form-btn'));
+        echo CHtml::linkButton('Cancel',array('submit'=>array('users/admin', 'Users_page'=>isset(Yii::app()->session['Users_page']) ? Yii::app()->session['Users_page'] : 1),'class'=>'save-form-btn'));
     } ?>
 </div>
 

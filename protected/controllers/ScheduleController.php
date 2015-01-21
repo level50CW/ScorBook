@@ -44,9 +44,8 @@ class ScheduleController extends Controller
     {
         $model = new Games('search');
         $model->unsetAttributes();
-        if(isset($_GET['Games'])){
-            $model->attributes=$_GET['Games'];
-        }
+		
+		$this->updateCurrentState($model, 'Games');
 
         $this->render('admin',array(
             'model'=>$model,

@@ -240,8 +240,8 @@ class GamesController extends Controller
 	{
 		$model=new Games('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Games']))
-			$model->attributes=$_GET['Games'];
+		
+		$this->updateCurrentState($model);
 
 		$this->render('admin',array(
 			'model'=>$model,

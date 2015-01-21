@@ -217,12 +217,12 @@ echo CHtml::hiddenField('link', '', array('id' => 'link'));;
     <div class="rowdiv">
         <?php echo CHtml::submitButton($model->isNewRecord ? 'Add' : 'Update', array('class'=>'save-form-btn','style'=>'margin-top: 0;',
         'onClick'=> !$model->isNewRecord ? 'alert("Game on "+$(\'input[name="Games[date]"]\').val().split(" ")[0]+" at "+$(\'input[name="Games[date]"]\').val().split(" ")[1]+ " between "+$(\'select[name="Games[Teams_idteam_home]"] option:selected\').text()+" and "+$(\'select[name="Games[Teams_idteam_visiting]"] option:selected\').text()+" was successfully updated.")' : 'alert("Game on "+$(\'input[name="Games[date]"]\').val().split(" ")[0]+" at "+$(\'input[name="Games[date]"]\').val().split(" ")[1]+ " between "+$(\'select[name="Games[Teams_idteam_home]"] option:selected\').text()+" and "+$(\'select[name="Games[Teams_idteam_visiting]"] option:selected\').text()+" was successfully added to the Schedule.")')); ?>
-        <?php echo CHtml::linkButton('Cancel',array('submit'=>array('schedule/admin'),'class'=>'save-form-btn'));?>
+        <?php echo CHtml::linkButton('Cancel',array('submit'=>array('schedule/admin', 'Schedule_page'=>isset(Yii::app()->session['Schedule_page']) ? Yii::app()->session['Schedule_page'] : 1),'class'=>'save-form-btn'));?>
     </div>
 <?php } 
 else { ?>
     <div class="rowdiv">
-        <?php echo CHtml::linkButton('Close',array('submit'=>array('schedule/admin'),'class'=>'save-form-btn'));?>
+        <?php echo CHtml::linkButton('Close',array('submit'=>array('schedule/admin', 'Schedule_page'=>isset(Yii::app()->session['Schedule_page']) ? Yii::app()->session['Schedule_page'] : 1),'class'=>'save-form-btn'));?>
     </div>
 <?php } ?>
 

@@ -221,7 +221,11 @@
     <div class="row buttons">
         <?php echo CHtml::submitButton($model->isNewRecord ? 'Add' : 'Update',array("class"=>"save-form-btn")); ?>
         <?php echo CHtml::submitButton(($model->isNewRecord ? 'Add' : 'Update').'/Next',array("class"=>"save-form-btn",'onclick'=>"$('form').append('<input name=\"next\" value=\"true\" style=\"display:none\">');")); ?>
-        <?php echo CHtml::Button('Cancel',array("class"=>"save-form-btn",'onclick'=>"history.back();","style"=>"height: 35px;")); ?>
+        <?php echo CHtml::linkButton('Close',array(
+			'submit'=>array(
+				'players/admin',
+				'Players_page'=>isset(Yii::app()->session['Players_page']) ? Yii::app()->session['Players_page'] : 1),
+			'class'=>'save-form-btn')); ?>
     </div>
 
     <div class='playerphoto' >

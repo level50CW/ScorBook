@@ -229,9 +229,9 @@ class PlayersController extends Controller
 	{
 		$model=new Players('search');
 		$model->unsetAttributes();  // clear any default values
-		if(isset($_GET['Players']))
-			$model->attributes=$_GET['Players'];
-
+		
+		$this->updateCurrentState($model);
+		
 		$this->render('admin',array(
 			'model'=>$model,
 		));
