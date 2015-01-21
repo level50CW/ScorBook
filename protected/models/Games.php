@@ -259,10 +259,10 @@ class Games extends CActiveRecord
         if (empty($date)) {
             return $date;
         }
-        $formatFrom = 'm-d-Y' . ($includeTime ? '  H:i:s' : '');
+        $formatFrom = 'm-d-Y' . ($includeTime ? '  H:i' : '');
         $dateObj = DateTime::createFromFormat($formatFrom, $date);
         if ($dateObj) {
-            $formatTo = 'Y-m-d' . ($includeTime ? '  H:i:s' : '');
+            $formatTo = 'Y-m-d' . ($includeTime ? '  H:i' : '');
             $date = $dateObj->format($formatTo);
         }
         return $date;
