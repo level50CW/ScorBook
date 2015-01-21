@@ -234,8 +234,8 @@ else { ?>
 <?php
 Yii::app()->clientScript->registerScript('update', "
 $('input[name=\"Games[date]\"]').on('change',function(){
-    var date = $(this).val().split('-');
-    $('input[name=\"Games[season]\"]').val(date[0]);
+    var date = $(this).datepicker('getDate');
+    $('input[name=\"Games[season]\"]').val(date.getFullYear());
 });
 
 $('select[name=\"Games[Teams_idteam_home]\"]').on('change',function(){
