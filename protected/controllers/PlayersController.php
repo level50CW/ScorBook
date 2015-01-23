@@ -115,12 +115,16 @@ class PlayersController extends Controller
 			}
 		}else{
 			$fet = explode("-", $model->Height);
-			if(count($fet) == 1)
-			$fet = explode("'", $model->Height);
-			if(count($fet) == 1)
-			$fet = explode("`", $model->Height);
-			$model->foot = $fet[0];
-			$model->inches = $fet[1];
+			if(count($fet) == 1) {
+				$fet = explode("'", $model->Height);
+			}
+			if(count($fet) == 1) {
+				$fet = explode("`", $model->Height);
+			}
+			if(count($fet) > 1) {
+				$model->foot = $fet[0];
+				$model->inches = $fet[1];
+			}
 		}
 
 		$this->render('create',array(
