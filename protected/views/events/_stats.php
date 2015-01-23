@@ -150,26 +150,26 @@ function loadTableTeam ( $id, $form, $model, $idteam, $idgame ){
             }
                 echo "</tr>";
                 echo "<tr class='scorewhite'> <td colspan=2 class='scoregreentr'> TOTAL </td>";
-                echo "<td >$G</td>";
-                echo "<td >$AB</td>";
-                echo "<td >$R</td>";
-                echo "<td >$H</td>";
-                echo "<td >$v2B</td>";
-                echo "<td >$v3B</td>";
-                echo "<td >$HR</td>";
-                echo "<td >$RBI</td>";
-                echo "<td >$BB</td>";
-                echo "<td >$SO</td>";
-                echo "<td >$SB</td>";
-                echo "<td >$CS</td>";
-                echo "<td >$HBP</td>";
-                echo "<td >$SAC</td>";
-                echo "<td >$PA</td>";
-                echo "<td >$XBH</td>";
-                echo "<td >$AVG</td>";
-                echo "<td >$OBP</td>";
-                echo "<td >$SLG</td>";
-                echo "<td >$OPS</td>";
+                echo "<td >" . (isset($G) ? $G : '') . "</td>";
+                echo "<td >" . (isset($AB) ? $AB : '') . "</td>";
+                echo "<td >" . (isset($R) ? $R : '') . "</td>";
+                echo "<td >" . (isset($H) ? $H : '') . "</td>";
+                echo "<td >" . (isset($v2B) ? $v2B : '') . "</td>";
+                echo "<td >" . (isset($v3B) ? $v3B : '') . "</td>";
+                echo "<td >" . (isset($HR) ? $HR : '') . "</td>";
+                echo "<td >" . (isset($RBI) ? $RBI : '') . "</td>";
+                echo "<td >" . (isset($BB) ? $BB : '') . "</td>";
+                echo "<td >" . (isset($SO) ? $SO : '') . "</td>";
+                echo "<td >" . (isset($SB) ? $SB : '') . "</td>";
+                echo "<td >" . (isset($CS) ? $CS : '') . "</td>";
+                echo "<td >" . (isset($HBP) ? $HBP : '') . "</td>";
+                echo "<td >" . (isset($SAC) ? $SAC : '') . "</td>";
+                echo "<td >" . (isset($PA) ? $PA : '') . "</td>";
+                echo "<td >" . (isset($XBH) ? $XBH : '') . "</td>";
+                echo "<td >" . (isset($AVG) ? $AVG : '') . "</td>";
+                echo "<td >" . (isset($OBP) ? $OBP : '') . "</td>";
+                echo "<td >" . (isset($SLG) ? $SLG : '') . "</td>";
+                echo "<td >" . (isset($OPS) ? $OPS : '') . "</td>";
                 echo  "</tr>";
         break;
             
@@ -476,6 +476,7 @@ switch (Yii::app()->user->getState('scoreteam')){
 
 //echo Yii::app()->user->getState('idteamvisiting')."LINEUP $idteam -Game $gameid---idlineupVisiting".Yii::app()->user->getState('idlineupvisiting');   
 
+$form = null; $idteam = null;
 loadTableTeam($lineup,$form,$model,$idteam,$idgame );
                 
                 

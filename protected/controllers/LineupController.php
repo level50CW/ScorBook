@@ -106,7 +106,7 @@ class LineupController extends Controller
                 Batters::model()->deleteAll("Lineup_idlineup = ".$model->idlineup);
     
 
-                $count = sizeof($_POST['Batters']['Number']);
+                $count = empty($_POST['Batters']) ? 0 : sizeof($_POST['Batters']['Number']);
 
                 for($i=0;$i<$count;$i++)
                 {

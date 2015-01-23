@@ -689,7 +689,7 @@ if ($idLineup){
 
 
 
-if (!$numberTurntoBat || $numberTurntoBat < 9) $numberTurntoBat = 9;
+if (empty($numberTurntoBat) || $numberTurntoBat < 9) $numberTurntoBat = 9;
 			
 
 $tablesize = 220+67*$numberTurntoBat;

@@ -56,7 +56,7 @@ class GamesController extends Controller
 	{
 		$id = Yii::app()->user->getState('idgame');
 		
-		if ($_POST['Games']){
+		if (!empty($_POST['Games'])){
 			$model = $this->loadModel($id);
 			
 			$model->attributes=$_POST['Games'];

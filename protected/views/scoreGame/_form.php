@@ -33,10 +33,10 @@ $team_selected = Yii::app()->session['team'];
 
 if (Yii::app()->session['role'] == 'admins') {
 
-    $divisions = Division::model()->findAll(array("condition" => "type='division'"));
+    $divisions = Division::model()->findAll();
     $divisionsListHome = CHtml::ListData($divisions, 'iddivision', 'Name');
 
-    $divisions = Division::model()->findAll(array("condition" => "type='division'"));
+    $divisions = Division::model()->findAll();
     $divisionsList = CHtml::ListData($divisions, 'iddivision', 'Name');
 
 }else if (Yii::app()->session['role'] == 'roster') {
@@ -44,7 +44,7 @@ if (Yii::app()->session['role'] == 'admins') {
     $divisions = Division::model()->findAllBySql("SELECT l.iddivision,l.Name FROM Division as l INNER JOIN Teams t ON(l.iddivision = t.Division_iddivision) WHERE l.type = 'division' AND idteam=:a",array(':a' => $team_selected,));
     $divisionsListHome = CHtml::ListData($divisions, 'iddivision', 'Name');
 
-    $divisions = Division::model()->findAll(array("condition" => "type='division'"));
+    $divisions = Division::model()->findAll(array());
     $divisionsList = CHtml::ListData($divisions, 'iddivision', 'Name');
 
 }

@@ -32,7 +32,7 @@
     $criteria->addcondition("Games_idgame=$model->Games_idgame AND Teams_idteam=$opponentTeam");
 
     $opponentLineup = Lineup::model()->findAll($criteria);
-    $opponentLineup = $opponentLineup[0]->idlineup ? $opponentLineup[0]->idlineup : null;
+    $opponentLineup = (!empty($opponentLineup) && $opponentLineup[0]->idlineup) ? $opponentLineup[0]->idlineup : null;
     
     if($opponentLineup){
         $opponentBattersStored = array();
@@ -173,7 +173,7 @@ var positions = $.map(positions, function(value, index) {
     while ($j < 11) 
     {
         //echo $BattersStored[$i]->BatterPosition . " - - " . ($j+1);
-        if((integer)$BattersStored[$i]->BatterPosition !== $j+1){
+        if(!empty($BattersStored) && ((integer)$BattersStored[$i]->BatterPosition !== $j+1)){
             $in = $j+1;
             ?>
             <div class="blacktitle"> Batter <?=$in?> </div>
@@ -209,7 +209,7 @@ var positions = $.map(positions, function(value, index) {
             <div class="clear"></div>
             <?
         }
-        else{
+        elseif (!empty($BattersStored[$i])) {
             $Player->idplayer = $BattersStored[$i]->Players_idplayer;
             $bat = 1+$j;
             if ($BattersStored[$i]['Inning'] == 1 ){

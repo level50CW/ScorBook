@@ -79,7 +79,7 @@ class TeamsController extends Controller
 
 			if($model->validate()){
 				$model->save();
-				if ($file->name != "") {
+				if ($file && $file->name != "") {
 					$model->logo = 'images/team_logo/'.$model->primaryKey.$file->name;
 					$model->thumb = $model->primaryKey.$file->name;
 					$file->saveAs($model->logo);

@@ -722,8 +722,8 @@ class EventsController extends Controller
 			
 			$this->redirect(array($_POST['link']));
 		}
-		
-		
+
+		$model = new Events;
 		$this->render('scorecard',array(
 			'model'=>$model,
 		));

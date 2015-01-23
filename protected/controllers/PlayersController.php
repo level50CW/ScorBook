@@ -151,7 +151,7 @@ class PlayersController extends Controller
 			$model->Height =  implode("-", array($_POST['Players']['foot'], $_POST['Players']['inches'] ));
 
 			if ($model->validate()) {
-				if ($file->name != "") {
+				if ($file && $file->name != "") {
 					$model->Photo = 'images/players/'.$model->primaryKey.$file->name;
 					$model->thumb = $model->primaryKey.$file->name;
 					if ($photoOri) unlink($photoOri);
