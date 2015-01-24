@@ -251,6 +251,7 @@ class Games extends CActiveRecord
     {
         // convert to display format
         $this->date = $this->dateToAmericanFormat($this->date);
+        $this->end_date = $this->dateToAmericanFormat($this->end_date);
         parent::afterFind();
     }
 
@@ -273,6 +274,7 @@ class Games extends CActiveRecord
         // convert to storage format
         // Not used yet as validation for date is not set in current implementation
         $this->date = $this->dateFromAmericanFormat($this->date);
+        $this->end_date = $this->dateFromAmericanFormat($this->end_date);
         return parent::beforeValidate ();
     }
 }
