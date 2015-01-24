@@ -54,6 +54,8 @@ if ( !$model->last_inning )
                 'name' => 'end_date', 
                 'options' => array(
                     'showOn'=>'focus',
+					'timeFormat'=>'hh:mm',
+					'dateFormat' => 'mm-dd-yy'
                 ),
             ));
 			?>

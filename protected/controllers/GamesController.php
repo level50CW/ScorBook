@@ -62,7 +62,10 @@ class GamesController extends Controller
 			$model->attributes=$_POST['Games'];
 			
 			
-			$time = date_diff( 	new DateTime($model->end_date) , new DateTime($model->date) );
+			$time = date_diff(
+				new DateTime($model->dateFromAmericanFormat($model->end_date)),
+				new DateTime($model->dateFromAmericanFormat($model->date))
+			);
 			
 			$model->duration = $time->h.':'.$time->i.':'.$time->s;
 			

@@ -233,7 +233,7 @@ class Games extends CActiveRecord
         ));
     }
 
-    protected function dateToAmericanFormat($date, $includeTime = true)
+    public function dateToAmericanFormat($date, $includeTime = true)
     {
         if (empty($date)) {
             return $date;
@@ -254,7 +254,7 @@ class Games extends CActiveRecord
         parent::afterFind();
     }
 
-    protected function dateFromAmericanFormat($date, $includeTime = true)
+    public function dateFromAmericanFormat($date, $includeTime = true)
     {
         if (empty($date)) {
             return $date;
