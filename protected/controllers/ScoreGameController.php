@@ -77,11 +77,14 @@ class ScoreGameController extends Controller
                 Yii::app()->user->setState('idteamvisiting',   $_POST['Games']['Teams_idteam_visiting']);
                 Yii::app()->user->setState('iddivisionhome',     $_POST['Games']['Division_iddivision_home']);
                 Yii::app()->user->setState('iddivisionvisiting', $_POST['Games']['Division_iddivision_visiting']);
-                Yii::app()->user->setState('idgame', Yii::app()->db->lastInsertID);
+                // TODO: verify if there are cases when Yii::app()->db->lastInsertID is required
+                $gameId = empty($id) ? Yii::app()->db->lastInsertID : $id;
+                Yii::app()->user->setState('idgame', $gameId);
             }
 
-            if ($_POST['link'])
-                    $this->redirect(array($_POST['link']));
+            if ($_POST['link']) {
+                $this->redirect(array($_POST['link']));
+            }
                 
             $this->redirect(array('lineup/create','team'=>'home'));
 

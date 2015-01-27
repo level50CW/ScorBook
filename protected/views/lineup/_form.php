@@ -170,7 +170,7 @@ var positions = $.map(positions, function(value, index) {
     $count = sizeof($BattersStored);
     $i = 0; $j = 0;
     //for( $i = 0; $i < 11 ; $i++ )
-    while ($j < 11) 
+    while ($j < 11)
     {
         //echo $BattersStored[$i]->BatterPosition . " - - " . ($j+1);
         if(!empty($BattersStored) && ((integer)$BattersStored[$i]->BatterPosition !== $j+1)){
@@ -209,15 +209,16 @@ var positions = $.map(positions, function(value, index) {
             <div class="clear"></div>
             <?
         }
-        elseif (!empty($BattersStored[$i])) {
-            $Player->idplayer = $BattersStored[$i]->Players_idplayer;
+        else {
+            $currentBatter = empty($BattersStored[$i]) ? new Batters : $BattersStored[$i];
+            $Player->idplayer = $currentBatter->Players_idplayer;
             $bat = 1+$j;
-            if ($BattersStored[$i]['Inning'] == 1 ){
+            if ($currentBatter['Inning'] == 1 ){
                 echo '<div class="blacktitle"> Batter '. $bat .'  </div>';
             }
             ?>
             <div class="grayplayer">
-                <?php echo $form->textField($BattersStored[$i],'Number[]',array('id'=>'Batters_Number'.$i,"class"=>"inputnumbers",'value'=>$BattersStored[$i]['Number'])); ?>
+                <?php echo $form->textField($currentBatter,'Number[]',array('id'=>'Batters_Number'.$i,"class"=>"inputnumbers",'value'=>$currentBatter['Number'])); ?>
                 <div class="batterPlayer" style="width:340px;display:inline-block;">
                     <?php echo $form->dropDownList($Player,'idplayer[]', $Players,  
                          array('id'=>'playerNumberOption'.$i,'options' => array($Player->idplayer=>array('selected'=>true)),
@@ -234,15 +235,15 @@ var positions = $.map(positions, function(value, index) {
                             $("#playerInning'.$i.'").val(1);}'),
                         ));?>
                </div>
-                <?php echo $form->dropDownList($BattersStored[$i],'DefensePosition[]',$positions,   array('class'=>'selectpositions','options' => array($BattersStored[$i]->DefensePosition => array('selected'=>true))));?>
-                <?php echo $form->hiddenField($BattersStored[$i],'BatterPosition[]',array('value' => $bat));?>
-                <?php echo $form->textField($BattersStored[$i],'Inning[]',array('id'=>'playerInning'.$i,"class"=>"inputnumbers",'value'=>$BattersStored[$i]['Inning']));?>
+                <?php echo $form->dropDownList($currentBatter,'DefensePosition[]',$positions,   array('class'=>'selectpositions','options' => array($currentBatter->DefensePosition => array('selected'=>true))));?>
+                <?php echo $form->hiddenField($currentBatter,'BatterPosition[]',array('value' => $bat));?>
+                <?php echo $form->textField($currentBatter,'Inning[]',array('id'=>'playerInning'.$i,"class"=>"inputnumbers",'value'=>$currentBatter['Inning']));?>
                 <?php echo $form->error($Batters,'Inning'); ?>
             </div>
 
             <?//CHECK IF NEXT BATTER IS INNING 1 OR SUBSTITUTION
             if ($bat <= 11){
-                if ($BattersStored[$bat]['Inning'] == 1 || $BattersStored[$bat]['Inning'] == '') {
+                if (empty($BattersStored[$bat]) || $BattersStored[$bat]['Inning'] == 1 || $BattersStored[$bat]['Inning'] == '') {
                 ?>
                     <div class="black">
                         <a href="#" class="copy">Enter Substitution</a>
