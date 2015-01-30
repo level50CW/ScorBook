@@ -103,10 +103,26 @@ var positions = $.map(positions, function(value, index) {
         <?php echo CHtml::imageButton('images/button_options.png', array('onClick'=>'submitLink("games/create")')); ?>
     </div>
     <div class="centerbutton">&nbsp;
-        <? if ($_GET['team']=='home') $dis = 'disabled'; else $dis = 'enabled'?>
-        <?php echo CHtml::imageButton('images/button_home.png',array($dis=>'true')); ?>
-        <? if ($_GET['team']=='visiting') $dis = 'disabled'; else $dis = 'enabled'?>
-        <?php echo CHtml::imageButton('images/button_visiting.png',array($dis=>'true') ); ?>
+        <?php
+            if ($_GET['team']=='home') {
+                $img = 'images/button_home.png';
+                $dis = 'disabled';
+            } else {
+                $img = 'images/button_home_red.png';
+                $dis = 'enabled';
+            }
+        ?>
+        <?php echo CHtml::imageButton($img,array($dis=>'true')); ?>
+        <?php
+            if ($_GET['team']=='visiting') {
+                $dis = 'disabled';
+                $img = 'images/button_visiting_green.png';
+            } else {
+                $dis = 'enabled';
+                $img = 'images/button_visiting.png';
+            }
+        ?>
+        <?php echo CHtml::imageButton($img,array($dis=>'true') ); ?>
     </div>
 </div>
     
@@ -170,7 +186,7 @@ var positions = $.map(positions, function(value, index) {
     $count = sizeof($BattersStored);
     $i = 0; $j = 0;
     //for( $i = 0; $i < 11 ; $i++ )
-    while ($j < 11)
+    while ($j < 10)
     {
         //echo $BattersStored[$i]->BatterPosition . " - - " . ($j+1);
         if(!empty($BattersStored) && ((integer)$BattersStored[$i]->BatterPosition !== $j+1)){
@@ -242,7 +258,7 @@ var positions = $.map(positions, function(value, index) {
             </div>
 
             <?//CHECK IF NEXT BATTER IS INNING 1 OR SUBSTITUTION
-            if ($bat <= 11){
+            if ($bat <= 10){
                 if (empty($BattersStored[$bat]) || $BattersStored[$bat]['Inning'] == 1 || $BattersStored[$bat]['Inning'] == '') {
                 ?>
                     <div class="black">
