@@ -107,13 +107,13 @@ class ScoreGameController extends Controller
             //Load Lineup
             $criteria = new CDbCriteria();
             $criteria->addcondition("Teams_idteam=$model->Teams_idteam_home AND Games_idgame=$model->idgame");
-            $Lineup = Lineup::model()->findAll($criteria);
-            @Yii::app()->user->setState('idlineuphome',$Lineup[0]->idlineup);
+            $LineupHome = Lineup::model()->findAll($criteria);
+            @Yii::app()->user->setState('idlineuphome',$LineupHome[0]->idlineup);
             
             $criteria = new CDbCriteria();
             $criteria->addcondition("Teams_idteam=$model->Teams_idteam_visiting AND Games_idgame=$model->idgame");
-            $Lineup = Lineup::model()->findAll($criteria);
-            @Yii::app()->user->setState('idlineupvisiting',$Lineup[0]->idlineup);
+            $LineupVisiting = Lineup::model()->findAll($criteria);
+            @Yii::app()->user->setState('idlineupvisiting',$LineupVisiting[0]->idlineup);
             
             
             Yii::app()->user->setState('hitterBase1',0);
@@ -131,13 +131,16 @@ class ScoreGameController extends Controller
             Yii::app()->user->setState('batter',0);
             
             Yii::app()->user->setState('idgame',$model->idgame);
+			
+			Yii::app()->user->setState('batterHomeCount',Batters::getCountInLineup($LineupHome[0]->idlineup));
+			Yii::app()->user->setState('batterVisitingCount',Batters::getCountInLineup($LineupVisiting[0]->idlineup));
         }
 
         $this->render('update',array(
             'model'=>$model,
         ));
     }
-
+	
     public function actionView($id = null)
     {
         if(!$id) $this->redirect(array('admin'));

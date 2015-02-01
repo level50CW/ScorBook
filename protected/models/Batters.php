@@ -105,4 +105,13 @@ class Batters extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+	
+	public function getCountInLineup($idlineup)
+	{
+		$criteria = new CDbCriteria();
+		$criteria->addcondition("Lineup_idlineup = ".$idlineup);
+		$Batters = Batters::model()->findAll($criteria);
+		
+		return sizeof($Batters);
+	}
 }

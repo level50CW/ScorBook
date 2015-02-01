@@ -38,7 +38,6 @@ function submitLink(link){
     case 'atbat':
 
         var doWeBreakIt = false;
-        var size = 0;
 
         var luh = <?php echo Yii::app()->user->getState('idlineuphome') ? 1 : 0; ?>;
         var luv = <?php echo Yii::app()->user->getState('idlineupvisiting') ? 1 : 0; ?>;
@@ -47,30 +46,20 @@ function submitLink(link){
             alert("Lineups were not saved");
             return false;
         }
-
-        $(".grayplayer").find('select[id^=playerNumberOption]').each(function(){
-            if($(this).val() != ""){
-                var a = $(this).parent().parent().find('input,select').each(function(){ 
-                    if($(this).val() == ""){ 
-                        alert("Fill all field for selected players");
-                        doWeBreakIt = true; 
-                        return false;
-                    }
-                    
-                });
-                if(doWeBreakIt){
-                 return false;
-                }
-                else{
-                    size++
-                }
-            }
-        });
-        //if(doWeBreakIt) {return false;}
-        if(size < 9 || doWeBreakIt || opponentBC < 9){
-            alert("Add at least 9 Batters for each team"); 
+		
+		var sizeHome = <?php echo Yii::app()->user->getState('batterHomeCount') ? Yii::app()->user->getState('batterHomeCount') : 0; ?>;		
+		var sizeVisiting = <?php echo Yii::app()->user->getState('batterVisitingCount') ? Yii::app()->user->getState('batterVisitingCount') : 0; ?>;
+		
+        if(sizeHome < 9){
+            alert("Add at least 9 Batters for Home team"); 
             return false;
         }
+		
+		if(sizeVisiting < 9){
+            alert("Add at least 9 Batters for Visiting team"); 
+            return false;
+        }
+		
         document.getElementById('link').value = 'events/create';
         break;
     case 'lineup':

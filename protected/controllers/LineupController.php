@@ -140,9 +140,11 @@ class LineupController extends Controller
 
                 if ($model->Teams_idteam == Yii::app()->user->getState('idteamhome')){
                     Yii::app()->user->setState('idlineuphome', $model->idlineup);
+					Yii::app()->user->setState('batterHomeCount',Batters::getCountInLineup($model->idlineup));
                 }
                 else {
                     Yii::app()->user->setState('idlineupvisiting', $model->idlineup);
+					Yii::app()->user->setState('batterVisitingCount',Batters::getCountInLineup($model->idlineup));
                 }
                 
                 $luh = Yii::app()->user->getState('idlineuphome') ? 1 : 0;
