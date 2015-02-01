@@ -174,106 +174,64 @@ var positions = $.map(positions, function(value, index) {
     <?
 
     //LOAD BATTERS
-    $BattersStored = array();
+    $BattersStoredRaw = array();
     if ($model->idlineup) {
         $criteria = new CDbCriteria();
         $criteria->addcondition("Lineup_idlineup = $model->idlineup");
 
-        $BattersStored = new Batters;
-        $BattersStored = Batters::model()->findAll($criteria);
+        $BattersStoredRaw = new Batters;
+        $BattersStoredRaw = Batters::model()->findAll($criteria);
+    }
+    $BattersStored = array();
+    foreach ($BattersStoredRaw as $batter) {
+        $BattersStored[$batter->BatterPosition][] = $batter;
     }
 
-    $count = sizeof($BattersStored);
-    $i = 0; $j = 0;
-    //for( $i = 0; $i < 11 ; $i++ )
-    while ($j < 10)
-    {
-        //echo $BattersStored[$i]->BatterPosition . " - - " . ($j+1);
-        if(!empty($BattersStored) && ((integer)$BattersStored[$i]->BatterPosition !== $j+1)){
-            $in = $j+1;
-            ?>
-            <div class="blacktitle"> Batter <?=$in?> </div>
-            <div class="grayplayer">
-                <?php echo $form->textField($Batters,'Number[]',array('id'=>'Batters_Number'.$in,"class"=>"inputnumbers")); ?>
-                <div class="batterPlayer" style="width:340px;display:inline-block;">
-                <?php
-                    echo $form->dropDownList($Player,'idplayer[]',$Players,
-                      array('id'=>'playerNumberOption'.$in,
-                            'empty'=>'Select player',
-                            'ajax' => array(
-                                'type'=>'POST',
-                                'url'=>CController::createUrl('lineup/dynamicplayers'), //url to call.
-                                'data' =>array('idplayer'=>'js:$(this).val()'),
-                                'success' => 'js:function(data) { 
-                                    var data = data.split(";");
-                                    $("#Batters_Number'.$in.'").val(data[0]); 
-                                    $("#Batters_Number'.$in.'").parent().find(".selectpositions option").removeAttr("selected");
-                                    $("#Batters_Number'.$in.'").parent().find(".selectpositions option").filter(function () { return $(this).html() == data[1]; }).attr("selected","selected"); 
-                                    $("#playerInning'.$in.'").val(1);
-                        }')
-                        ));
-                ?>
-                </div>
-                <?php echo $form->dropDownList($Batters,'DefensePosition[]',$positions,array('class'=>'selectpositions'));?>
-                <?php echo $form->hiddenField($Batters,'BatterPosition[]',array('value'=>$in));?>
-                <?php echo $form->textField($Batters,'Inning[]',array('id'=>'playerInning'.$in,"class"=>"inputnumbers"));?>
-                <?php echo $form->error($Batters,'Inning'); ?>
-            </div>
-            <div class="black">
-                <a href="#" class="copy">Enter Substitution</a>
-            </div>
-            <div class="clear"></div>
-            <?
+    for( $i = 1; $i <= 10 ; $i++ ) {
+        $title = ($i < 10) ? "Batter $i" : "Pitcher";
+        if (empty($BattersStored[$i])) {
+            $BattersStored[$i] = array(new Batters());
         }
-        else {
-            $currentBatter = empty($BattersStored[$i]) ? new Batters : $BattersStored[$i];
+        ?>
+        <div class="blacktitle"><?php echo $title; ?></div>
+        <?php
+        foreach ($BattersStored[$i] as $currentBatter) {
             $Player->idplayer = $currentBatter->Players_idplayer;
-            $bat = 1+$j;
-            if ($currentBatter['Inning'] == 1 ){
-                echo '<div class="blacktitle"> Batter '. $bat .'  </div>';
-            }
             ?>
             <div class="grayplayer">
-                <?php echo $form->textField($currentBatter,'Number[]',array('id'=>'Batters_Number'.$i,"class"=>"inputnumbers",'value'=>$currentBatter['Number'])); ?>
+                <?php echo $form->textField($currentBatter, 'Number[]', array('id' => 'Batters_Number' . $i, "class" => "inputnumbers", 'value' => $currentBatter['Number'])); ?>
                 <div class="batterPlayer" style="width:340px;display:inline-block;">
-                    <?php echo $form->dropDownList($Player,'idplayer[]', $Players,  
-                         array('id'=>'playerNumberOption'.$i,'options' => array($Player->idplayer=>array('selected'=>true)),
-                        'empty'=>'Select player',
-                        'ajax' => array(
-                        'type'=>'POST', //request type
-                        'url'=>CController::createUrl('lineup/dynamicplayers'), //url to call.
-                        'data' =>array('idplayer'=>'js:$("#playerNumberOption'.$i.'").val()'),
-                        'success' => 'js:function(data) {
+                    <?php echo $form->dropDownList($Player, 'idplayer[]', $Players,
+                        array('id' => 'playerNumberOption' . $i, 'options' => array($Player->idplayer => array('selected' => true)),
+                            'empty' => 'Select player',
+                            'ajax' => array(
+                                'type' => 'POST', //request type
+                                'url' => CController::createUrl('lineup/dynamicplayers'), //url to call.
+                                'data' => array('idplayer' => 'js:$("#playerNumberOption' . $i . '").val()'),
+                                'success' => 'js:function(data) {
                             var data = data.split(";");
-                            $("#Batters_Number'.$i.'").val(data[0]);
-                            $("#Batters_Number'.$i.'").parent().find(".selectpositions option").removeAttr("selected");
-                            $("#Batters_Number'.$i.'").parent().find(".selectpositions option").filter(function () { return $(this).html() == data[1]; }).attr("selected","selected"); 
-                            $("#playerInning'.$i.'").val(1);}'),
-                        ));?>
-               </div>
-                <?php echo $form->dropDownList($currentBatter,'DefensePosition[]',$positions,   array('class'=>'selectpositions','options' => array($currentBatter->DefensePosition => array('selected'=>true))));?>
-                <?php echo $form->hiddenField($currentBatter,'BatterPosition[]',array('value' => $bat));?>
-                <?php echo $form->textField($currentBatter,'Inning[]',array('id'=>'playerInning'.$i,"class"=>"inputnumbers",'value'=>$currentBatter['Inning']));?>
-                <?php echo $form->error($Batters,'Inning'); ?>
+                            $("#Batters_Number' . $i . '").val(data[0]);
+                            $("#Batters_Number' . $i . '").parent().find(".selectpositions option").removeAttr("selected");
+                            $("#Batters_Number' . $i . '").parent().find(".selectpositions option").filter(function () { return $(this).html() == data[1]; }).attr("selected","selected");
+                            $("#playerInning' . $i . '").val(1);}'),
+                        )); ?>
+                </div>
+                <?php echo $form->dropDownList($currentBatter, 'DefensePosition[]', $positions, array('class' => 'selectpositions', 'options' => array($currentBatter->DefensePosition => array('selected' => true)))); ?>
+                <?php echo $form->hiddenField($currentBatter, 'BatterPosition[]', array('value' => $i)); ?>
+                <?php echo $form->textField($currentBatter, 'Inning[]', array('id' => 'playerInning' . $i, "class" => "inputnumbers", 'value' => $currentBatter['Inning'])); ?>
+                <?php echo $form->error($Batters, 'Inning'); ?>
             </div>
-
-            <?//CHECK IF NEXT BATTER IS INNING 1 OR SUBSTITUTION
-            if ($bat <= 10){
-                if (empty($BattersStored[$bat]) || $BattersStored[$bat]['Inning'] == 1 || $BattersStored[$bat]['Inning'] == '') {
-                ?>
-                    <div class="black">
-                        <a href="#" class="copy">Enter Substitution</a>
-                    </div>
-                    <div class="clear"></div>
-                <? 
-                }
-            }
-            $i++;
+        <?php
         }
-        $j++;
-        
+        ?>
+
+        <div class="black">
+            <a href="#" class="copy">Enter Substitution</a>
+        </div>
+        <div class="clear"></div>
+    <?php
     }
-?>
+    ?>
 </table>
 
 
