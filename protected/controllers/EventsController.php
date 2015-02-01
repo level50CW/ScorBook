@@ -348,7 +348,7 @@ class EventsController extends Controller
 						$criteria = new CDbCriteria();
 						$id_player=$_POST['Statshitting']['Players_idplayer'][$i];
 						$id_game=$_POST['Statshitting']['Games_idgame'][$i];
-						$criteria->addcondition("Players_idplayer=$id_player and Games_idgame = $id_game");
+						$criteria->addcondition("Players_idplayer=".$id_player." and Games_idgame = ".$id_game);
 						$statsArr = Statshitting::model()->findAll($criteria);
 						$stats = $statsArr[0];
 
