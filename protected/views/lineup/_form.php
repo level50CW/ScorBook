@@ -60,35 +60,55 @@ var positions = <?php echo json_encode($positions); ?>;
 var positions = $.map(positions, function(value, index) {
     return [value];
 });
-    $(document).ready(function(){
-
-
-        var myTags = ["aaa","PHP", "Perl", "Python"];
-                    $('body').delegate('input.ui-autocomplete-input', 'focusin', function() {
-                        if($(this).is(':data(autocomplete)')) return;
-                        $(this).autocomplete({
-                            "source": myTags
-                        });
-                    });
-                    var tagsdiv = $('#tags');
-
-                    //DELETE BUTTON
-                    var element = document.createElement("input");
-
-                    //Assign different attributes to the element.
-                    /*element.setAttribute("type", 'button');
-                    element.setAttribute("value", 'Delete');
-                    element.setAttribute("name", 'Delete');
-                    element.setAttribute("onClick", 'deleteSustitution');*/
-
-
-                    $('body').delegate('a.copy', 'click', function(e) {
-                        e.preventDefault();
-                        $(this).closest('div').prev().after($(this).closest('div').prev().clone());
-                        //$(this).closest('div').prev().after(element);
-
-                    });
+function checkShowPitcher()
+{
+    var showPitcher = false;
+    $(".grayplayer").find(".selectpositions[value!=0]").each(function() {
+        if($(this).val() == "11") { // if DH position was selected
+            showPitcher = true;
+        }
     });
+    var pitcherBlock = $("#line_batter_10");
+    if (showPitcher) {
+        pitcherBlock.show();
+        pitcherBlock.find('input,select').removeAttr('disabled');
+    } else {
+        pitcherBlock.hide();
+        pitcherBlock.find('input,select').attr('disabled','disabled');
+    }
+}
+$(document).ready(function(){
+
+
+    var myTags = ["aaa","PHP", "Perl", "Python"];
+    $('body').delegate('input.ui-autocomplete-input', 'focusin', function() {
+        if($(this).is(':data(autocomplete)')) return;
+        $(this).autocomplete({
+            "source": myTags
+        });
+    });
+    var tagsdiv = $('#tags');
+
+    //DELETE BUTTON
+    var element = document.createElement("input");
+
+    //Assign different attributes to the element.
+    /*element.setAttribute("type", 'button');
+    element.setAttribute("value", 'Delete');
+    element.setAttribute("name", 'Delete');
+    element.setAttribute("onClick", 'deleteSustitution');*/
+
+
+    $('body').delegate('a.copy', 'click', function(e) {
+        e.preventDefault();
+        $(this).closest('div').prev().after($(this).closest('div').prev().clone());
+        //$(this).closest('div').prev().after(element);
+
+    });
+    $('.selectpositions').change(function(){
+        checkShowPitcher();
+    });
+});
 </script>
 
 <div class="form">
@@ -188,18 +208,24 @@ var positions = $.map(positions, function(value, index) {
     }
 
     for( $i = 1; $i <= 10 ; $i++ ) {
-        $title = ($i < 10) ? "Batter $i" : "Pitcher";
+        $isPitcher = $i == 10;
+        $playerExists = true;
+        $title = $isPitcher ? "Pitcher" : "Batter $i";
         if (empty($BattersStored[$i])) {
             $BattersStored[$i] = array(new Batters());
+            $playerExists = false;
         }
+        $hideBlock = $isPitcher && !$playerExists;
         ?>
+        <div class="batter" id="line_batter_<?php echo $i ?>" <?php if ($hideBlock) { echo 'style="display:none"'; } ?>>
         <div class="blacktitle"><?php echo $title; ?></div>
         <?php
         foreach ($BattersStored[$i] as $currentBatter) {
             $Player->idplayer = $currentBatter->Players_idplayer;
             ?>
             <div class="grayplayer">
-                <?php echo $form->textField($currentBatter, 'Number[]', array('id' => 'Batters_Number' . $i, "class" => "inputnumbers", 'value' => $currentBatter['Number'])); ?>
+                <?php $commonOptions = $hideBlock ? array('disabled' => true) : array(); ?>
+                <?php echo $form->textField($currentBatter, 'Number[]', array('id' => 'Batters_Number' . $i, "class" => "inputnumbers", 'value' => $currentBatter['Number']) + $commonOptions); ?>
                 <div class="batterPlayer" style="width:340px;display:inline-block;">
                     <?php echo $form->dropDownList($Player, 'idplayer[]', $Players,
                         array('id' => 'playerNumberOption' . $i, 'options' => array($Player->idplayer => array('selected' => true)),
@@ -213,12 +239,14 @@ var positions = $.map(positions, function(value, index) {
                             $("#Batters_Number' . $i . '").val(data[0]);
                             $("#Batters_Number' . $i . '").parent().find(".selectpositions option").removeAttr("selected");
                             $("#Batters_Number' . $i . '").parent().find(".selectpositions option").filter(function () { return $(this).html() == data[1]; }).attr("selected","selected");
-                            $("#playerInning' . $i . '").val(1);}'),
-                        )); ?>
+                            $("#playerInning' . $i . '").val(1);
+                            checkShowPitcher();}'),
+                        ) + $commonOptions); ?>
                 </div>
-                <?php echo $form->dropDownList($currentBatter, 'DefensePosition[]', $positions, array('class' => 'selectpositions', 'options' => array($currentBatter->DefensePosition => array('selected' => true)))); ?>
-                <?php echo $form->hiddenField($currentBatter, 'BatterPosition[]', array('value' => $i)); ?>
-                <?php echo $form->textField($currentBatter, 'Inning[]', array('id' => 'playerInning' . $i, "class" => "inputnumbers", 'value' => $currentBatter['Inning'])); ?>
+                <?php $positionsInSelect = $isPitcher ? array('1' => 'P') : $positions; ?>
+                <?php echo $form->dropDownList($currentBatter, 'DefensePosition[]', $positionsInSelect, array('class' => 'selectpositions', 'options' => array($currentBatter->DefensePosition => array('selected' => true))) + $commonOptions); ?>
+                <?php echo $form->hiddenField($currentBatter, 'BatterPosition[]', array('value' => $i) + $commonOptions); ?>
+                <?php echo $form->textField($currentBatter, 'Inning[]', array('id' => 'playerInning' . $i, "class" => "inputnumbers", 'value' => $currentBatter['Inning']) + $commonOptions); ?>
                 <?php echo $form->error($Batters, 'Inning'); ?>
             </div>
         <?php
@@ -229,6 +257,7 @@ var positions = $.map(positions, function(value, index) {
             <a href="#" class="copy">Enter Substitution</a>
         </div>
         <div class="clear"></div>
+        </div>
     <?php
     }
     ?>
@@ -268,10 +297,9 @@ var positions = $.map(positions, function(value, index) {
 <script>
 $(".save-form-btn").on("click",function(){
     var doWeBreakIt = false;
-    $(".grayplayer").find('select[id^=playerNumberOption]').each(function(){
+    $(".grayplayer").find('select[id^=playerNumberOption]:enabled').each(function(){
         if($(this).val() != ""){
-           
-            var a = $(this).parent().parent().find('input,select').each(function(){ 
+            var a = $(this).parent().parent().find('input,select').each(function(){
                 if($(this).val() == ""){ 
                     alert("Fill all field for selected players"); 
                     doWeBreakIt = true; 
@@ -282,7 +310,7 @@ $(".save-form-btn").on("click",function(){
         }
     });
 
-    $(".grayplayer").find('select[id^=playerNumberOption]').each(function() {
+    $(".grayplayer").find('select[id^=playerNumberOption]:enabled').each(function() {
         var len = $(".grayplayer").find('select[id^=playerNumberOption][value=' + $(this).val() + ']').size();
         if (len > 1 && $(this).val() != "") {
             doWeBreakIt = true; 
@@ -291,19 +319,23 @@ $(".save-form-btn").on("click",function(){
         }
     });
 
-
-    $(".grayplayer").find(".selectpositions[value!=0]").each(function() {
-        var len = $(".grayplayer").find(".selectpositions[value=" + $(this).val() + "]").size();
+    var pitcherIsPresent = false;
+    $(".grayplayer").find(".selectpositions[value!=0]:enabled").each(function() {
+        var len = $(".grayplayer").find(".selectpositions[value=" + $(this).val() + "]:enabled").size();
         if (len > 1 && $(this).val() != "") {
             doWeBreakIt = true; 
             alert("You have entered the same Position for multiple Batters. All positions must be unique. Please correct the duplicate(s).");
             return false;
         }
+        if ($(this).val() == "1") {
+            pitcherIsPresent = true;
+        }
     });
 
+    if (!pitcherIsPresent) {
+        doWeBreakIt = true;
+        alert("You have to enter pincher.");
+    }
     if(doWeBreakIt) return false;
-
-    
-
 });
 </script>
