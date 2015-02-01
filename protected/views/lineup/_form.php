@@ -297,12 +297,13 @@ $(document).ready(function(){
 <script>
 $(".save-form-btn").on("click",function(){
     var doWeBreakIt = false;
-    $(".grayplayer").find('select[id^=playerNumberOption]:enabled').each(function(){
+    var errorMessage = [];
+    $(".grayplayer").find('select[id^=playerNumberOption]').each(function(){
         if($(this).val() != ""){
             var a = $(this).parent().parent().find('input,select').each(function(){
-                if($(this).val() == ""){ 
-                    alert("Fill all field for selected players"); 
-                    doWeBreakIt = true; 
+                if($(this).val() == ""){
+                    errorMessage[0] = "Fill all field for selected players";
+                    doWeBreakIt = true;
                     return false;
                 }
             });
@@ -313,8 +314,8 @@ $(".save-form-btn").on("click",function(){
     $(".grayplayer").find('select[id^=playerNumberOption]:enabled').each(function() {
         var len = $(".grayplayer").find('select[id^=playerNumberOption][value=' + $(this).val() + ']').size();
         if (len > 1 && $(this).val() != "") {
-            doWeBreakIt = true; 
-            alert("You have entered the same player in Line Up multiple times. All Batters must be unique. Please remove the duplicate(s).");
+            doWeBreakIt = true;
+            errorMessage[1] = "You have entered the same player in Line Up multiple times. All Batters must be unique. Please remove the duplicate(s).";
             return false;
         }
     });
@@ -323,8 +324,8 @@ $(".save-form-btn").on("click",function(){
     $(".grayplayer").find(".selectpositions[value!=0]:enabled").each(function() {
         var len = $(".grayplayer").find(".selectpositions[value=" + $(this).val() + "]:enabled").size();
         if (len > 1 && $(this).val() != "") {
-            doWeBreakIt = true; 
-            alert("You have entered the same Position for multiple Batters. All positions must be unique. Please correct the duplicate(s).");
+            doWeBreakIt = true;
+            errorMessage[2] = "You have entered the same Position for multiple Batters. All positions must be unique. Please correct the duplicate(s).";
             return false;
         }
         if ($(this).val() == "1") {
@@ -334,8 +335,11 @@ $(".save-form-btn").on("click",function(){
 
     if (!pitcherIsPresent) {
         doWeBreakIt = true;
-        alert("You have to enter pincher.");
+        errorMessage[3] = "You have to enter pincher.";
     }
-    if(doWeBreakIt) return false;
+    if (doWeBreakIt) {
+        alert(errorMessage.join("\n"));
+        return false;
+    }
 });
 </script>
