@@ -335,7 +335,7 @@ $(".save-form-btn").on("click",function(){
 
     if (!pitcherIsPresent) {
         doWeBreakIt = true;
-        errorMessage[3] = "You have to enter pincher.";
+        errorMessage[3] = "You must enter a Pitcher.";
     }
     if (doWeBreakIt) {
         alert(errorMessage.join("\n"));
