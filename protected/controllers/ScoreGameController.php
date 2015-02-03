@@ -131,9 +131,11 @@ class ScoreGameController extends Controller
             Yii::app()->user->setState('batter',0);
             
             Yii::app()->user->setState('idgame',$model->idgame);
-			
-			Yii::app()->user->setState('batterHomeCount',Batters::getCountInLineup($LineupHome[0]->idlineup));
-			Yii::app()->user->setState('batterVisitingCount',Batters::getCountInLineup($LineupVisiting[0]->idlineup));
+
+            $batterHomeCount = empty($LineupHome[0]) ? 0 : Batters::getCountInLineup($LineupHome[0]->idlineup);
+			Yii::app()->user->setState('batterHomeCount', $batterHomeCount);
+            $batterVisitingCount = empty($LineupVisiting[0]) ? 0 : Batters::getCountInLineup($LineupVisiting[0]->idlineup);
+			Yii::app()->user->setState('batterVisitingCount', $batterVisitingCount);
         }
 
         $this->render('update',array(

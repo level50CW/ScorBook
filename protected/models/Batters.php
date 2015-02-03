@@ -109,7 +109,7 @@ class Batters extends CActiveRecord
 	public function getCountInLineup($idlineup)
 	{
 		$criteria = new CDbCriteria();
-		$criteria->addcondition("Lineup_idlineup = ".$idlineup);
+		$criteria->addcondition("Lineup_idlineup = " . (string)(int)$idlineup);
 		$Batters = Batters::model()->findAll($criteria);
 		
 		return sizeof($Batters);
