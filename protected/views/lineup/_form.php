@@ -108,6 +108,7 @@ $(document).ready(function(){
     $('.selectpositions').change(function(){
         checkShowPitcher();
     });
+    checkShowPitcher();
 });
 </script>
 
