@@ -646,482 +646,481 @@ function loadTableRuns ($idgame,$idteam,$form){
 
 function loadTableTeam ($id,$form,$model){
 				
-				$positions = array('P', 'C', '1B', '2B', '3B','SS',
-				  'LF', 'CF', 'RF', 'EF','DH', 'PH',
-				  'PR',  'CR', 'EH',  'X');
-				
-				
-				//LOAD LINEUP
-				
-				if (!$id) $id=0;
-				
-				$idLineup = $id;
-				$criteria = new CDbCriteria();
-				$criteria->addcondition("idlineup=$idLineup");
-				$lineup = Lineup::model()->findAll($criteria);
-				
-				
-				//LOAD TEAM INFO
-				if (! $teamid=$lineup[0]->Teams_idteam) $teamid = 0 ;
-				
-				if (Yii::app()->user->getState('idteamhome') == $teamid) {
-					$name = Yii::app()->user->getState('teamhome');
-					echo "<script> idteamhome = $teamid </script>";
-				}else {
-					$name = Yii::app()->user->getState('teamvisiting');
-					echo "<script> idteamvisiting = $teamid</script>";
+	$positions = array('P', 'C', '1B', '2B', '3B','SS',
+	  'LF', 'CF', 'RF', 'EF','DH', 'PH',
+	  'PR',  'CR', 'EH',  'X');
+
+	//LOAD LINEUP
+
+	if (!$id) $id=0;
+
+	$idLineup = $id;
+	$criteria = new CDbCriteria();
+	$criteria->addcondition("idlineup=$idLineup");
+	$lineup = Lineup::model()->findAll($criteria);
+
+
+	//LOAD TEAM INFO
+	if (! $teamid=$lineup[0]->Teams_idteam) $teamid = 0 ;
+
+	if (Yii::app()->user->getState('idteamhome') == $teamid) {
+		$name = Yii::app()->user->getState('teamhome');
+		echo "<script> idteamhome = $teamid </script>";
+	}else {
+		$name = Yii::app()->user->getState('teamvisiting');
+		echo "<script> idteamvisiting = $teamid</script>";
+	}
+	echo Yii::trace(CVarDumper::dumpAsString( Yii::app()->user->getState('idteamvisiting') ),'teamvis');
+
+	if ($name) echo "<tr class='blacktitle'> <td colspan=8>". $name." </td> </tr>";
+	else echo "<tr> <td colspan=4> LINEUP MUST BE CREATED </td> </tr>";
+
+	//LOAD BATTERS
+	$criteria = new CDbCriteria();
+	$criteria->addcondition("Lineup_idlineup=$idLineup");
+	$Batters = Batters::model()->findAll($criteria);
+
+	$count = sizeof($Batters);
+
+	//Load stats of players Hitting
+	$criteria = new CDbCriteria();
+	$idgame = Yii::app()->user->getState('idgame');
+	$criteria->addcondition("Games_idgame=$idgame");
+	$Statshitting = new Statshitting;
+	$StatshittingArray = Statshitting::model()->findAll($criteria);
+
+	$count_stats_hit = count ($StatshittingArray);
+
+	//Load stats of players fielding
+	$criteria = new CDbCriteria();
+	//$idgame = Yii::app()->user->getState('idgame');
+	$criteria->addcondition("Games_idgame=$idgame");
+	$Statsfielding = new Statsfielding;
+	$StatsfieldingArray = Statsfielding::model()->findAll($criteria);
+
+	$count_stats_field = count ($StatsfieldingArray);
+
+	//echo Yii::trace(CVarDumper::dumpAsString($rows),'varsearch');
+	echo "<tr class='greentr'>";
+		echo "<td colspan=3 style='width: 30%'> Lineup </td> <td>AB</td> <td>H</td> <td>RBI</td> <td>BB</td> <td>SO</td>";
+	echo "</tr>";
+
+
+	//Set the number of players at bat
+	if ( Yii::app()->user->getState('battingteam') == $teamid){
+		Yii::app()->user->setState('batters_number', $count);
+		echo "<script> var batters_number =  $count </script>";
+
+			//echo "<script> alert('BattersCountForm'+ $count) </script>";
+			//echo "<script> alert('BatterForm'+".Yii::app()->user->getState('batter').") </script>";
+			//echo "<script> alert('TurntobatForm'+".Yii::app()->user->getState('turntobat').") </script>";
+
+		//Go to  batter1
+		if (Yii::app()->user->getState('batterNumber') > $count){
+			Yii::app()->user->setState('turntobat', Yii::app()->user->getState('turntobat')+1);
+			Yii::app()->user->setState('batterNumber',1);
+			$model->Batter=1;
+
+
+		}else $model->Batter = Yii::app()->user->getState('batterNumber');
+
+
+		//echo "<script> alert('BatterFormCambiado ?'+".Yii::app()->user->getState('batter').") </script>";
+
+		$batternumber = Yii::app()->user->getState('batterNumber'); //Number of batter at lineup
+		$turntobat = Yii::app()->user->getState('turntobat'); //Turn to bat
+
+		//echo "<script> document.getElementById('Events_Batter').value = '$batternumber' </script>";
+		echo "<script> document.getElementById('Events_turntobat').value = '$turntobat' </script>";
+
+		echo Yii::trace(CVarDumper::dumpAsString(Yii::app()->user->getState('batter')),'battervar');
+		echo Yii::trace(CVarDumper::dumpAsString($count),'battercount');
+		echo Yii::trace(CVarDumper::dumpAsString($count),'battermodel');
+	}
+	$pitcher = array();
+	//for ($i=0;$i < $count; $i++){
+	for ($i=0;$i < $count; $i++){
+
+		//echo  "BAT".Yii::app()->user->getState('batterNumber') ;
+		//echo "-$i-SUP<br> ";
+
+
+
+		//Check sustitutions
+		if ($i < $count -1 ){
+			if ($Batters[$i+1]->Inning != 1) {
+				if ( $Batters[$i+1]->Inning <=  Yii::app()->user->getState('inning') ){
+					//Check if batterNumber == actual i loop
+					if ( ( $i+1 ) == Yii::app()->user->getState('batterNumber')){
+						;
+					}
+					$i++; //Set the next player
+					Yii::app()->user->setState('batterNumber',Yii::app()->user->getState('batterNumber')+1);
 				}
-				echo Yii::trace(CVarDumper::dumpAsString( Yii::app()->user->getState('idteamvisiting') ),'teamvis');
-				
-				if ($name) echo "<tr class='blacktitle'> <td colspan=8>". $name." </td> </tr>";
-				else echo "<tr> <td colspan=4> LINEUP MUST BE CREATED </td> </tr>";
-				
-				//LOAD BATTERS
-				$criteria = new CDbCriteria();
-				$criteria->addcondition("Lineup_idlineup=$idLineup");
-				$Batters = Batters::model()->findAll($criteria);
-				
-				$count = sizeof($Batters);
-				
-				//Load stats of players Hitting
-				$criteria = new CDbCriteria();
-				$idgame = Yii::app()->user->getState('idgame');
-				$criteria->addcondition("Games_idgame=$idgame");
-				$Statshitting = new Statshitting;
-				$StatshittingArray = Statshitting::model()->findAll($criteria);
-				
-				$count_stats_hit = count ($StatshittingArray);
-				
-				//Load stats of players fielding
-				$criteria = new CDbCriteria();
-				//$idgame = Yii::app()->user->getState('idgame');
-				$criteria->addcondition("Games_idgame=$idgame");
-				$Statsfielding = new Statsfielding;
-				$StatsfieldingArray = Statsfielding::model()->findAll($criteria);
-				
-				$count_stats_field = count ($StatsfieldingArray);
-				
-				//echo Yii::trace(CVarDumper::dumpAsString($rows),'varsearch');
-				echo "<tr class='greentr'>";
-					echo "<td colspan=3 style='width: 30%'> Lineup </td> <td>AB</td> <td>H</td> <td>RBI</td> <td>BB</td> <td>SO</td>";
-				echo "</tr>";
-				
-				
-				//Set the number of players at bat
-				if ( Yii::app()->user->getState('battingteam') == $teamid){
-					Yii::app()->user->setState('batters_number', $count);
-					echo "<script> var batters_number =  $count </script>";
-					
-						//echo "<script> alert('BattersCountForm'+ $count) </script>";
-						//echo "<script> alert('BatterForm'+".Yii::app()->user->getState('batter').") </script>";
-						//echo "<script> alert('TurntobatForm'+".Yii::app()->user->getState('turntobat').") </script>";
-						
-					//Go to  batter1	
-					if (Yii::app()->user->getState('batterNumber') > $count){
-						Yii::app()->user->setState('turntobat', Yii::app()->user->getState('turntobat')+1);
-						Yii::app()->user->setState('batterNumber',1);
-						$model->Batter=1;
-						
-						
-					}else $model->Batter = Yii::app()->user->getState('batterNumber');
-					
-					
-					//echo "<script> alert('BatterFormCambiado ?'+".Yii::app()->user->getState('batter').") </script>";
-					
-					$batternumber = Yii::app()->user->getState('batterNumber'); //Number of batter at lineup
-					$turntobat = Yii::app()->user->getState('turntobat'); //Turn to bat
-					
-					//echo "<script> document.getElementById('Events_Batter').value = '$batternumber' </script>";
-					echo "<script> document.getElementById('Events_turntobat').value = '$turntobat' </script>";
-					
-					echo Yii::trace(CVarDumper::dumpAsString(Yii::app()->user->getState('batter')),'battervar');
-					echo Yii::trace(CVarDumper::dumpAsString($count),'battercount');
-					echo Yii::trace(CVarDumper::dumpAsString($count),'battermodel');
+			}
+		}
+
+		//Check if the sustitution is not in this inning yet
+		if ( $Batters[$i]->Inning != 1 &&  $Batters[$i]->Inning > Yii::app()->user->getState('inning') ){
+			$i++;
+			Yii::app()->user->setState('batterNumber',Yii::app()->user->getState('batterNumber')+1);
+		}
+
+
+		$class = "grayatbat";
+
+		//Select Pitcher || $Batters[$i]->DefensePosition == "11"
+		if ($Batters[$i]->DefensePosition == "1") {
+			$pitcher[] = $i;
+		}
+
+			$player=Players::model()->findByPk($Batters[$i]->Players_idplayer); //CAMBIAR LIST de USUARIOS
+
+
+
+			//Player at Bat
+			if ( Yii::app()->user->getState('battingteam') == $teamid){
+
+
+				//Style player at bat
+
+				if ( Yii::app()->user->getState('batterNumber') == $i+2){
+					$class = "brownatbat";
+					$number = $i + 1;
+					echo "<script  type='text/javascript'> var batter=$player->idplayer </script>"; //Batter ID
+					echo "<script  type='text/javascript'> var batterNumber=$model->Batter </script>"; //Batter number
+					echo "<script> $('#span-23').css('text-align','center'); $('#span-23').css('text-weight','bold');$('#span-23').html('Batter $number - #".$Batters[$i]->Number. " " .
+					$player->Firstname ." ".$player->Lastname[0].", ".$positions[$Batters[$i]->DefensePosition-1] ."');</script> ";
 				}
-				//for ($i=0;$i < $count; $i++){
-				for ($i=0;$i < $count; $i++){
-					
-					//echo  "BAT".Yii::app()->user->getState('batterNumber') ;
-					//echo "-$i-SUP<br> ";
-					
-					
 
-					//Check sustitutions
-					if ($i < $count -1 ){
-						if ($Batters[$i+1]->Inning != 1) {
-							if ( $Batters[$i+1]->Inning <=  Yii::app()->user->getState('inning') ){
-								//Check if batterNumber == actual i loop
-								if ( ( $i+1 ) == Yii::app()->user->getState('batterNumber')){
-									;
-								}
-								$i++; //Set the next player
-								Yii::app()->user->setState('batterNumber',Yii::app()->user->getState('batterNumber')+1);
-							}
-						}
-					}
-					
-					//Check if the sustitution is not in this inning yet
-					if ( $Batters[$i]->Inning != 1 &&  $Batters[$i]->Inning > Yii::app()->user->getState('inning') ){
-						$i++;
-						Yii::app()->user->setState('batterNumber',Yii::app()->user->getState('batterNumber')+1);
-					}
-					
-					
-					$class = "grayatbat";
-					
-					//Select Pitcher || $Batters[$i]->DefensePosition == "11"
-					if ($Batters[$i]->DefensePosition == "1") {
-						$pitcher[] = $i;
-					}
-						
-						$player=Players::model()->findByPk($Batters[$i]->Players_idplayer); //CAMBIAR LIST de USUARIOS
-						
-						
-						
-						//Player at Bat
-						if ( Yii::app()->user->getState('battingteam') == $teamid){
-							
-							
-							//Style player at bat	
 
-							if ( Yii::app()->user->getState('batterNumber') == $i+2){
-								$class = "brownatbat";
-								$number = $i + 1;
-								echo "<script  type='text/javascript'> var batter=$player->idplayer </script>"; //Batter ID
-								echo "<script  type='text/javascript'> var batterNumber=$model->Batter </script>"; //Batter number
-								echo "<script> $('#span-23').css('text-align','center'); $('#span-23').css('text-weight','bold');$('#span-23').html('Batter $number - #".$Batters[$i]->Number. " " . 
-								$player->Firstname ." ".$player->Lastname[0].", ".$positions[$Batters[$i]->DefensePosition-1] ."');</script> ";
-							}
-						
-								
-						}else{//SELECT THE FIELD PLAYERS 
-							
-							//Search the player stats
-							$e=0;
-							if ($count_stats_field){
-								for ($e;$e < $count_stats_field; $e++){
-									if ($StatsfieldingArray[$e]->Players_idplayer == $player->idplayer){
-										$Statsfielding =  $StatsfieldingArray[$e];
-										echo $form->hiddenfield($Statsfielding,'idstatsfield[]',array('value'=>$StatsfieldingArray[$e]->idstatsfield));
-										
-										$e = $count_stats_field;
-									} 
-								}
-							}
-							
-							if (! $Statsfielding->TC ) $Statsfielding->TC = 0;
-							if (! $Statsfielding->PO ) $Statsfielding->PO = 0;
-							if (! $Statsfielding->A ) $Statsfielding->A = 0;
-							if (! $Statsfielding->PB ) $Statsfielding->PB = 0;
-							
-							
-							if (! $Statsfielding->E ) $Statsfielding->E = 0;
-							if (! $Statsfielding->INN ) $Statsfielding->INN = 0;
-							if (! $Statsfielding->CS ) $Statsfielding->CS = 0;
-							if (! $Statsfielding->C_WP ) $Statsfielding->C_WP = 0;
-							
-							if (Yii::app()->user->getState('inning') == 1) {
-								$Statsfielding->GS = 1;
-							}else
-								$Statsfielding->GS = 0;
-						
-							//The total number of games in which the pitcher appeared, whether as the starter or as a reliever.
-							if (! $Statsfielding->G) $Statsfielding->G = 1;
-						
-							
-							echo $form->hiddenfield($Statsfielding,'Players_idplayer[]',array('value'=>$player->idplayer));
-							echo $form->hiddenfield($Statsfielding,'Games_idgame[]',array('value'=>$idgame));
-							$strPosition=$Batters[$i]->DefensePosition;
-							
-							echo $form->hiddenfield($Statsfielding,'TC[]',array('value'=>$Statsfielding->TC,'class'=>'inputnumbers','maxsize'=>2,"id"=>"fTC$player->idplayer"));
-							echo $form->hiddenfield($Statsfielding,'PO[]',array('value'=>$Statsfielding->PO,'class'=>'inputnumbers','maxsize'=>2,"id"=>"fPO$player->idplayer"));
-							echo $form->hiddenfield($Statsfielding,'A[]',array('value'=>$Statsfielding->A,'class'=>'inputnumbers','maxsize'=>2,"id"=>"fA$player->idplayer"));
-							echo $form->hiddenfield($Statsfielding,'PB[]',array('value'=>$Statsfielding->PB,'class'=>'inputnumbers','maxsize'=>2,"id"=>"fPB$player->idplayer"));
-							echo $form->hiddenfield($Statsfielding,'E[]',array('value'=>$Statsfielding->E,'class'=>'inputnumbers','maxsize'=>2,"id"=>"fE$player->idplayer"));
-							echo $form->hiddenfield($Statsfielding,'INN[]',array('value'=>$Statsfielding->INN,'class'=>'inputnumbers','maxsize'=>2,"id"=>"fINN$player->idplayer"));
-							echo $form->hiddenfield($Statsfielding,'DP[]',array('value'=>$Statsfielding->DP,'class'=>'inputnumbers','maxsize'=>2,"id"=>"fDP$player->idplayer"));
-							echo $form->hiddenfield($Statsfielding,'SB[]',array('value'=>$Statsfielding->SB,'class'=>'inputnumbers','maxsize'=>2,"id"=>"fSB$player->idplayer"));
-							echo $form->hiddenfield($Statsfielding,'CS[]',array('value'=>$Statsfielding->CS,'class'=>'inputnumbers','maxsize'=>2,"id"=>"fCS$player->idplayer"));
-							echo $form->hiddenfield($Statsfielding,'PB[]',array('value'=>$Statsfielding->PB,'class'=>'inputnumbers','maxsize'=>2,"id"=>"fPB$player->idplayer"));
-							echo $form->hiddenfield($Statsfielding,'C_WP[]',array('value'=>$Statsfielding->C_WP,'class'=>'inputnumbers','maxsize'=>2,"id"=>"fC_WP$player->idplayer"));
-							echo $form->hiddenfield($Statsfielding,'GS[]',array('value'=>$Statsfielding->GS,'class'=>'inputnumbers','maxsize'=>2,"id"=>"fGS$player->idplayer"));
-								
-									
-							switch ($Batters[$i]->DefensePosition){
-								
-								case 1: //Pitcher
-									$str = "'P: # ".$Batters[$i]->Number." ".$player->Firstname."'";
-									Yii::app()->user->setState('pitcher',$player->idplayer);
-									echo "<script  type='text/javascript'> var pitcher=$player->idplayer </script>";
-									echo "<script  type='text/javascript'> pitcherDefensive=$str;</script>";
-									
-									break;
-								case 2: //catcher
-									Yii::app()->user->setState('catcher',$player->idplayer);
-									echo "<script  type='text/javascript'> var catcher=$player->idplayer </script>";
-									$str = "'C: # ".$Batters[$i]->Number." ".$player->Firstname."'";
-									echo "<script  type='text/javascript'> catcherDefensive=$str;</script>";
-									break;
-								case 3: //base1
-									$str = "'B1: # ".$Batters[$i]->Number." ".$player->Firstname."'";
-									
-									Yii::app()->user->setState('base1',$player->idplayer);
-									echo "<script  type='text/javascript'> v1bDefensive=$str;</script>";
-									echo "<script  type='text/javascript'> var base1=$player->idplayer </script>";
-									break;
-								case 4: //base2
-									$str = "'B2: # ".$Batters[$i]->Number." ".$player->Firstname."'";
-									echo "<script  type='text/javascript'> v2bDefensive=$str;</script>";
-									Yii::app()->user->setState('base2',$player->idplayer);
-									echo "<script  type='text/javascript'> var base2=$player->idplayer </script>";
-									break;
-								case 5: //base3
-									$str = "'B3: # ".$Batters[$i]->Number." ".$player->Firstname."'";
-									echo "<script  type='text/javascript'> v3bDefensive=$str;</script>";
-									Yii::app()->user->setState('base3',$player->idplayer);
-									echo "<script  type='text/javascript'> var base3=$player->idplayer </script>";
-									break;
-								case 6: //shortstop
-									$str = "'SS: # ".$Batters[$i]->Number." ".$player->Firstname."'";
-									echo "<script  type='text/javascript'> ssDefensive=$str;</script>";
-									Yii::app()->user->setState('shortstop',$player->idplayer);
-									echo "<script  type='text/javascript'> var shortstop=$player->idplayer </script>";
-									break;
-								case 7: //leftfield
-									$str = "'LF: # ".$Batters[$i]->Number." ".$player->Firstname."'";
-									echo "<script  type='text/javascript'> lfDefensive=$str;</script>";
-									Yii::app()->user->setState('leftfield',$player->idplayer);
-									echo "<script  type='text/javascript'> var leftfield=$player->idplayer </script>";
-									break;
-								case 8: //centerfield
-									$str = "'CF: # ".$Batters[$i]->Number." ".$player->Firstname."'";
-									echo "<script  type='text/javascript'> cfDefensive=$str;</script>";
-									Yii::app()->user->setState('centerfield',$player->idplayer);
-									echo "<script  type='text/javascript'> var centerfield=$player->idplayer </script>";
-									break;
-								case 9: //rightfield
-									$str = "'RF: # ".$Batters[$i]->Number." ".$player->Firstname."'";
-									echo "<script  type='text/javascript'> rfDefensive=$str;</script>";
-									Yii::app()->user->setState('rightfield',$player->idplayer);
-									echo "<script  type='text/javascript'> var rightfield=$player->idplayer </script>";
-									break;
-								case 10: //EF
-									break;
-								case 11: //Designatedhitter
-									Yii::app()->user->setState('designatedhitter',$player->idplayer);
-									echo "<script  type='text/javascript'> var designatedhitter=$player->idplayer </script>";
-									break;
-								case 12: //PH pinch hitter
-									Yii::app()->user->setState('pinchhitter',$player->idplayer);
-									echo "<script  type='text/javascript'> var pinchhitter=$player->idplayer </script>";
-									break;
-								case 13: //PR pinch runner
-									Yii::app()->user->setState('pinchrunner',$player->idplayer);
-									echo "<script  type='text/javascript'> var pinchrunner=$player->idplayer </script>";
-									break;
-								case 14: //CR
-									break;
-								case 15: //EH
-									break;
-								case 16: //X
-									break;
-								
-								
-							}				
-										
-							
-						
-						}
-						
-						
-						$e=0;
-						
-						//Search the player stats
-						if ($count_stats_hit){
-							for ($e;$e < $count_stats_hit; $e++){
-								
-								if ($StatshittingArray[$e]->Players_idplayer == $player->idplayer){
-									
-									$Statshitting =  $StatshittingArray[$e];
-									echo $form->hiddenfield($Statshitting,'idstatshit[]',array('value'=>$StatshittingArray[$e]->idstatshit));
-									$e = $count_stats_hit;
-								} 
-							}
-						}
-							
-						if($Batters[$i]->DefensePosition != "1"){ 
+			}else{//SELECT THE FIELD PLAYERS
 
-						echo "<tr> 
-						<td colspan=3 class='$class'>".$Batters[$i]->Number." ".$player->Firstname . ' ' . $player->Lastname[0]. " - ". $positions[$Batters[$i]->DefensePosition-1]. "</td>";
-						
-						if (! $Statshitting->AB) $Statshitting->AB = 0;
-						if (! $Statshitting->H) $Statshitting->H = 0;
-						if (! $Statshitting->RBI) $Statshitting->RBI = 0;
-						if (! $Statshitting->BB) $Statshitting->BB = 0;
-						if (! $Statshitting->SO) $Statshitting->SO = 0;
-						
-						if (! $Statshitting->PA) $Statshitting->PA = 0;
-						if (! $Statshitting->R) $Statshitting->R = 0;
-						if (! $Statshitting->v2B) $Statshitting->v2B = 0;
-						if (! $Statshitting->v3B) $Statshitting->v3B = 0;
-						if (! $Statshitting->HR) $Statshitting->HR = 0;
-						if (! $Statshitting->TB) $Statshitting->TB = 0;
-						if (! $Statshitting->IBB) $Statshitting->IBB = 0;
-						if (! $Statshitting->HP) $Statshitting->HP = 0;
-						if (! $Statshitting->SH) $Statshitting->SH = 0;
-						if (! $Statshitting->SF) $Statshitting->SF = 0;
-						if (! $Statshitting->SB) $Statshitting->SB = 0;
-						if (! $Statshitting->CS) $Statshitting->CS = 0;
-						if (! $Statshitting->LOB) $Statshitting->LOB = 0;
-						if (! $Statshitting->OE) $Statshitting->OE = 0;
-						if (! $Statshitting->FC) $Statshitting->FC = 0;
-						if (! $Statshitting->CO) $Statshitting->CO = 0;
-						if (! $Statshitting->DP) $Statshitting->DP = 0;
-						if (! $Statshitting->TP) $Statshitting->TP = 0;
-						if (! $Statshitting->OBP) $Statshitting->OBP = 0;
-						if (! $Statshitting->SLG) $Statshitting->SLG = 0;
-						if (! $Statshitting->AVG) $Statshitting->AVG = 0;
-						
-						echo "<td class='$class'>".$form->textfield($Statshitting,'AB[]',array("readonly"=>'true','value'=>$Statshitting->AB,'class'=>'inputnumbers','maxsize'=>2,"id"=>"AB$player->idplayer"))."</td>";
-						echo "<td class='$class'>".$form->textfield($Statshitting,'H[]',array("readonly"=>'true','value'=>$Statshitting->H,'class'=>'inputnumbers','maxsize'=>2,"id"=>"H$player->idplayer"))."</td>";
-						echo "<td class='$class'>".$form->textfield($Statshitting,'RBI[]',array("readonly"=>'true','value'=>$Statshitting->RBI,'class'=>'inputnumbers','maxsize'=>2,"id"=>"RBI$player->idplayer"))."</td>";
-						echo "<td class='$class'>".$form->textfield($Statshitting,'BB[]',array("readonly"=>'true','value'=>$Statshitting->BB,'class'=>'inputnumbers','maxsize'=>2,"id"=>"BB$player->idplayer"))."</td>";
-						echo "<td class='$class'>".$form->textfield($Statshitting,'SO[]',array("readonly"=>'true','value'=>$Statshitting->SO,'class'=>'inputnumbers','maxsize'=>2,"id"=>"SO$player->idplayer"))."</td>";
-						
-						echo $form->hiddenfield($Statshitting,'PA[]',array('value'=>$Statshitting->PA,'class'=>'inputnumbers','maxsize'=>2,"id"=>"PA$player->idplayer"));
-						echo $form->hiddenfield($Statshitting,'R[]',array('value'=>$Statshitting->R,'class'=>'inputnumbers','maxsize'=>2,"id"=>"R$player->idplayer"));
-						echo $form->hiddenfield($Statshitting,'v2B[]',array('value'=>$Statshitting->v2B,'class'=>'inputnumbers','maxsize'=>2,"id"=>"v2B$player->idplayer"));
-						echo $form->hiddenfield($Statshitting,'v3B[]',array('value'=>$Statshitting->v3B,'class'=>'inputnumbers','maxsize'=>2,"id"=>"v3B$player->idplayer"));
-						echo $form->hiddenfield($Statshitting,'HR[]',array('value'=>$Statshitting->HR,'class'=>'inputnumbers','maxsize'=>2,"id"=>"HR$player->idplayer"));
-						echo $form->hiddenfield($Statshitting,'TB[]',array('value'=>$Statshitting->TB,'class'=>'inputnumbers','maxsize'=>2,"id"=>"TB$player->idplayer"));
-						echo $form->hiddenfield($Statshitting,'IBB[]',array('value'=>$Statshitting->IBB,'class'=>'inputnumbers','maxsize'=>2,"id"=>"IBB$player->idplayer"));
-						echo $form->hiddenfield($Statshitting,'HP[]',array('value'=>$Statshitting->HP,'class'=>'inputnumbers','maxsize'=>2,"id"=>"HP$player->idplayer"));
-						echo $form->hiddenfield($Statshitting,'HBP[]',array('value'=>$Statshitting->HBP,'class'=>'inputnumbers','maxsize'=>2,"id"=>"HBP$player->idplayer"));
-						echo $form->hiddenfield($Statshitting,'SH[]',array('value'=>$Statshitting->SH,'class'=>'inputnumbers','maxsize'=>2,"id"=>"SH$player->idplayer"));
-						echo $form->hiddenfield($Statshitting,'SF[]',array('value'=>$Statshitting->SF,'class'=>'inputnumbers','maxsize'=>2,"id"=>"SF$player->idplayer"));
-						echo $form->hiddenfield($Statshitting,'SB[]',array('value'=>$Statshitting->SB,'class'=>'inputnumbers','maxsize'=>2,"id"=>"SB$player->idplayer"));
-						echo $form->hiddenfield($Statshitting,'CS[]',array('value'=>$Statshitting->CS,'class'=>'inputnumbers','maxsize'=>2,"id"=>"CS$player->idplayer"));
-						echo $form->hiddenfield($Statshitting,'LOB[]',array('value'=>$Statshitting->LOB,'class'=>'inputnumbers','maxsize'=>2,"id"=>"LOB$player->idplayer"));
-						echo $form->hiddenfield($Statshitting,'OE[]',array('value'=>$Statshitting->OE,'class'=>'inputnumbers','maxsize'=>2,"id"=>"OE$player->idplayer"));
-						echo $form->hiddenfield($Statshitting,'FC[]',array('value'=>$Statshitting->FC,'class'=>'inputnumbers','maxsize'=>2,"id"=>"FC$player->idplayer"));
-						echo $form->hiddenfield($Statshitting,'CO[]',array('value'=>$Statshitting->CO,'class'=>'inputnumbers','maxsize'=>2,"id"=>"CO$player->idplayer"));
-						echo $form->hiddenfield($Statshitting,'DP[]',array('value'=>$Statshitting->DP,'class'=>'inputnumbers','maxsize'=>2,"id"=>"DP$player->idplayer"));
-						echo $form->hiddenfield($Statshitting,'TP[]',array('value'=>$Statshitting->TP,'class'=>'inputnumbers','maxsize'=>2,"id"=>"TP$player->idplayer"));
-						echo $form->hiddenfield($Statshitting,'OBP[]',array('value'=>$Statshitting->OBP,'class'=>'inputnumbers','maxsize'=>2,"id"=>"OBP$player->idplayer"));
-						echo $form->hiddenfield($Statshitting,'SLG[]',array('value'=>$Statshitting->SLG,'class'=>'inputnumbers','maxsize'=>2,"id"=>"SLG$player->idplayer"));
-						echo $form->hiddenfield($Statshitting,'AVG[]',array('value'=>$Statshitting->AVG,'class'=>'inputnumbers','maxsize'=>2,"id"=>"AVG$player->idplayer"));
-						echo $form->hiddenfield($Statshitting,'SAC[]',array('value'=>$Statshitting->SAC,'class'=>'inputnumbers','maxsize'=>2,"id"=>"SAC$player->idplayer"));
-						echo $form->hiddenfield($Statshitting,'GDP[]',array('value'=>$Statshitting->GDP,'class'=>'inputnumbers','maxsize'=>2,"id"=>"GDP$player->idplayer"));
-						echo $form->hiddenfield($Statshitting,'XBH[]',array('value'=>$Statshitting->XBH,'class'=>'inputnumbers','maxsize'=>2,"id"=>"XBH$player->idplayer"));
-						
-						echo $form->hiddenfield($Statshitting,'Players_idplayer[]',array('value'=>$player->idplayer));
-						echo $form->hiddenfield($Statshitting,'Games_idgame[]',array('value'=>$idgame));
-						
-						if ( Yii::app()->user->getState('battingteam') == $teamid)
-							if ( Yii::app()->user->getState('batterNumber') == $i+1){
-								echo "<script> $('#span-23').html( $('#span-23').html() + ' ( $Statshitting->H of $Statshitting->AB )') </script>";
-							}
-						echo "</tr>";
+				//Search the player stats
+				$e=0;
+				if ($count_stats_field){
+					for ($e;$e < $count_stats_field; $e++){
+						if ($StatsfieldingArray[$e]->Players_idplayer == $player->idplayer){
+							$Statsfielding =  $StatsfieldingArray[$e];
+							echo $form->hiddenfield($Statsfielding,'idstatsfield[]',array('value'=>$StatsfieldingArray[$e]->idstatsfield));
+
+							$e = $count_stats_field;
 						}
 					}
-					
-						
-				
-				echo "<tr class='trdiv'></tr>";
-				echo "<tr>";
-					echo "<td class='blacktitle' colspan=8> PITCHING STAT </td>";
-				echo "</tr>";
-				echo "<tr class='greentr'>";
-					echo "<td width='30%'> Pitcher </td> <td>IP</td> <td>H</td> <td>R</td> <td>BB</td> <td>SO</td>  <td>B</td>  <td>S</td>";
-				echo "</tr>";
-				
-				//Load stats of players
-				$criteria = new CDbCriteria();
-				$criteria->addcondition("Games_idgame=$idgame");
-				$Statspitching = new Statspitching;
-				$StatspitchingArray = Statspitching::model()->findAll($criteria);
-				
-				$count_stats_pit = count ($StatspitchingArray);
-				
-				
-					for ($o=0;$o < count($pitcher); $o++){
-						$class = "grayatbat";
-						//Select from pitcher's array
-						$i = $pitcher[$o];
-						$player=Players::model()->findByPk($Batters[$i]->Players_idplayer); //CAMBIAR LIST de USUARIOS
-						
-							
-							$e=0;
-							//Search the pitcher stats
-							if ($count_stats_pit){
-								for ($e;$e < $count_stats_pit; $e++){
-									if ($StatspitchingArray[$e]->Players_idplayer == $player->idplayer){
-										
-							
-										$Statspitching =  $StatspitchingArray[$e];
-										echo $form->hiddenfield($Statspitching,'idstatspit[]',array('value'=>$StatspitchingArray[$e]->idstatspit));
-										$e = $count_stats_pit;
-									} 
-								}
-							}
-								
-							
-							echo "<tr> 
-							<td 	 class='$class'>".$Batters[$i]->Number." ".$player->Firstname ." ".$player->Lastname[0].  "</td>";
-							
-							
-							//Games started as the pitcher
-							
-							if (Yii::app()->user->getState('inning') == 1) {
-								$Statspitching->GS = 1;
-							}else
-								$Statspitching->GS = 0;
-						
-							//The total number of games in which the pitcher appeared, whether as the starter or as a reliever.
-							if (! $Statspitching->G) $Statspitching->G = 1;
-							
-							
-							echo "<td class='$class'>".$form->textfield($Statspitching,'IP[]',array("readonly"=>'true','value'=>$Statspitching->IP,'class'=>'inputnumbers','maxsize'=>2,"id"=>"pIP$player->idplayer"))."</td>";
-							echo "<td class='$class'>".$form->textfield($Statspitching,'H[]',array("readonly"=>'true','value'=>$Statspitching->H,'class'=>'inputnumbers','maxsize'=>2,"id"=>"pH$player->idplayer"))."</td>";
-							echo "<td class='$class'>".$form->textfield($Statspitching,'R[]',array("readonly"=>'true','value'=>$Statspitching->R,'class'=>'inputnumbers','maxsize'=>2,"id"=>"pR$player->idplayer"))."</td>";
-							echo "<td class='$class'>".$form->textfield($Statspitching,'BB[]',array("readonly"=>'true','value'=>$Statspitching->BB,'class'=>'inputnumbers','maxsize'=>2,"id"=>"pBB$player->idplayer"))."</td>";
-							echo "<td class='$class'>".$form->textfield($Statspitching,'SO[]',array("readonly"=>'true','value'=>$Statspitching->SO,'class'=>'inputnumbers','maxsize'=>2,"id"=>"pSO$player->idplayer"))."</td>";
-							echo "<td class='$class'>".$form->textfield($Statspitching,'B[]',array("readonly"=>'true','value'=>$Statspitching->B,'class'=>'inputnumbers','maxsize'=>2,"id"=>"pB$player->idplayer"))."</td>";
-							echo "<td class='$class'>".$form->textfield($Statspitching,'S[]',array("readonly"=>'true','value'=>$Statspitching->S,'class'=>'inputnumbers','maxsize'=>2,"id"=>"pS$player->idplayer"))."</td>";
-							
-							echo $form->hiddenfield($Statspitching,'BF[]',array('value'=>$Statspitching->BF,"id"=>"pBF$player->idplayer"));
-							echo $form->hiddenfield($Statspitching,'ER[]',array('value'=>$Statspitching->ER,"id"=>"pER$player->idplayer"));
-							echo $form->hiddenfield($Statspitching,'v2B[]',array('value'=>$Statspitching->v2B,"id"=>"pv2B$player->idplayer"));
-							echo $form->hiddenfield($Statspitching,'v3B[]',array('value'=>$Statspitching->v3B,"id"=>"pv3B$player->idplayer"));
-							echo $form->hiddenfield($Statspitching,'HR[]',array('value'=>$Statspitching->HR,"id"=>"pHR$player->idplayer"));
-							echo $form->hiddenfield($Statspitching,'SH[]',array('value'=>$Statspitching->SH,"id"=>"pSH$player->idplayer"));
-							echo $form->hiddenfield($Statspitching,'SF[]',array('value'=>$Statspitching->SF,"id"=>"pSF$player->idplayer"));
-							echo $form->hiddenfield($Statspitching,'HBP[]',array('value'=>$Statspitching->HBP,"id"=>"pHBP$player->idplayer"));
-							echo $form->hiddenfield($Statspitching,'HB[]',array('value'=>$Statspitching->HB,"id"=>"pHB$player->idplayer"));
-							echo $form->hiddenfield($Statspitching,'WP[]',array('value'=>$Statspitching->WP,"id"=>"pWP$player->idplayer"));
-							//echo $form->hiddenfield($Statspitching,'CO[]',array('value'=>$Statspitching->CO,"id"=>"pCO$player->idplayer"));
-							echo $form->hiddenfield($Statspitching,'BK[]',array('value'=>$Statspitching->BK,"id"=>"pBK$player->idplayer"));
-							echo $form->hiddenfield($Statspitching,'G[]',array('value'=>$Statspitching->G,"id"=>"pG$player->idplayer"));
-							echo $form->hiddenfield($Statspitching,'GS[]',array('value'=>$Statspitching->GS,"id"=>"pGS$player->idplayer"));
-							echo $form->hiddenfield($Statspitching,'CG[]',array('value'=>$Statspitching->CG,"id"=>"pCG$player->idplayer"));
-							//echo $form->hiddenfield($Statspitching,'CGL[]',array('value'=>$Statspitching->CGL,"id"=>"pCGL$player->idplayer"));
-							echo $form->hiddenfield($Statspitching,'W[]',array('value'=>$Statspitching->W,"id"=>"pW$player->idplayer"));
-							//echo $form->hiddenfield($Statspitching,'LS[]',array('value'=>$Statspitching->LS,"id"=>"pLS$player->idplayer"));
-							//echo $form->hiddenfield($Statspitching,'HO[]',array('value'=>$Statspitching->HO,"id"=>"pHO$player->idplayer"));
-							echo $form->hiddenfield($Statspitching,'SV[]',array('value'=>$Statspitching->SV,"id"=>"pSV$player->idplayer"));
-							echo $form->hiddenfield($Statspitching,'AB[]',array('value'=>$Statspitching->AB,"id"=>"pAB$player->idplayer"));	
-							echo $form->hiddenfield($Statspitching,'CS[]',array('value'=>$Statspitching->CS,"id"=>"pCS$player->idplayer"));	
-							echo $form->hiddenfield($Statspitching,'SB[]',array('value'=>$Statspitching->SB,"id"=>"pSB$player->idplayer"));	
-							echo $form->hiddenfield($Statspitching,'NP[]',array('value'=>$Statspitching->NP,"id"=>"pNP$player->idplayer"));	
-							echo $form->hiddenfield($Statspitching,'GIDP[]',array('value'=>$Statspitching->GIDP,"id"=>"pGIDP$player->idplayer"));	
-							
-							echo $form->hiddenfield($Statspitching,'Players_idplayer[]',array('value'=>$player->idplayer));
-							echo $form->hiddenfield($Statspitching,'Games_idgame[]',array('value'=>$idgame));
-							echo "</tr>";
-					
+				}
+
+				if (! $Statsfielding->TC ) $Statsfielding->TC = 0;
+				if (! $Statsfielding->PO ) $Statsfielding->PO = 0;
+				if (! $Statsfielding->A ) $Statsfielding->A = 0;
+				if (! $Statsfielding->PB ) $Statsfielding->PB = 0;
+
+
+				if (! $Statsfielding->E ) $Statsfielding->E = 0;
+				if (! $Statsfielding->INN ) $Statsfielding->INN = 0;
+				if (! $Statsfielding->CS ) $Statsfielding->CS = 0;
+				if (! $Statsfielding->C_WP ) $Statsfielding->C_WP = 0;
+
+				if (Yii::app()->user->getState('inning') == 1) {
+					$Statsfielding->GS = 1;
+				}else
+					$Statsfielding->GS = 0;
+
+				//The total number of games in which the pitcher appeared, whether as the starter or as a reliever.
+				if (! $Statsfielding->G) $Statsfielding->G = 1;
+
+
+				echo $form->hiddenfield($Statsfielding,'Players_idplayer[]',array('value'=>$player->idplayer));
+				echo $form->hiddenfield($Statsfielding,'Games_idgame[]',array('value'=>$idgame));
+				$strPosition=$Batters[$i]->DefensePosition;
+
+				echo $form->hiddenfield($Statsfielding,'TC[]',array('value'=>$Statsfielding->TC,'class'=>'inputnumbers','maxsize'=>2,"id"=>"fTC$player->idplayer"));
+				echo $form->hiddenfield($Statsfielding,'PO[]',array('value'=>$Statsfielding->PO,'class'=>'inputnumbers','maxsize'=>2,"id"=>"fPO$player->idplayer"));
+				echo $form->hiddenfield($Statsfielding,'A[]',array('value'=>$Statsfielding->A,'class'=>'inputnumbers','maxsize'=>2,"id"=>"fA$player->idplayer"));
+				echo $form->hiddenfield($Statsfielding,'PB[]',array('value'=>$Statsfielding->PB,'class'=>'inputnumbers','maxsize'=>2,"id"=>"fPB$player->idplayer"));
+				echo $form->hiddenfield($Statsfielding,'E[]',array('value'=>$Statsfielding->E,'class'=>'inputnumbers','maxsize'=>2,"id"=>"fE$player->idplayer"));
+				echo $form->hiddenfield($Statsfielding,'INN[]',array('value'=>$Statsfielding->INN,'class'=>'inputnumbers','maxsize'=>2,"id"=>"fINN$player->idplayer"));
+				echo $form->hiddenfield($Statsfielding,'DP[]',array('value'=>$Statsfielding->DP,'class'=>'inputnumbers','maxsize'=>2,"id"=>"fDP$player->idplayer"));
+				echo $form->hiddenfield($Statsfielding,'SB[]',array('value'=>$Statsfielding->SB,'class'=>'inputnumbers','maxsize'=>2,"id"=>"fSB$player->idplayer"));
+				echo $form->hiddenfield($Statsfielding,'CS[]',array('value'=>$Statsfielding->CS,'class'=>'inputnumbers','maxsize'=>2,"id"=>"fCS$player->idplayer"));
+				echo $form->hiddenfield($Statsfielding,'PB[]',array('value'=>$Statsfielding->PB,'class'=>'inputnumbers','maxsize'=>2,"id"=>"fPB$player->idplayer"));
+				echo $form->hiddenfield($Statsfielding,'C_WP[]',array('value'=>$Statsfielding->C_WP,'class'=>'inputnumbers','maxsize'=>2,"id"=>"fC_WP$player->idplayer"));
+				echo $form->hiddenfield($Statsfielding,'GS[]',array('value'=>$Statsfielding->GS,'class'=>'inputnumbers','maxsize'=>2,"id"=>"fGS$player->idplayer"));
+
+
+				switch ($Batters[$i]->DefensePosition){
+
+					case 1: //Pitcher
+						$str = "'P: # ".$Batters[$i]->Number." ".$player->Firstname."'";
+						Yii::app()->user->setState('pitcher',$player->idplayer);
+						echo "<script  type='text/javascript'> var pitcher=$player->idplayer </script>";
+						echo "<script  type='text/javascript'> pitcherDefensive=$str;</script>";
+
+						break;
+					case 2: //catcher
+						Yii::app()->user->setState('catcher',$player->idplayer);
+						echo "<script  type='text/javascript'> var catcher=$player->idplayer </script>";
+						$str = "'C: # ".$Batters[$i]->Number." ".$player->Firstname."'";
+						echo "<script  type='text/javascript'> catcherDefensive=$str;</script>";
+						break;
+					case 3: //base1
+						$str = "'B1: # ".$Batters[$i]->Number." ".$player->Firstname."'";
+
+						Yii::app()->user->setState('base1',$player->idplayer);
+						echo "<script  type='text/javascript'> v1bDefensive=$str;</script>";
+						echo "<script  type='text/javascript'> var base1=$player->idplayer </script>";
+						break;
+					case 4: //base2
+						$str = "'B2: # ".$Batters[$i]->Number." ".$player->Firstname."'";
+						echo "<script  type='text/javascript'> v2bDefensive=$str;</script>";
+						Yii::app()->user->setState('base2',$player->idplayer);
+						echo "<script  type='text/javascript'> var base2=$player->idplayer </script>";
+						break;
+					case 5: //base3
+						$str = "'B3: # ".$Batters[$i]->Number." ".$player->Firstname."'";
+						echo "<script  type='text/javascript'> v3bDefensive=$str;</script>";
+						Yii::app()->user->setState('base3',$player->idplayer);
+						echo "<script  type='text/javascript'> var base3=$player->idplayer </script>";
+						break;
+					case 6: //shortstop
+						$str = "'SS: # ".$Batters[$i]->Number." ".$player->Firstname."'";
+						echo "<script  type='text/javascript'> ssDefensive=$str;</script>";
+						Yii::app()->user->setState('shortstop',$player->idplayer);
+						echo "<script  type='text/javascript'> var shortstop=$player->idplayer </script>";
+						break;
+					case 7: //leftfield
+						$str = "'LF: # ".$Batters[$i]->Number." ".$player->Firstname."'";
+						echo "<script  type='text/javascript'> lfDefensive=$str;</script>";
+						Yii::app()->user->setState('leftfield',$player->idplayer);
+						echo "<script  type='text/javascript'> var leftfield=$player->idplayer </script>";
+						break;
+					case 8: //centerfield
+						$str = "'CF: # ".$Batters[$i]->Number." ".$player->Firstname."'";
+						echo "<script  type='text/javascript'> cfDefensive=$str;</script>";
+						Yii::app()->user->setState('centerfield',$player->idplayer);
+						echo "<script  type='text/javascript'> var centerfield=$player->idplayer </script>";
+						break;
+					case 9: //rightfield
+						$str = "'RF: # ".$Batters[$i]->Number." ".$player->Firstname."'";
+						echo "<script  type='text/javascript'> rfDefensive=$str;</script>";
+						Yii::app()->user->setState('rightfield',$player->idplayer);
+						echo "<script  type='text/javascript'> var rightfield=$player->idplayer </script>";
+						break;
+					case 10: //EF
+						break;
+					case 11: //Designatedhitter
+						Yii::app()->user->setState('designatedhitter',$player->idplayer);
+						echo "<script  type='text/javascript'> var designatedhitter=$player->idplayer </script>";
+						break;
+					case 12: //PH pinch hitter
+						Yii::app()->user->setState('pinchhitter',$player->idplayer);
+						echo "<script  type='text/javascript'> var pinchhitter=$player->idplayer </script>";
+						break;
+					case 13: //PR pinch runner
+						Yii::app()->user->setState('pinchrunner',$player->idplayer);
+						echo "<script  type='text/javascript'> var pinchrunner=$player->idplayer </script>";
+						break;
+					case 14: //CR
+						break;
+					case 15: //EH
+						break;
+					case 16: //X
+						break;
+
+
+				}
+
+
+
+			}
+
+
+			$e=0;
+
+			//Search the player stats
+			if ($count_stats_hit){
+				for ($e;$e < $count_stats_hit; $e++){
+
+					if ($StatshittingArray[$e]->Players_idplayer == $player->idplayer){
+
+						$Statshitting =  $StatshittingArray[$e];
+						echo $form->hiddenfield($Statshitting,'idstatshit[]',array('value'=>$StatshittingArray[$e]->idstatshit));
+						$e = $count_stats_hit;
 					}
-				
+				}
+			}
+
+			if($Batters[$i]->DefensePosition != "1"){
+
+			echo "<tr>
+			<td colspan=3 class='$class'>".$Batters[$i]->Number." ".$player->Firstname . ' ' . $player->Lastname[0]. " - ". $positions[$Batters[$i]->DefensePosition-1]. "</td>";
+
+			if (! $Statshitting->AB) $Statshitting->AB = 0;
+			if (! $Statshitting->H) $Statshitting->H = 0;
+			if (! $Statshitting->RBI) $Statshitting->RBI = 0;
+			if (! $Statshitting->BB) $Statshitting->BB = 0;
+			if (! $Statshitting->SO) $Statshitting->SO = 0;
+
+			if (! $Statshitting->PA) $Statshitting->PA = 0;
+			if (! $Statshitting->R) $Statshitting->R = 0;
+			if (! $Statshitting->v2B) $Statshitting->v2B = 0;
+			if (! $Statshitting->v3B) $Statshitting->v3B = 0;
+			if (! $Statshitting->HR) $Statshitting->HR = 0;
+			if (! $Statshitting->TB) $Statshitting->TB = 0;
+			if (! $Statshitting->IBB) $Statshitting->IBB = 0;
+			if (! $Statshitting->HP) $Statshitting->HP = 0;
+			if (! $Statshitting->SH) $Statshitting->SH = 0;
+			if (! $Statshitting->SF) $Statshitting->SF = 0;
+			if (! $Statshitting->SB) $Statshitting->SB = 0;
+			if (! $Statshitting->CS) $Statshitting->CS = 0;
+			if (! $Statshitting->LOB) $Statshitting->LOB = 0;
+			if (! $Statshitting->OE) $Statshitting->OE = 0;
+			if (! $Statshitting->FC) $Statshitting->FC = 0;
+			if (! $Statshitting->CO) $Statshitting->CO = 0;
+			if (! $Statshitting->DP) $Statshitting->DP = 0;
+			if (! $Statshitting->TP) $Statshitting->TP = 0;
+			if (! $Statshitting->OBP) $Statshitting->OBP = 0;
+			if (! $Statshitting->SLG) $Statshitting->SLG = 0;
+			if (! $Statshitting->AVG) $Statshitting->AVG = 0;
+
+			echo "<td class='$class'>".$form->textfield($Statshitting,'AB[]',array("readonly"=>'true','value'=>$Statshitting->AB,'class'=>'inputnumbers','maxsize'=>2,"id"=>"AB$player->idplayer"))."</td>";
+			echo "<td class='$class'>".$form->textfield($Statshitting,'H[]',array("readonly"=>'true','value'=>$Statshitting->H,'class'=>'inputnumbers','maxsize'=>2,"id"=>"H$player->idplayer"))."</td>";
+			echo "<td class='$class'>".$form->textfield($Statshitting,'RBI[]',array("readonly"=>'true','value'=>$Statshitting->RBI,'class'=>'inputnumbers','maxsize'=>2,"id"=>"RBI$player->idplayer"))."</td>";
+			echo "<td class='$class'>".$form->textfield($Statshitting,'BB[]',array("readonly"=>'true','value'=>$Statshitting->BB,'class'=>'inputnumbers','maxsize'=>2,"id"=>"BB$player->idplayer"))."</td>";
+			echo "<td class='$class'>".$form->textfield($Statshitting,'SO[]',array("readonly"=>'true','value'=>$Statshitting->SO,'class'=>'inputnumbers','maxsize'=>2,"id"=>"SO$player->idplayer"))."</td>";
+
+			echo $form->hiddenfield($Statshitting,'PA[]',array('value'=>$Statshitting->PA,'class'=>'inputnumbers','maxsize'=>2,"id"=>"PA$player->idplayer"));
+			echo $form->hiddenfield($Statshitting,'R[]',array('value'=>$Statshitting->R,'class'=>'inputnumbers','maxsize'=>2,"id"=>"R$player->idplayer"));
+			echo $form->hiddenfield($Statshitting,'v2B[]',array('value'=>$Statshitting->v2B,'class'=>'inputnumbers','maxsize'=>2,"id"=>"v2B$player->idplayer"));
+			echo $form->hiddenfield($Statshitting,'v3B[]',array('value'=>$Statshitting->v3B,'class'=>'inputnumbers','maxsize'=>2,"id"=>"v3B$player->idplayer"));
+			echo $form->hiddenfield($Statshitting,'HR[]',array('value'=>$Statshitting->HR,'class'=>'inputnumbers','maxsize'=>2,"id"=>"HR$player->idplayer"));
+			echo $form->hiddenfield($Statshitting,'TB[]',array('value'=>$Statshitting->TB,'class'=>'inputnumbers','maxsize'=>2,"id"=>"TB$player->idplayer"));
+			echo $form->hiddenfield($Statshitting,'IBB[]',array('value'=>$Statshitting->IBB,'class'=>'inputnumbers','maxsize'=>2,"id"=>"IBB$player->idplayer"));
+			echo $form->hiddenfield($Statshitting,'HP[]',array('value'=>$Statshitting->HP,'class'=>'inputnumbers','maxsize'=>2,"id"=>"HP$player->idplayer"));
+			echo $form->hiddenfield($Statshitting,'HBP[]',array('value'=>$Statshitting->HBP,'class'=>'inputnumbers','maxsize'=>2,"id"=>"HBP$player->idplayer"));
+			echo $form->hiddenfield($Statshitting,'SH[]',array('value'=>$Statshitting->SH,'class'=>'inputnumbers','maxsize'=>2,"id"=>"SH$player->idplayer"));
+			echo $form->hiddenfield($Statshitting,'SF[]',array('value'=>$Statshitting->SF,'class'=>'inputnumbers','maxsize'=>2,"id"=>"SF$player->idplayer"));
+			echo $form->hiddenfield($Statshitting,'SB[]',array('value'=>$Statshitting->SB,'class'=>'inputnumbers','maxsize'=>2,"id"=>"SB$player->idplayer"));
+			echo $form->hiddenfield($Statshitting,'CS[]',array('value'=>$Statshitting->CS,'class'=>'inputnumbers','maxsize'=>2,"id"=>"CS$player->idplayer"));
+			echo $form->hiddenfield($Statshitting,'LOB[]',array('value'=>$Statshitting->LOB,'class'=>'inputnumbers','maxsize'=>2,"id"=>"LOB$player->idplayer"));
+			echo $form->hiddenfield($Statshitting,'OE[]',array('value'=>$Statshitting->OE,'class'=>'inputnumbers','maxsize'=>2,"id"=>"OE$player->idplayer"));
+			echo $form->hiddenfield($Statshitting,'FC[]',array('value'=>$Statshitting->FC,'class'=>'inputnumbers','maxsize'=>2,"id"=>"FC$player->idplayer"));
+			echo $form->hiddenfield($Statshitting,'CO[]',array('value'=>$Statshitting->CO,'class'=>'inputnumbers','maxsize'=>2,"id"=>"CO$player->idplayer"));
+			echo $form->hiddenfield($Statshitting,'DP[]',array('value'=>$Statshitting->DP,'class'=>'inputnumbers','maxsize'=>2,"id"=>"DP$player->idplayer"));
+			echo $form->hiddenfield($Statshitting,'TP[]',array('value'=>$Statshitting->TP,'class'=>'inputnumbers','maxsize'=>2,"id"=>"TP$player->idplayer"));
+			echo $form->hiddenfield($Statshitting,'OBP[]',array('value'=>$Statshitting->OBP,'class'=>'inputnumbers','maxsize'=>2,"id"=>"OBP$player->idplayer"));
+			echo $form->hiddenfield($Statshitting,'SLG[]',array('value'=>$Statshitting->SLG,'class'=>'inputnumbers','maxsize'=>2,"id"=>"SLG$player->idplayer"));
+			echo $form->hiddenfield($Statshitting,'AVG[]',array('value'=>$Statshitting->AVG,'class'=>'inputnumbers','maxsize'=>2,"id"=>"AVG$player->idplayer"));
+			echo $form->hiddenfield($Statshitting,'SAC[]',array('value'=>$Statshitting->SAC,'class'=>'inputnumbers','maxsize'=>2,"id"=>"SAC$player->idplayer"));
+			echo $form->hiddenfield($Statshitting,'GDP[]',array('value'=>$Statshitting->GDP,'class'=>'inputnumbers','maxsize'=>2,"id"=>"GDP$player->idplayer"));
+			echo $form->hiddenfield($Statshitting,'XBH[]',array('value'=>$Statshitting->XBH,'class'=>'inputnumbers','maxsize'=>2,"id"=>"XBH$player->idplayer"));
+
+			echo $form->hiddenfield($Statshitting,'Players_idplayer[]',array('value'=>$player->idplayer));
+			echo $form->hiddenfield($Statshitting,'Games_idgame[]',array('value'=>$idgame));
+
+			if ( Yii::app()->user->getState('battingteam') == $teamid)
+				if ( Yii::app()->user->getState('batterNumber') == $i+1){
+					echo "<script> $('#span-23').html( $('#span-23').html() + ' ( $Statshitting->H of $Statshitting->AB )') </script>";
+				}
+			echo "</tr>";
+			}
+		}
+
+
+
+	echo "<tr class='trdiv'></tr>";
+	echo "<tr>";
+		echo "<td class='blacktitle' colspan=8> PITCHING STAT </td>";
+	echo "</tr>";
+	echo "<tr class='greentr'>";
+		echo "<td width='30%'> Pitcher </td> <td>IP</td> <td>H</td> <td>R</td> <td>BB</td> <td>SO</td>  <td>B</td>  <td>S</td>";
+	echo "</tr>";
+
+	//Load stats of players
+	$criteria = new CDbCriteria();
+	$criteria->addcondition("Games_idgame=$idgame");
+	$Statspitching = new Statspitching;
+	$StatspitchingArray = Statspitching::model()->findAll($criteria);
+
+	$count_stats_pit = count ($StatspitchingArray);
+
+		for ($o=0;$o < count($pitcher); $o++){
+			$class = "grayatbat";
+			//Select from pitcher's array
+			$i = $pitcher[$o];
+			$player=Players::model()->findByPk($Batters[$i]->Players_idplayer); //CAMBIAR LIST de USUARIOS
+
+
+				$e=0;
+				//Search the pitcher stats
+				if ($count_stats_pit){
+					for ($e;$e < $count_stats_pit; $e++){
+						if ($StatspitchingArray[$e]->Players_idplayer == $player->idplayer){
+
+
+							$Statspitching =  $StatspitchingArray[$e];
+							echo $form->hiddenfield($Statspitching,'idstatspit[]',array('value'=>$StatspitchingArray[$e]->idstatspit));
+							$e = $count_stats_pit;
+						}
+					}
+				}
+
+
+				echo "<tr>
+				<td 	 class='$class'>".$Batters[$i]->Number." ".$player->Firstname ." ".$player->Lastname[0].  "</td>";
+
+
+				//Games started as the pitcher
+
+				if (Yii::app()->user->getState('inning') == 1) {
+					$Statspitching->GS = 1;
+				}else
+					$Statspitching->GS = 0;
+
+				//The total number of games in which the pitcher appeared, whether as the starter or as a reliever.
+				if (! $Statspitching->G) $Statspitching->G = 1;
+
+
+				echo "<td class='$class'>".$form->textfield($Statspitching,'IP[]',array("readonly"=>'true','value'=>$Statspitching->IP,'class'=>'inputnumbers','maxsize'=>2,"id"=>"pIP$player->idplayer"))."</td>";
+				echo "<td class='$class'>".$form->textfield($Statspitching,'H[]',array("readonly"=>'true','value'=>$Statspitching->H,'class'=>'inputnumbers','maxsize'=>2,"id"=>"pH$player->idplayer"))."</td>";
+				echo "<td class='$class'>".$form->textfield($Statspitching,'R[]',array("readonly"=>'true','value'=>$Statspitching->R,'class'=>'inputnumbers','maxsize'=>2,"id"=>"pR$player->idplayer"))."</td>";
+				echo "<td class='$class'>".$form->textfield($Statspitching,'BB[]',array("readonly"=>'true','value'=>$Statspitching->BB,'class'=>'inputnumbers','maxsize'=>2,"id"=>"pBB$player->idplayer"))."</td>";
+				echo "<td class='$class'>".$form->textfield($Statspitching,'SO[]',array("readonly"=>'true','value'=>$Statspitching->SO,'class'=>'inputnumbers','maxsize'=>2,"id"=>"pSO$player->idplayer"))."</td>";
+				echo "<td class='$class'>".$form->textfield($Statspitching,'B[]',array("readonly"=>'true','value'=>$Statspitching->B,'class'=>'inputnumbers','maxsize'=>2,"id"=>"pB$player->idplayer"))."</td>";
+				echo "<td class='$class'>".$form->textfield($Statspitching,'S[]',array("readonly"=>'true','value'=>$Statspitching->S,'class'=>'inputnumbers','maxsize'=>2,"id"=>"pS$player->idplayer"))."</td>";
+
+				echo $form->hiddenfield($Statspitching,'BF[]',array('value'=>$Statspitching->BF,"id"=>"pBF$player->idplayer"));
+				echo $form->hiddenfield($Statspitching,'ER[]',array('value'=>$Statspitching->ER,"id"=>"pER$player->idplayer"));
+				echo $form->hiddenfield($Statspitching,'v2B[]',array('value'=>$Statspitching->v2B,"id"=>"pv2B$player->idplayer"));
+				echo $form->hiddenfield($Statspitching,'v3B[]',array('value'=>$Statspitching->v3B,"id"=>"pv3B$player->idplayer"));
+				echo $form->hiddenfield($Statspitching,'HR[]',array('value'=>$Statspitching->HR,"id"=>"pHR$player->idplayer"));
+				echo $form->hiddenfield($Statspitching,'SH[]',array('value'=>$Statspitching->SH,"id"=>"pSH$player->idplayer"));
+				echo $form->hiddenfield($Statspitching,'SF[]',array('value'=>$Statspitching->SF,"id"=>"pSF$player->idplayer"));
+				echo $form->hiddenfield($Statspitching,'HBP[]',array('value'=>$Statspitching->HBP,"id"=>"pHBP$player->idplayer"));
+				echo $form->hiddenfield($Statspitching,'HB[]',array('value'=>$Statspitching->HB,"id"=>"pHB$player->idplayer"));
+				echo $form->hiddenfield($Statspitching,'WP[]',array('value'=>$Statspitching->WP,"id"=>"pWP$player->idplayer"));
+				//echo $form->hiddenfield($Statspitching,'CO[]',array('value'=>$Statspitching->CO,"id"=>"pCO$player->idplayer"));
+				echo $form->hiddenfield($Statspitching,'BK[]',array('value'=>$Statspitching->BK,"id"=>"pBK$player->idplayer"));
+				echo $form->hiddenfield($Statspitching,'G[]',array('value'=>$Statspitching->G,"id"=>"pG$player->idplayer"));
+				echo $form->hiddenfield($Statspitching,'GS[]',array('value'=>$Statspitching->GS,"id"=>"pGS$player->idplayer"));
+				echo $form->hiddenfield($Statspitching,'CG[]',array('value'=>$Statspitching->CG,"id"=>"pCG$player->idplayer"));
+				//echo $form->hiddenfield($Statspitching,'CGL[]',array('value'=>$Statspitching->CGL,"id"=>"pCGL$player->idplayer"));
+				echo $form->hiddenfield($Statspitching,'W[]',array('value'=>$Statspitching->W,"id"=>"pW$player->idplayer"));
+				//echo $form->hiddenfield($Statspitching,'LS[]',array('value'=>$Statspitching->LS,"id"=>"pLS$player->idplayer"));
+				//echo $form->hiddenfield($Statspitching,'HO[]',array('value'=>$Statspitching->HO,"id"=>"pHO$player->idplayer"));
+				echo $form->hiddenfield($Statspitching,'SV[]',array('value'=>$Statspitching->SV,"id"=>"pSV$player->idplayer"));
+				echo $form->hiddenfield($Statspitching,'AB[]',array('value'=>$Statspitching->AB,"id"=>"pAB$player->idplayer"));
+				echo $form->hiddenfield($Statspitching,'CS[]',array('value'=>$Statspitching->CS,"id"=>"pCS$player->idplayer"));
+				echo $form->hiddenfield($Statspitching,'SB[]',array('value'=>$Statspitching->SB,"id"=>"pSB$player->idplayer"));
+				echo $form->hiddenfield($Statspitching,'NP[]',array('value'=>$Statspitching->NP,"id"=>"pNP$player->idplayer"));
+				echo $form->hiddenfield($Statspitching,'GIDP[]',array('value'=>$Statspitching->GIDP,"id"=>"pGIDP$player->idplayer"));
+
+				echo $form->hiddenfield($Statspitching,'Players_idplayer[]',array('value'=>$player->idplayer));
+				echo $form->hiddenfield($Statspitching,'Games_idgame[]',array('value'=>$idgame));
 				echo "</tr>";
+
+		}
+
+	echo "</tr>";
 				
 }
 
@@ -1547,7 +1546,9 @@ if (idevents){
 
  //$str1=loadEvents(1300);
 
-echo Yii::trace(CVarDumper::dumpAsString($str1),'salida');
+if (!empty($str1)) {
+	echo Yii::trace(CVarDumper::dumpAsString($str1), 'salida');
+}
  
 $str = "<script>
 basecanvas.beginPath();

@@ -166,7 +166,8 @@ class EventsController extends Controller
 		
 		$model=new Events;
 		
-		$ajax = $_POST['ajax'];
+		$ajax = isset($_POST['ajax']) ? $_POST['ajax'] : array();
+		$idevents = null;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
@@ -677,12 +678,13 @@ class EventsController extends Controller
 
 		//echo "<script> alert(".$_POST['link'].")</script>";
 		
-	 	if ($_POST['link'])
-					$this->redirect(array($_POST['link']));
+	 	if (!empty($_POST['link'])) {
+			$this->redirect(array($_POST['link']));
+		}
 						
-		if ($ajax && $idevents){
+		if ($ajax && $idevents) {
 			echo json_encode($idevents);
-		}else{
+		} else {
 			$this->render('create',array(
 			'model'=>$model,
 			));

@@ -15,7 +15,8 @@ $defensiveteam = setBattingTeamName($model);
 
 
 //Load events when id event is provided
-if ($idevent=$_GET['idevent']) {
+$idevent = isset($_GET['idevent']) ? $_GET['idevent'] : null;
+if ($idevent) {
 	$criteria = new CDbCriteria();
 	$criteria->addcondition("idevents=$idevent");
 	$event = Events::model()->findAll($criteria);
@@ -77,7 +78,7 @@ if ($idevent=$_GET['idevent']) {
 	
 }else {
 	
-		if (Yii::app()->user->getState('idlineuphome') &&  Yii::app()->user->getState('idlineupvisiting') && !$_GET['idevent'] ){
+		if (Yii::app()->user->getState('idlineuphome') &&  Yii::app()->user->getState('idlineupvisiting') && empty($_GET['idevent'])) {
 	
 		
 		// Get the last Inning  	
@@ -208,7 +209,7 @@ if ($idevent=$_GET['idevent']) {
 		
 		
 		//Load the play number
-		if ($event->play){
+		if (isset($event) && $event->play){
 			$model->play = $event->play + 1;
 		}
 		
@@ -225,9 +226,10 @@ if ($idevent=$_GET['idevent']) {
 		$playmax = Events::model()->findBySql("select MAX(play) as maxplay FROM Events WHERE Lineup_idlineup=$model->Lineup_idlineup"  ) ;
 		$playN = $playmax['maxplay'];
 		
-		if ($playN)
-		$lstBatter = Events::model()->findBySql("select * FROM Events WHERE Lineup_idlineup=$model->Lineup_idlineup AND play = $playN AND Events_type_idevents_type='77'");
-		$count = sizeof($lstBatter);
+		if ($playN) {
+			$lstBatter = Events::model()->findBySql("select * FROM Events WHERE Lineup_idlineup=$model->Lineup_idlineup AND play = $playN AND Events_type_idevents_type='77'");
+		}
+		$count = empty($lstBatter) ? 0 : sizeof($lstBatter);
 		
 		if ($count){
 			
@@ -239,7 +241,7 @@ if ($idevent=$_GET['idevent']) {
 				resetBases();
 				
 				
-			}else{ //Visiting line up with 3 outs
+			} else { //Visiting line up with 3 outs
 				$model->Lineup_idlineup  = Yii::app()->user->getState('idlineuphome');
 				Yii::app()->user->setState('battingteam', Yii::app()->user->getState('idteamhome'));
 				$model->Inning = $model->Inning;
@@ -261,12 +263,14 @@ if ($idevent=$_GET['idevent']) {
 		
 		//echo "<script> alert('Outs!:'+".$model->Lineup_idlineup." ) </script>";
 		
-	echo Yii::trace(CVarDumper::dumpAsString($_GET['inning'] ."-". $_GET['turntobat']  ."-". $_GET['batter']),'entreprueba'); 
+		echo Yii::trace(CVarDumper::dumpAsString(
+			(empty($_GET['inning']) ? '' : $_GET['inning']) . "-" .
+			(empty($_GET['turntobat']) ? '' : $_GET['turntobat']) . "-" .
+			(empty($_GET['batter']) ? '' : $_GET['batter'])),
+			'entreprueba'
+		);
 		
-		if ($_GET['inning'] && $_GET['turntobat'] && $_GET['batter']){
-			
-			
-			
+		if (!empty($_GET['inning']) && !empty($_GET['turntobat']) && !empty($_GET['batter'])) {
 			$model->Inning = $_GET['inning'];
 			Yii::app()->user->setState('inning',$model->Inning);
 			
@@ -275,8 +279,6 @@ if ($idevent=$_GET['idevent']) {
 			
 			$model->Batter = $_GET['batter'];
 			Yii::app()->user->setState('batterNumber',$model->Batter);
-			
-			
 			
 		}
 		
@@ -293,27 +295,26 @@ if ($idevent=$_GET['idevent']) {
 	$count = sizeof($Batters);
 	
 	// Get the last Batter of the inning 
-	if (! $numberLastBatter) {
+	if (empty($numberLastBatter)) {
 		$criteria = new CDbCriteria();
 		$criteria->addcondition("Lineup_idlineup=".$model->Lineup_idlineup ." AND inning=$model->Inning AND turntobat=$numberTurntoBat");
 		$eventsmax = Events::model()->findAll($criteria);
 		//$eventsmax = Events::model()->findBySql("select * FROM Events WHERE Lineup_idlineup=".$model->Lineup_idlineup ." AND inning=$model->Inning AND turntobat=$numberTurntoBat");
-		$numb = count($eventsmax)-1;
-		$numberLastBatter = $eventsmax[$numb]->Batter;
+		$numb = (count($eventsmax) > 0) ? (count($eventsmax)-1) : 0;
+		$numberLastBatter = empty($eventsmax[$numb]) ? 0 : $eventsmax[$numb]->Batter;
 		//echo "Lasb".$numberLastBatter."<br>";
 	}
-	
-	
-	// Get the last Batter of the past inning 
-	if (! $numberLastBatter) {
+
+	// Get the last Batter of the past inning
+	if (empty($numberLastBatter)) {
 		$befInning = $model->Inning - 1; 
 		$criteria = new CDbCriteria();
 		$criteria->addcondition("Lineup_idlineup=".$model->Lineup_idlineup ." AND inning=$befInning");
 		$eventsmax = Events::model()->findAll($criteria);
 		//$eventsmax = Events::model()->findBySql("select MAX(Batter) as maxbatter FROM Events WHERE Lineup_idlineup=".$model->Lineup_idlineup ." AND inning=$befInning");
 		//$numberLastBatter = $eventsmax['maxbatter'];
-		$numb = count($eventsmax)-1;
-		$numberLastBatter = $eventsmax[$numb]->Batter;
+		$numb = (count($eventsmax) > 0) ? (count($eventsmax)-1) : 0;
+		$numberLastBatter = empty($eventsmax[$numb]) ? 0 : $eventsmax[$numb]->Batter;
 	}
 	
 	if ($numberLastBatter > $count) //Last batter 
@@ -328,8 +329,6 @@ if ( ! Yii::app()->user->getState('battingteam')){
 	$model->Lineup_idlineup = Yii::app()->user->getState('idlineupvisiting');
 }*/
 
-
-
 ;
 
 echo "<script> defensiveteam  = $defensiveteam </script>";
@@ -337,8 +336,6 @@ echo Yii::trace(CVarDumper::dumpAsString( Yii::app()->user->getState('battingtea
 
 //echo "Lineuphome.".Yii::app()->user->getState('idlineuphome') ;
 //echo "<BR> LineupVis". Yii::app()->user->getState('idlineupvisiting');
-
-
 
  //echo "<script> alert('TURN TO BAT BatterNumber FORM:'+".Yii::app()->user->getState('batterNumber')." ) </script>";
 	
@@ -359,9 +356,7 @@ echo Yii::trace(CVarDumper::dumpAsString( Yii::app()->user->getState('battingtea
 										
 ?>
 
-
-
-<h1> <? 
+<h1> <?
 	setBattingTeamName($model);  
 	echo ( Yii::app()->user->getState('battingteam') == Yii::app()->user->getState('idteamvisiting') ) ? 'TOP ' : 'BOTTOM' ?> OF THE <?php echo $model->Inning ?>
 	<?  switch($model->Inning){
