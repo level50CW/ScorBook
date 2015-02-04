@@ -80,7 +80,7 @@ function loadTableTeam ( $id, $form, $model, $idteam, $idgame ){
                 echo "<tr class='$class'>";
                     
                     echo "<td> ".$Batters[$i]->Number." </td>";
-                    echo "<td> ".$player->Firstname ." ".$player->Lastname[0]." </td>";
+                    echo "<td> ".$player->Firstname ." ".$player->Lastname." </td>";
                     
                     //Search the player stats
                     $e=0;
@@ -193,7 +193,7 @@ function loadTableTeam ( $id, $form, $model, $idteam, $idgame ){
                 echo "<tr class='$class'>";
                     
                     echo "<td> ".$Batters[$i]->Number." </td>";
-                    echo "<td> ".$player->Firstname ." ".$player->Lastname[0]." </td>";
+                    echo "<td> ".$player->Firstname ." ".$player->Lastname." </td>";
                     
                     //Search the player stats
                     $e=0;
@@ -290,7 +290,7 @@ function loadTableTeam ( $id, $form, $model, $idteam, $idgame ){
                 echo "<tr class='$class'>";
                     
                     echo "<td> ".$Batters[$i]->Number." </td>";
-                    echo "<td> ".$player->Firstname ." ".$player->Lastname[0]." </td>";
+                    echo "<td> ".$player->Firstname ." ".$player->Lastname." </td>";
                     
                     //Search the player stats
                     $e=0;

@@ -487,7 +487,7 @@ function loadTableTeam ($id,$form,$numberTurntoBat,$idLineup){
 		
 			if ($player->Firstname) {
 			//echo "<tr>";
-			echo "<td class='scoreboardplayer' width:150px>".$player->Firstname." ".$player->Lastname[0]."</td>";
+			echo "<td class='scoreboardplayer' width:150px>".$player->Firstname." ".$player->Lastname."</td>";
 			echo "<td class='scoreboardplayer'>".$positions[$Batters[$i]->DefensePosition-1]."</td>";
 			echo "<td class='scoreboardplayer'>".$Batters[$i]->Inning."</td>";
 			//echo "</tr>";	
@@ -623,7 +623,7 @@ function loadTableTeam ($id,$form,$numberTurntoBat,$idLineup){
 			$player=Players::model()->findByPk($Batters[$j]->Players_idplayer); 
 			if ($player->Firstname) {
 			//echo "<tr>";
-			echo "<td class='scoreboardplayer' width:150px>".$player->Firstname." ".$player->Lastname[0]."</td>";
+			echo "<td class='scoreboardplayer' width:150px>".$player->Firstname." ".$player->Lastname."</td>";
 			echo "<td class='scoreboardplayer'>".$positions[$Batters[$j]->DefensePosition-1]."</td>";
 			echo "<td class='scoreboardplayer'>".$Batters[$j]->Inning."</td>";
 			//echo "</tr>";	
