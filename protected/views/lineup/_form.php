@@ -299,19 +299,18 @@ $(document).ready(function(){
 $(".save-form-btn").on("click",function(){
     var doWeBreakIt = false;
     var errorMessage = [];
-    $(".grayplayer").find('select[id^=playerNumberOption]').each(function(){
+    $(".grayplayer").find('select[id^=playerNumberOption]:enabled').each(function(){
         if($(this).val() != ""){
             var a = $(this).parent().parent().find('input,select').each(function(){
                 if($(this).val() == ""){
-                    errorMessage[0] = "Fill all field for selected players";
+                    errorMessage[0] = "Fill all field for selected players.";
                     doWeBreakIt = true;
                     return false;
                 }
             });
             if(doWeBreakIt) return false;
-        }
-		else{
-			errorMessage[0] = "There are unselected batters";
+        } else {
+			errorMessage[0] = "There are unselected batters.";
 			doWeBreakIt = true;
 			return false;
 		}
@@ -326,7 +325,6 @@ $(".save-form-btn").on("click",function(){
         }
     });
 
-    var pitcherIsPresent = false;
     $(".grayplayer").find(".selectpositions[value!=0]:enabled").each(function() {
         var len = $(".grayplayer").find(".selectpositions[value=" + $(this).val() + "]:enabled").size();
         if (len > 1 && $(this).val() != "") {
@@ -334,15 +332,15 @@ $(".save-form-btn").on("click",function(){
             errorMessage[2] = "You have entered the same Position for multiple Batters. All positions must be unique. Please correct the duplicate(s).";
             return false;
         }
+	});
+	
+    var pitcherIsPresent = false;
+	$(".grayplayer").find(".selectpositions[value!=0]:enabled").each(function() {		
         if ($(this).val() == "1") {
             pitcherIsPresent = true;
         }
     });
 	
-	var pitcherBlock = $("#line_batter_10");
-	if (pitcherBlock.is(":visible") && pitcherBlock.find('select[id^=playerNumberOption]').first().val()=="")
-		pitcherIsPresent = false;
-
     if (!pitcherIsPresent) {
         doWeBreakIt = true;
         errorMessage[3] = "You must enter a Pitcher.";
