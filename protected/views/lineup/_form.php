@@ -310,6 +310,11 @@ $(".save-form-btn").on("click",function(){
             });
             if(doWeBreakIt) return false;
         }
+		else{
+			errorMessage[0] = "There are unselected batters";
+			doWeBreakIt = true;
+			return false;
+		}
     });
 
     $(".grayplayer").find('select[id^=playerNumberOption]:enabled').each(function() {
