@@ -333,6 +333,10 @@ $(".save-form-btn").on("click",function(){
             pitcherIsPresent = true;
         }
     });
+	
+	var pitcherBlock = $("#line_batter_10");
+	if (pitcherBlock.is(":visible") && pitcherBlock.find('select[id^=playerNumberOption]').first().val()=="")
+		pitcherIsPresent = false;
 
     if (!pitcherIsPresent) {
         doWeBreakIt = true;
