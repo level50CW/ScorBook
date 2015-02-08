@@ -163,7 +163,6 @@ class EventsController extends Controller
 	 */
 	public function actionCreate()
 	{
-		
 		$model=new Events;
 		
 		$ajax = isset($_POST['ajax']) ? $_POST['ajax'] : array();
@@ -174,20 +173,13 @@ class EventsController extends Controller
 
 		 if(isset($_POST['Events']))
 		{
-			
-			
-			
-			
 			$count = sizeof($_POST['Events']['Events_type_idevents_type']);
-						
-				
+
 				for($i=0;$i<$count;$i++)
 				{
 					//echo $_POST['Events']['Events_type_idevents_type'][$i]."<br>";
 					if ($_POST['Events']['Events_type_idevents_type'][$i] != ""){
-					
-					
-			
+
 					$idEve = $_POST['Events']['idevents'][$i];
 					
 					echo Yii::trace(CVarDumper::dumpAsString($_POST['Statspitching'])."-".$i ,'IDEVE9');
@@ -196,7 +188,6 @@ class EventsController extends Controller
 						$model=$this->loadModel($idEve);
 						
 					}
-					
 						
 					if (!$idEve) $model=new Events;
 					
@@ -204,8 +195,6 @@ class EventsController extends Controller
 					
 					if (!$idEve) $model->idevents = NULL;
 					else $model->idevents = $idEve;
-					
-					
 					
 					$model->play = 	$_POST['Events']['play'];	
 					$model->turntobat = $_POST['Events']['turntobat'];
@@ -216,8 +205,7 @@ class EventsController extends Controller
 					$model->ER = $_POST['Events']['ER'][$i]; 
 					$model->Batter = $_POST['Events']['Batter'][$i]; 
 					$model->playerid = $_POST['Events']['playerid'][$i]; 
-					$model->batterNumberOut = $_POST['Events']['batterNumberOut'][$i]; 
-					
+					$model->batterNumberOut = $_POST['Events']['batterNumberOut'][$i];
 					
 					$idplayer=$_POST['Statshitting']['Players_idplayer'][0];
 							
@@ -340,9 +328,8 @@ class EventsController extends Controller
 				for($i=0;$i<$count;$i++)
 				{
 					if ($_POST['Statshitting']['Players_idplayer']){
-						
-					
-					if ($_POST['Statshitting']['idstatshit'][$i]){
+
+					if (!empty($_POST['Statshitting']['idstatshit'][$i])){
 						$stats=Statshitting::model()->findByPk($_POST['Statshitting']['idstatshit'][$i]); // = Statshitting::findByPK();
 					}else{
 						//Find by ID player and ID game
@@ -351,16 +338,11 @@ class EventsController extends Controller
 						$id_game=$_POST['Statshitting']['Games_idgame'][$i];
 						$criteria->addcondition("Players_idplayer=".$id_player." and Games_idgame = ".$id_game);
 						$statsArr = Statshitting::model()->findAll($criteria);
-						$stats = $statsArr[0];
-
+						$stats = isset($statsArr[0]) ? $statsArr[0] : null;
 						if (!$stats){
 							$stats=new Statshitting;
 						}
-						
-						
 					}
-
-
 
 					$stats->AB= $_POST['Statshitting']['AB'][$i];
 					$stats->G= 1;
@@ -452,8 +434,12 @@ class EventsController extends Controller
                         $stats_inning->CS = $_POST['Statshitting']['CS'][$i];
                         $stats_inning->Players_idplayer = $_POST['Statshitting']['Players_idplayer'][$i];
                         $stats_inning->Games_idgame = $_POST['Statshitting']['Games_idgame'][$i];
-                        $stats_inning->Lineup_idlineup = $model->Lineup_idlineup[$i];
-                        $stats_inning->Inning = $model->Inning[$i];
+						if (!empty($model->Lineup_idlineup[$i])) {
+							$stats_inning->Lineup_idlineup = $model->Lineup_idlineup[$i];
+						}
+						if (!empty($model->Inning[$i])) {
+							$stats_inning->Inning = $model->Inning[$i];
+						}
 
                         echo Yii::trace(CVarDumper::dumpAsString($stats_inning->H) ,'abzero');
 
@@ -479,7 +465,7 @@ class EventsController extends Controller
 				{
 				echo Yii::trace(CVarDumper::dumpAsString($_POST['Statspitching']) ,'entre1');
 					
-					if ($_POST['Statspitching']['idstatspit'][$i]){
+					if (!empty($_POST['Statspitching']['idstatspit'][$i])) {
 						$stats=Statspitching::model()->findByPk($_POST['Statspitching']['idstatspit'][$i]); // = Statshitting::findByPK();
 					}else{
 						//Find by ID player and ID game
@@ -488,16 +474,13 @@ class EventsController extends Controller
 						$id_game=$_POST['Statspitching']['Games_idgame'][$i];
 						$criteria->addcondition("Players_idplayer=$id_player and Games_idgame = $id_game");
 						$statsArr = Statspitching::model()->findAll($criteria);
-						$stats = $statsArr[0];
+						$stats = isset($statsArr[0]) ? $statsArr[0] : null;
 
 						if (!$stats){
 							$stats=new Statspitching;
 						}
-						
-						
 					}	
-					
-					
+
 					$stats->G= 1;
 					$stats->IP = $_POST['Statspitching']['IP'][$i];
 					$stats->H = $_POST['Statspitching']['H'][$i];
@@ -570,14 +553,9 @@ class EventsController extends Controller
 				} 
 				
 				$count = count($_POST['Statsfielding']['Players_idplayer']);
-				
-				
 				for($i=0;$i<$count;$i++)
 				{
-					
-					
-							
-					if ($_POST['Statsfielding']['idstatsfield'][$i]){
+					if (!empty($_POST['Statsfielding']['idstatsfield'][$i])) {
 						$stats=Statsfielding::model()->findByPk($_POST['Statsfielding']['idstatsfield'][$i]); // = Statshitting::findByPK();
 					}else{
 						
@@ -587,13 +565,12 @@ class EventsController extends Controller
 						$id_game=$_POST['Statsfielding']['Games_idgame'][$i];
 						$criteria->addcondition("Players_idplayer=$id_player and Games_idgame = $id_game");
 						$statsArr = Statsfielding::model()->findAll($criteria);
-						$stats = $statsArr[0];
+						$stats = isset($statsArr[0]) ? $statsArr[0] : null;
 						
 						if (!$stats){
 							$stats=new Statsfielding;
 						}
 					}
-					
 					
 					$stats->G= 1;
 					
@@ -660,16 +637,13 @@ class EventsController extends Controller
 					
 				}
 			
-			
 			//Yii::app()->user->setState('batterNumber', $model->Batter+1); 	
 			
 			//if($model->save())
 				echo Yii::trace(CVarDumper::dumpAsString(Yii::app()->user->getState('batterNumber')),'varSavecount');//$this->redirect(array('view','id'=>$model->idevents));
-			
-			
+
 			//Increment batter
-			
-			
+
 			//Change team
 			//3 outs change team
 				
@@ -733,9 +707,6 @@ class EventsController extends Controller
 	
 	public function actionstats()
 	{
-
-
-
 		if (! Yii::app()->user->getState('scoretype')) Yii::app()->user->setState('scoretype','batting');
 		if (! Yii::app()->user->getState('scoretime')) Yii::app()->user->setState('scoretime','game');
 		if (! Yii::app()->user->getState('scoreteam')) Yii::app()->user->setState('scoreteam','home');

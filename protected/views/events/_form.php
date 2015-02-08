@@ -925,17 +925,10 @@ function loadTableTeam ($id,$form,$model){
 						break;
 					case 16: //X
 						break;
-
-
 				}
-
-
-
 			}
 
-
 			$e=0;
-
 			//Search the player stats
 			if ($count_stats_hit){
 				for ($e;$e < $count_stats_hit; $e++){
