@@ -1271,7 +1271,7 @@ function loadTableTeam ($id,$form,$model){
 									<td width=5% style='white-space: nowrap;'><?php echo CHtml::image('images/button_batter.png','',array('id'=>'batter')); ?></td>
 									<td width=5% style='white-space: nowrap; margin: -10px !important'><?php echo CHtml::image('images/button_nextbatter.png','',array('id'=>'nextbatter','onClick'=>'if(!$(".brownatbat").removeClass("brownatbat").addClass("grayatbat").parent().next().find("td").removeClass("grayatbat").addClass("brownatbat").length){
    $(".tablevisiting").find(".grayatbat:first").parent().find("td").addClass("brownatbat").removeClass("grayatbat");
-   if(twotime){
+   if((typeof twotime != "undefined") && twotime){
        $(".tablevisiting").find(".grayatbat:first").parent().find("td").addClass("brownatbat").removeClass("grayatbat");
         $(".tablevisiting").find(".brownatbat:first").parent().find("td").removeClass("brownatbat").addClass("grayatbat");
    }
