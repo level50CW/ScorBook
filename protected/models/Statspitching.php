@@ -217,4 +217,12 @@ class Statspitching extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+	
+	public function getByGame($idgame)
+	{
+		$criteria = new CDbCriteria();
+		$criteria->addcondition("Games_idgame=".$idgame);
+		$statspitching = Statspitching::model()->findAll($criteria);
+		return $statspitching;
+	}
 }

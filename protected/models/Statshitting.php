@@ -179,4 +179,13 @@ class Statshitting extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+	
+	
+	public function getByGame($idgame)
+	{
+		$criteria = new CDbCriteria();
+		$criteria->addcondition("Games_idgame=".$idgame);
+		$statshitting = Statshitting::model()->findAll($criteria);
+		return $statshitting;
+	}
 }

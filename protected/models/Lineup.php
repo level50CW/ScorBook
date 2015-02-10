@@ -93,4 +93,25 @@ class Lineup extends CActiveRecord
             'criteria' => $criteria,
         ));
     }
+	
+	public function getByCondition($condition)
+	{
+		$criteria = new CDbCriteria();
+		$criteria->addcondition($condition);
+		
+		$lineup = new Lineup;
+		$lineup = Lineup::model()->findAll($criteria);
+		return $lineup;
+	}
+	
+	
+	public function getByGameTeam($gameid, $idteam)
+	{
+		return Lineup::getByCondition("Games_idgame=".$gameid." AND Teams_idteam=".$idteam);
+	}
+	
+	public function getById($idLineup)
+	{
+		return Lineup::getByCondition("idlineup=".$idLineup);
+	}
 }

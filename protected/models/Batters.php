@@ -114,4 +114,11 @@ class Batters extends CActiveRecord
 		
 		return sizeof($Batters);
 	}
+	
+	public function getByLineup($idLineup)
+	{
+		$criteria = new CDbCriteria();
+		$criteria->addcondition("Lineup_idlineup=".$idLineup);
+		return Batters::model()->findAll($criteria);
+	}
 }

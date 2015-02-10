@@ -127,4 +127,15 @@ class Runs extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+	
+	public function getByGameTeam($idgame, $idteam)
+	{
+		$criteria = new CDbCriteria();
+		$criteria->addcondition("games_idgame=".$idgame." AND teams_idteam =".$idteam);
+		
+		$runs = new Runs;
+		$runs = Runs::model()->findAll($criteria);
+		
+		return $runs;
+	}
 }

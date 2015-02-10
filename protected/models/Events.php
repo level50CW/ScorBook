@@ -116,4 +116,12 @@ class Events extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+	
+	public function getById($idevent)
+	{
+		$criteria = new CDbCriteria();
+		$criteria->addcondition("idevents=".$idevent);
+		$event = Events::model()->findAll($criteria);
+		return $event;
+	}
 }
