@@ -600,7 +600,7 @@ loadTableTeam(Yii::app()->user->getState('idlineuphome'), $form, $model);
 											<?php echo CHtml::textfield('B2text','', array('onclick' => "B2text()",'class'=>'B2',"id"=>"B2")); ?>
 											<?php echo CHtml::textfield('B3text','', array('onclick' => "B3text()",'class'=>'B3',"id"=>"B3")); ?>
 											<?php echo CHtml::textfield('B4text','', array('onclick' => "B4text()",'class'=>'iB4',"id"=>"B4")); ?>
-											<?php echo CHtml::button('', array('class'=>'OutNumber',"id"=>"OutNumber", "value"=>$Outs+1)); ?>
+											<?php echo CHtml::button('', array('class'=>'OutNumber',"id"=>"OutNumber", "value"=>(isset($Outs) ? $Outs : 0)+1)); ?>
 											<?php echo CHtml::textfield('OutText','', array('onclick' => "Outtext()",'class'=>'OutText',"id"=>"OutText")); ?>
 											<?php echo CHtml::button('', array('class'=>'base1button',"id"=>"base1button")); ?>
 											<?php echo CHtml::button('', array('class'=>'base2button',"id"=>"base2button")); ?>
