@@ -124,4 +124,12 @@ class Events extends CActiveRecord
 		$event = Events::model()->findAll($criteria);
 		return $event;
 	}
+	
+	public function getByLineupInning($idlineup, $inning)
+	{
+		$criteria = new CDbCriteria();
+		$criteria->addcondition("Lineup_idlineup=" . $idlineup . " AND inning=".$inning);
+		$events = Events::model()->findAll($criteria);
+		return $events;
+	}
 }
