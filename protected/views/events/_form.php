@@ -46,15 +46,9 @@ function loadTableRuns($idgame, $idteam, $form)
         $runs = new Runs;
 
     $stdRuns = new stdClass;
-    $stdRuns->inning1 = $runs->inning1;
-    $stdRuns->inning2 = $runs->inning2;
-    $stdRuns->inning3 = $runs->inning3;
-    $stdRuns->inning4 = $runs->inning4;
-    $stdRuns->inning5 = $runs->inning5;
-    $stdRuns->inning6 = $runs->inning6;
-    $stdRuns->inning7 = $runs->inning7;
-    $stdRuns->inning8 = $runs->inning8;
-    $stdRuns->inning9 = $runs->inning9;
+    for ($i = 1; $i <=9; $i++) {
+        $stdRuns->{"inning$i"} = $runs->{"inning$i"};
+    }
     $stdRuns->_empty = '';
     $stdRuns->R = $runs->R;
     $stdRuns->H = $runs->H;
@@ -100,23 +94,26 @@ function loadTableTeam($id, $form, $model, $state)
 
     //LOAD LINEUP
 
-    if (!$id)
+    if (!$id) {
         $id = 0;
+    }
 
     $idLineup = $id;
     $lineup   = Lineup::getById($idLineup);
 
 
     //LOAD TEAM INFO
-    if (!$teamid = $lineup[0]->Teams_idteam)
+    if (!$teamid = $lineup[0]->Teams_idteam) {
         $teamid = 0;
+    }
 
     $name = $state->idteamhome == $teamid ? $state->teamhome : $state->teamvisiting;
 
-    if ($name)
+    if ($name) {
         echo "<tr class='blacktitle'> <td colspan=8>" . $name . " </td> </tr>";
-    else
+    } else {
         echo "<tr> <td colspan=4> LINEUP MUST BE CREATED </td> </tr>";
+    }
 
     //LOAD BATTERS
     $Batters = Batters::getByLineup($idLineup);
@@ -236,8 +233,9 @@ function loadTableTeam($id, $form, $model, $state)
 
         if ($state->inning == 1) {
             $Statspitching->GS = 1;
-        } else
+        } else {
             $Statspitching->GS = 0;
+        }
 
         //The total number of games in which the pitcher appeared, whether as the starter or as a reliever.
         if (!$Statspitching->G)
