@@ -1,21 +1,11 @@
-
-<script>
-    document.getElementById("content").style.width = "1100px";
-    document.getElementById("page").style.width = "1100px";
-</script>
-
 <?php
-$state = new stdClass;
-$state->idgame = Yii::app()->user->getState('idgame');
-$state->idteamhome = Yii::app()->user->getState('idteamhome');
-$state->idteamvisiting = Yii::app()->user->getState('idteamvisiting');
-$state->teamhome = Yii::app()->user->getState('teamhome');
-$state->teamvisiting = Yii::app()->user->getState('teamvisiting');
-$state->battingteam = Yii::app()->user->getState('battingteam');
-$state->batterNumber = Yii::app()->user->getState('batterNumber');
-$state->inning = Yii::app()->user->getState('inning');
-$state->idlineuphome = Yii::app()->user->getState('idlineuphome');
-$state->idlineupvisiting = Yii::app()->user->getState('idlineupvisiting');
+/* @var $state 
+		$visitingTeamTable
+		$homeTeamTable
+		$visitingRunsTable
+		$homeRunsTable
+
+*/
 
 function printLogo($id)
 {
@@ -30,173 +20,69 @@ function printLogo($id)
     }
 }
 
-/* @var $this EventsController */
-/* @var $model Events */
-/* @var $form CActiveForm */
-
-function loadTableRuns($idgame, $idteam, $form)
+function renderTableRuns($runs, $form)
 {
-    //Load runs
-    $runsArray = Runs::getByGameTeam($idgame, $idteam);
-
-    if (count($runsArray)) {
-        $runs = $runsArray[0];
-    }
-    else
-        $runs = new Runs;
-
-    $stdRuns = new stdClass;
-    for ($i = 1; $i <=9; $i++) {
-        $stdRuns->{"inning$i"} = $runs->{"inning$i"};
-    }
-    $stdRuns->_empty = '';
-    $stdRuns->R = $runs->R;
-    $stdRuns->H = $runs->H;
-    $stdRuns->E = $runs->E;
-
     $i=1;
-    foreach($stdRuns as $field => $value)
+    foreach($runs->runs as $field => $value)
     {
-        if ($field == '_empty')
+        if ($field == '_empty') {
             echo "<td></td>";
-        else
-            echo "<td style='border: 1px solid' class='white'>" . $form->textfield($runs, $field.'[]', array(
+		} else {
+            echo "<td style='border: 1px solid' class='white'>" . $form->textfield($runs->runsOrigin, $field.'[]', array(
                     'value' => $value,
                     "id" => "r".$i . $idteam,
                     "class" => "inputnumbersinning",
                     'readonly' => "true"
                 )) . "</td>";
+		}
         $i++;
     }
 }
 
-
-function loadTableTeam($id, $form, $model, $state)
+function renderTableTeam($form, $teamTable)
 {
-    $positions = array(
-        'P',
-        'C',
-        '1B',
-        '2B',
-        '3B',
-        'SS',
-        'LF',
-        'CF',
-        'RF',
-        'EF',
-        'DH',
-        'PH',
-        'PR',
-        'CR',
-        'EH',
-        'X'
-    );
+	$positions = array('P','C','1B','2B','3B','SS','LF','CF','RF','EF','DH','PH','PR','CR','EH','X');
+	
+    $name = $teamTable->name;
 
-    //LOAD LINEUP
+    echo "<tr class='blacktitle'> <td colspan=8>" . $name . " </td> </tr>";
 
-    if (!$id) {
-        $id = 0;
-    }
-
-    $idLineup = $id;
-    $lineup   = Lineup::getById($idLineup);
-
-
-    //LOAD TEAM INFO
-    if (!$teamid = $lineup[0]->Teams_idteam) {
-        $teamid = 0;
-    }
-
-    $name = $state->idteamhome == $teamid ? $state->teamhome : $state->teamvisiting;
-
-    if ($name) {
-        echo "<tr class='blacktitle'> <td colspan=8>" . $name . " </td> </tr>";
-    } else {
-        echo "<tr> <td colspan=4> LINEUP MUST BE CREATED </td> </tr>";
-    }
-
-    //LOAD BATTERS
-    $Batters = Batters::getByLineup($idLineup);
-
-    $count = sizeof($Batters);
-
-    $StatshittingArray = Statshitting::getByGame($state->idgame);
-    $count_stats_hit   = count($StatshittingArray);
-
-    $StatsfieldingArray = Statsfielding::getByGame($state->idgame);
-    $count_stats_field  = count($StatsfieldingArray);
-
+    $Batters = $teamTable->battersOrigin;
+	$count = count($Batters);
+	
     echo "<tr class='greentr'>";
     echo "<td colspan=3 style='width: 30%'> Lineup </td> <td>AB</td> <td>H</td> <td>RBI</td> <td>BB</td> <td>SO</td>";
     echo "</tr>";
 
-    $pitcher = array();
+	//Render batters
     for ($i = 0; $i < $count; $i++) {
+		
+		if ($teamTable->batters[$i]->isPitcher) {
+			continue;
+		}
 
         $class = "grayatbat";
+		if ($teamTable->batters[$i]->isSelected){
+			$class = "brownatbat";
+		}
+				
+		echo "<tr>
+		<td colspan=3 class='$class'>" . $Batters[$i]->Number . " " . $teamTable->batters[$i]->player->Firstname . ' ' . $teamTable->batters[$i]->player->Lastname[0] . " - " . $positions[$Batters[$i]->DefensePosition - 1] . "</td>";
+		
+		foreach($teamTable->batters[$i]->Statshitting as $field => $value){
+			echo "<td class='$class'>" . $form->textfield($teamTable->batters[$i]->StatshittingOrigin, $field.'[]', array(
+					"readonly" => 'true',
+					'value' => $value,
+					'class' => 'inputnumbers',
+					'maxsize' => 2,
+					"id" => $positions[$Batters[$i]->DefensePosition - 1].$teamTable->batters[$i]->player->idplayer
+				)) . "</td>";
+		}
 
-        //Select Pitcher || $Batters[$i]->DefensePosition == "11"
-        if ($Batters[$i]->DefensePosition == "1") {
-            $pitcher[] = $i;
-        }
-
-        $player = Players::model()->findByPk($Batters[$i]->Players_idplayer); //CAMBIAR LIST de USUARIOS
-
-        //Player at Bat
-        if ($state->battingteam == $teamid) {
-            //Style player at bat
-
-            if ($state->batterNumber == $i + 2) {
-                $class  = "brownatbat";
-                $number = $i + 1;
-            }
-        } else {
-            //Search the player stats
-            $e = 0;
-            $Statsfielding = new Statsfielding;
-            for ($e; $e < $count_stats_field; $e++) {
-                if ($StatsfieldingArray[$e]->Players_idplayer == $player->idplayer) {
-                    $Statsfielding = $StatsfieldingArray[$e];
-                    $e = $count_stats_field;
-                }
-            }
-        }
-
-        $e = 0;
-        $Statshitting = new Statshitting;
-        for ($e; $e < $count_stats_hit; $e++) {
-            if ($StatshittingArray[$e]->Players_idplayer == $player->idplayer) {
-                $Statshitting = $StatshittingArray[$e];
-                $e = $count_stats_hit;
-            }
-        }
-
-        if ($Batters[$i]->DefensePosition != "1") {
-
-            echo "<tr>
-			<td colspan=3 class='$class'>" . $Batters[$i]->Number . " " . $player->Firstname . ' ' . $player->Lastname[0] . " - " . $positions[$Batters[$i]->DefensePosition - 1] . "</td>";
-
-            $stdStatshitting = new stdClass;
-            $stdStatshitting->AB = $Statshitting->AB;
-            $stdStatshitting->H = $Statshitting->H;
-            $stdStatshitting->RBI = $Statshitting->RBI;
-            $stdStatshitting->BB = $Statshitting->BB;
-            $stdStatshitting->SO = $Statshitting->SO;
-            $stdStatshitting->RBI = $Statshitting->RBI;
-
-            foreach($stdStatshitting as $field => $value)
-                echo "<td class='$class'>" . $form->textfield($Statshitting, $field.'[]', array(
-                        "readonly" => 'true',
-                        'value' => $value,
-                        'class' => 'inputnumbers',
-                        'maxsize' => 2,
-                        "id" => "AB".$player->idplayer
-                    )) . "</td>";
-
-            echo "</tr>";
-        }
+		echo "</tr>";
     }
 
+	//Render pitcher
     echo "<tr class='trdiv'></tr>";
     echo "<tr>";
     echo "<td class='blacktitle' colspan=8> PITCHING STAT </td>";
@@ -205,59 +91,22 @@ function loadTableTeam($id, $form, $model, $state)
     echo "<td width='30%'> Pitcher </td> <td>IP</td> <td>H</td> <td>R</td> <td>BB</td> <td>SO</td>  <td>B</td>  <td>S</td>";
     echo "</tr>";
 
-    //Load stats of players
-    $StatspitchingArray = Statspitching::getByGame($state->idgame);
-    $count_stats_pit = count($StatspitchingArray);
-
-    for ($o = 0; $o < count($pitcher); $o++) {
+    for ($o = 0; $o < count($teamTable->pitcherIndexes); $o++) {
         $class  = "grayatbat";
-        $i      = $pitcher[$o];
-        $player = Players::model()->findByPk($Batters[$i]->Players_idplayer); //CAMBIAR LIST de USUARIOS
-
-        $e = 0;
-        $Statspitching = new Statspitching;
-        //Search the pitcher stats
-        if ($count_stats_pit) {
-            for ($e; $e < $count_stats_pit; $e++) {
-                if ($StatspitchingArray[$e]->Players_idplayer == $player->idplayer) {
-                    $Statspitching = $StatspitchingArray[$e];
-                    $e = $count_stats_pit;
-                }
-            }
-        }
+        $i      = $teamTable->pitcherIndexes[$o];
 
         echo "<tr>
-				<td 	 class='$class'>" . $Batters[$i]->Number . " " . $player->Firstname . " " . $player->Lastname[0] . "</td>";
+				<td 	 class='$class'>" . $Batters[$i]->Number . " " . $teamTable->batters[$i]->player->Firstname . " " . $teamTable->batters[$i]->player->Lastname[0] . "</td>";
 
-        //Games started as the pitcher
-
-        if ($state->inning == 1) {
-            $Statspitching->GS = 1;
-        } else {
-            $Statspitching->GS = 0;
-        }
-
-        //The total number of games in which the pitcher appeared, whether as the starter or as a reliever.
-        if (!$Statspitching->G)
-            $Statspitching->G = 1;
-
-        $stdStatspitching = new stdClass;
-        $stdStatspitching->IP = $Statspitching->IP;
-        $stdStatspitching->H = $Statspitching->H;
-        $stdStatspitching->R = $Statspitching->R;
-        $stdStatspitching->BB = $Statspitching->BB;
-        $stdStatspitching->SO = $Statspitching->SO;
-        $stdStatspitching->B = $Statspitching->B;
-        $stdStatspitching->S = $Statspitching->S;
-
-        foreach($stdStatspitching as $field => $value)
-            echo "<td class='$class'>" . $form->textfield($Statspitching, $field.'[]', array(
+        foreach($teamTable->batters[$i]->Statspitching as $field => $value){
+            echo "<td class='$class'>" . $form->textfield($teamTable->batters[$i]->StatspitchingOrigin, $field.'[]', array(
                     "readonly" => 'true',
                     'value' => $value,
                     'class' => 'inputnumbers',
                     'maxsize' => 2,
-                    "id" => "p".$field.$player->idplayer
+                    "id" => "p".$field.$teamTable->batters[$i]->player->idplayer
                 )) . "</td>";
+		}
         echo "</tr>";
     }
     echo "</tr>";
@@ -273,23 +122,28 @@ function loadTableTeam($id, $form, $model, $state)
         'enableAjaxValidation' => false
     ));
     echo $form->errorSummary($model);
+	
+	
+							//renderTableTeam($form, preLoadTableTeam($state->idlineupvisiting, $state));
     ?>
 
     <div class="tableHome">
+	
         <table >
             <tr>
                 <td class="tdUpper"> <p></p>
                     <table class="tablevisiting">
                         <?
-                        if ($state->idlineupvisiting)
-                            loadTableTeam($state->idlineupvisiting, $form, $model, $state);
+                        if ($state->idlineupvisiting) {
+							renderTableTeam($form, $visitingTeamTable);
+						}
                         ?>
                     </table>
 
                     <table class="tablehome">
                         <?
                         if ($state->idlineuphome) {
-                            loadTableTeam($state->idlineuphome, $form, $model, $state);
+							renderTableTeam($form, $homeTeamTable);
                         }
                         ?>
                     </table>
@@ -388,13 +242,13 @@ function loadTableTeam($id, $form, $model, $state)
                                         <tr>
                                             <td class='grayatbat'><?php echo $state->teamvisiting;?></td>
                                             <?
-                                            loadTableRuns ($state->idgame,$state->idteamvisiting,$form);
+                                            renderTableRuns( $visitingRunsTable ,$form);
                                             ?>
                                         </tr>
                                         <tr>
                                             <td class='grayatbat'><?php echo $state->teamhome;?></td>
                                             <?
-                                            loadTableRuns ($state->idgame,$state->idteamhome,$form);
+                                            renderTableRuns( $homeRunsTable ,$form);
                                             ?>
                                         </tr>
                                         <tr>
@@ -435,87 +289,13 @@ function loadTableTeam($id, $form, $model, $state)
             </tr>
         </table>
         <?
-        echo CHtml::hiddenField('link','',array('id'=>'link'));
+        echo CHtml::hiddenField('link','',array('id'=>'link')); //bottom menu redirector
         ?>
         <?php $this->endWidget(); ?>
     </div><!-- form -->
 </div>
 
-<script>
-
-    var drawingCanvas = document.getElementById('myDrawing');
-
-
-    // Check the element is in the DOM and the browser supports canvas
-    if(drawingCanvas.getContext) {
-// Initaliase a 2-dimensional drawing context
-        var basecanvas = drawingCanvas.getContext('2d');
-//Canvas commands go here
-    }
-
-    basecanvas.beginPath();
-
-    function printBases(){
-        basecanvas.save();
-        basecanvas.restore();
-
-        // Create the yellow face
-        basecanvas.strokeStyle = "#FFFFFF";
-        basecanvas.fillStyle = "#FFFFFF";
-
-        //1B
-        basecanvas.beginPath();
-        basecanvas.moveTo(345,180);
-        basecanvas.lineTo(355,185); // \
-        basecanvas.lineTo(365,180); //  /
-        basecanvas.lineTo(355,175); //  \
-        basecanvas.lineTo(345,180); // /
-        basecanvas.stroke();
-
-        //2B
-        basecanvas.beginPath();
-        basecanvas.moveTo(242,152);
-        basecanvas.lineTo(252,157); // \
-        basecanvas.lineTo(262,152); //  /
-        basecanvas.lineTo(252,147); //  \
-        basecanvas.lineTo(242,152); // /
-        basecanvas.stroke();
-
-        //3B
-        basecanvas.beginPath();
-        basecanvas.moveTo(140,180);
-        basecanvas.lineTo(150,185); // \
-        basecanvas.lineTo(160,180); //  /
-        basecanvas.lineTo(150,175); //  \
-        basecanvas.lineTo(140,180); // /
-        basecanvas.stroke();
-
-        //PLATE
-        basecanvas.beginPath();
-        basecanvas.moveTo(242,230);
-        basecanvas.lineTo(252,235); // \
-        basecanvas.lineTo(262,230); //  /
-        basecanvas.lineTo(262,225); // |
-        basecanvas.lineTo(242,225); // |
-        basecanvas.lineTo(242,230); //
-        basecanvas.stroke();
-
-        basecanvas.save();
-    }
-
-    basecanvas.beginPath();
-    var imageObj = new Image();
-    imageObj.onload = function() {
-        basecanvas.drawImage(imageObj, -2, 85);
-        printBases();
-    }
-    imageObj.src = 'images/Field.png';
-    basecanvas.stroke();
-    basecanvas.closePath();
-    basecanvas.beginPath();
-    basecanvas.globalCompositeOperation = 'source-over';
-
-</script>
+<script src="js/AtBat/renderBaseballField.js" type="text/javascript"></script>
 
 <? include "contextmenus.php"; ?>
 

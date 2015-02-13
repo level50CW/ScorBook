@@ -70,12 +70,36 @@ class EventsController extends Controller
 	 	if (!empty($_POST['link'])) {
 			$this->redirect(array($_POST['link']));
 		}
+		
+		$state = AtBat::loadState();
+
+		Yii::app()->user->setState('battingteam',$state->idteamvisiting);
+		$model->Lineup_idlineup = $state->idlineupvisiting;
+		$model->Inning = 1;
+
+		$eventsmax        = Events::getByLineupInning($model->Lineup_idlineup, $model->Inning);
+		$numb             = (count($eventsmax) > 0) ? (count($eventsmax) - 1) : 0;
+		$numberLastBatter = empty($eventsmax[$numb]) ? 0 : $eventsmax[$numb]->Batter;
+		Yii::app()->user->setState('batterNumber', $numberLastBatter + 1);
+		
+		$state = AtBat::loadState(); //reload
+		
+		$visitingTeamTable = AtBat::loadTableTeam($state->idlineupvisiting, $state);
+		$homeTeamTable = AtBat::loadTableTeam($state->idlineuphome, $state);
+		$visitingRunsTable = AtBat::loadTableRuns ($state->idgame,$state->idteamvisiting);
+		$homeRunsTable = AtBat::loadTableRuns ($state->idgame,$state->idteamvisiting);
+		
 						
 		if ($ajax && $idevents) {
 			echo json_encode($idevents);
 		} else {
 			$this->render('create',array(
-			'model'=>$model,
+				'model'=>$model,
+				'state'=>$state,
+				'visitingTeamTable'=>$visitingTeamTable,
+				'homeTeamTable'=>$homeTeamTable,
+				'visitingRunsTable'=>$visitingRunsTable,
+				'homeRunsTable'=>$homeRunsTable
 			));
 			//$this->redirect(array());
 		}
