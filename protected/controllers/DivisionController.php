@@ -69,7 +69,7 @@ class DivisionController extends Controller
 		$model=new Division;
 
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$this->performAjaxSaving($model);
 
 		if(isset($_POST['Division']))
 		{
@@ -88,7 +88,7 @@ class DivisionController extends Controller
 		$model=new Division;
 
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$this->performAjaxSaving($model);
 
 		if(isset($_POST['Division']))
 		{
@@ -113,7 +113,7 @@ class DivisionController extends Controller
 		$model=$this->loadModel($id);
 
 		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$this->performAjaxSaving($model);
 
 		if(isset($_POST['Division']))
 		{
@@ -192,6 +192,25 @@ class DivisionController extends Controller
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
+		}
+	}
+	
+	protected function performAjaxSaving($model)
+	{
+		if (isset($_POST['ajax']) && $_POST['ajax']==='division-form')
+		{
+			$result = CActiveForm::validate($model);
+			if ($result == '[]'){
+				if($model->save())
+					echo '{"id":"'.$model->iddivision.'"}';
+				else
+					echo '{"error":"Data not saved"}';
+			}
+			else
+			{
+				echo $result;
+			}
+			Yii::app()->end();				
 		}
 	}
 }

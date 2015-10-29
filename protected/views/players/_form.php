@@ -8,8 +8,22 @@
 
 <?php $form = $this->beginWidget('CActiveForm', array(
     'id' => 'players-form',
-    'enableAjaxValidation' => false,
-    'htmlOptions' => array('enctype' => 'multipart/form-data')
+    'enableAjaxValidation' => true,
+    'htmlOptions' => array('enctype' => 'multipart/form-data'),
+	'clientOptions' => array(
+      'validateOnSubmit' => true,
+      'validateOnChange' => false,
+	  'afterValidate' => 'js: function(form, data, hasError) {
+		  if (!hasError){
+			  if ('.$model->isNewRecord.'+0){
+				  alert("Player "+$("input#Players_Firstname").val()+" "+$("input#Players_Lastname").val()+" successfully added.");
+			  }else{
+				  alert("Player "+$("input#Players_Firstname").val()+" "+$("input#Players_Lastname").val()+" successfully updated.");
+			  }
+			  return true;
+		  }
+	  }'
+	  )
 )); ?>
 
 <div class="clear"></div>
@@ -18,9 +32,7 @@
 
 <div style='text-align: center'>
 
-    <div class="clear">
-    </div>
-
+<div class="blacktitle"> PLAYER INFO</div>
     <div class="rowdiv">
         <div class="green" style='padding-top: 27px;'>First Name<span class="required">*</span></div>
         <div class="gray" style='padding-top: 27px;'>
@@ -221,11 +233,11 @@
     <div class="row buttons">
         <?php echo CHtml::submitButton($model->isNewRecord ? 'Add' : 'Update',array("class"=>"save-form-btn")); ?>
         <?php echo CHtml::submitButton(($model->isNewRecord ? 'Add' : 'Update').'/Next',array("class"=>"save-form-btn",'onclick'=>"$('form').append('<input name=\"next\" value=\"true\" style=\"display:none\">');")); ?>
-        <?php echo CHtml::linkButton('Close',array(
-			'submit'=>array(
+        <?php echo CHtml::link('Close',
+			array(
 				'players/admin',
 				'Players_page'=>isset(Yii::app()->session['Players_page']) ? Yii::app()->session['Players_page'] : 1),
-			'class'=>'save-form-btn')); ?>
+			array('class'=>'save-form-btn')); ?>
     </div>
 
     <div class='playerphoto' >

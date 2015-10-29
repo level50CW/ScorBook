@@ -46,8 +46,11 @@ class Teams extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('Division_iddivision', 'required'),
-            array('uploadfile', 'file', 'types'=>'jpg, jpeg, gif, png','safe'=>true, 'maxSize'=>30*1024*1024, 'allowEmpty'=>true, 'tooLarge'=>'{attribute} is too large to be uploaded. Maximum size is 30MB.'),
+            array('Division_iddivision, Name, Abv, location', 'required'),
+            array('uploadfile', 'file', 'types'=>'jpg, jpeg, gif, png','safe'=>true, 
+				'maxSize'=>30*1024*1024, 
+				'allowEmpty'=>true, 
+				'tooLarge'=>'{attribute} is too large to be uploaded. Maximum size is 30MB.'),
             array('idteam, Division_iddivision', 'numerical', 'integerOnly'=>true),
             array('Name', 'length', 'max'=>100),
             array('location', 'length', 'max'=>100),

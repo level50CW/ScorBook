@@ -150,9 +150,7 @@ function finalizeGame(){
         if(!Yii::app()->user->isGuest){
           echo "Welcome " .  Yii::app()->session['firstname'] . " " . Yii::app()->session['lastname'].'<br/>';
           echo "Role: " . Yii::app()->session['role'];
-        }else{
-            echo '<a href="index.php?r=site/login">Login</a>';
-        }
+		}
         ?>
     </div><!-- mainmenu -->
     <div style="clear: both;"></div>
@@ -183,13 +181,13 @@ function finalizeGame(){
                             array('label'=>'Manage Games', 'url'=>array('schedule/admin')),
                             array('label'=>'Add New Game', 'url'=>array('schedule/update')),
                         )),
-                        array('label'=>'Score Game', 
-                            'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
-                            array('label'=>'Todays Games', 'url'=>array('scoreGame/admin')),
-                            array('label'=>'Scorecard', 'url'=>array('')),
-                            array('label'=>'Complete Game', 'url'=>array('')),
-                        )),
-                        array('label'=>'Statistics', 
+                        // array('label'=>'Score Game', 
+                            // 'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
+                            // array('label'=>'Todays Games', 'url'=>array('scoreGame/admin')),
+                            // array('label'=>'Scorecard', 'url'=>array('')),
+                            // array('label'=>'Complete Game', 'url'=>array('')),
+                        // )),
+                        array('label'=>'Game Statistics', 
                             'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
                             array('label'=>'Edit Complete Game Stats', 'url'=>array('games/admin')),
                         )),

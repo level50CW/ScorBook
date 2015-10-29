@@ -63,9 +63,8 @@ class LeagueController extends Controller
 	public function actionCreate()
 	{
 		$model=new League;
-
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		
+		$this->performAjaxSaving($model);
 
 		if(isset($_POST['League']))
 		{
@@ -88,8 +87,7 @@ class LeagueController extends Controller
 	{
 		$model=$this->loadModel($id);
 
-		// Uncomment the following line if AJAX validation is needed
-		// $this->performAjaxValidation($model);
+		$this->performAjaxSaving($model);
 
 		if(isset($_POST['League']))
 		{
@@ -168,6 +166,25 @@ class LeagueController extends Controller
 		{
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
+		}
+	}
+	
+	protected function performAjaxSaving($model)
+	{
+		if (isset($_POST['ajax']) && $_POST['ajax']==='league-form')
+		{
+			$result = CActiveForm::validate($model);
+			if ($result == '[]'){
+				if($model->save())
+					echo '{"id":"'.$model->idleague.'"}';
+				else
+					echo '{"error":"Data not saved"}';
+			}
+			else
+			{
+				echo $result;
+			}
+			Yii::app()->end();				
 		}
 	}
 }

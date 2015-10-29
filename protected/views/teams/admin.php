@@ -14,6 +14,25 @@ $('.search-form form').submit(function(){
     return false;
 });
 ");
+
+
+function createTeamHasRoster(){
+	$connection = Yii::app()->db;
+	$command = $connection->createCommand('SELECT DISTINCT  `Teams_idteam` FROM  `players`');
+	$row = $command->queryAll();
+	
+	$jsArray = '[';
+	for($i=0;$i<count($row); $i++){
+		$jsArray .= $row[$i]['Teams_idteam'].', ';
+	}
+	$jsArray .= ']';
+	
+	echo 'function isTeamHasRoster(id){
+		return '.$jsArray.'.indexOf(id)!=-1;
+	}
+	';
+}
+
 ?>
 
 <h1>Teams - Manage Teams</h1>
@@ -43,7 +62,33 @@ $('.search-form form').submit(function(){
         ),
         array(
             'class'=>'CButtonColumn',
-            'deleteConfirmation'=>"js: 'Are you sure you want to delete this Team?'"
+            'buttons'=>array(
+				'delete'=>array(
+					'click'=>"function(){
+						if (isTeamHasRoster(+this.search.split('=').reverse()[0])){
+							alert('You can not delete a Team that has Players assigned to its Roster. You must first delete or change Team for all assigned Players.');
+						} else {
+							if(!confirm( 'Please confirm you want to delete '+$(this).parent().parent().find('td').eq(1).text()+'.')) return false;
+							var th = this;
+							var	afterDelete = function(link,success,data){ if(success) {
+										alert('Team '+$(link).parent().parent().find('td').eq(1).text()+' has been successfully deleted.');
+									} };
+							jQuery('#teams-grid').yiiGridView('update', {
+								type: 'POST',
+								url: jQuery(this).attr('href'),
+								success: function(data) {
+									jQuery('#teams-grid').yiiGridView('update');
+									afterDelete(th, true, data);
+								},
+								error: function(XHR) {
+									return afterDelete(th, false, XHR);
+								}
+							});
+						}
+						return false;
+					}"
+				)
+			),
         ),
     ),
     'pager'=>array(
@@ -55,3 +100,7 @@ $('.search-form form').submit(function(){
         'nextPageLabel'  => 'Next &gt;',
     ),
 )); ?>
+
+<script>
+	<?php createTeamHasRoster(); ?>
+</script>

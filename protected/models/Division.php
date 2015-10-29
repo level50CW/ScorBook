@@ -43,7 +43,7 @@ class Division extends CActiveRecord
 		// will receive user inputs.
 		return array(
 			array('iddivision', 'numerical', 'integerOnly'=>true),
-			array('league_idleague', 'required'),
+			array('league_idleague, Name', 'required'),
 			array('league_idleague', 'numerical', 'integerOnly'=>true),
 			array('Name', 'length', 'max'=>150),
 			// The following rule is used by search().

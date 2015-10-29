@@ -21,8 +21,22 @@ if( isset($disabled) && $disabled ){
 
 <?php $form=$this->beginWidget('CActiveForm', array(
     'id'=>'teams-form',
-    'enableAjaxValidation'=>false,
-    'htmlOptions'=>array('enctype' => 'multipart/form-data')
+    'htmlOptions'=>array('enctype' => 'multipart/form-data'),
+	'enableAjaxValidation'=>true,
+	'clientOptions' => array(
+      'validateOnSubmit' => true,
+      'validateOnChange' => false,
+	  'afterValidate' => 'js: function(form, data, hasError) {
+		  if (!hasError){
+			  if ('.$model->isNewRecord.'+0){
+				  alert("Team "+$("#Teams_Name").val()+" successfully Added.");
+			  }else{
+				  alert("Team "+$("#Teams_Name").val()+" successfully Updated.");
+			  }
+			  return true;
+		  }
+	  }'
+	  )
 )); ?>
 
 <div class="clear"></div>
@@ -37,7 +51,7 @@ if( isset($disabled) && $disabled ){
     ?>
 
     <div class="rowdiv">
-        <div class="green" style="padding-top:30px;" > Division  </div>
+        <div class="green" style="padding-top:30px;" > Division <span class="required">*</span></div>
             <div class="gray" style="padding-top:30px;" >
             <?php echo $form->dropDownList($model,'Division_iddivision',$listDivision,array_merge($disabledArray,array('empty' => 'Select Division','style' => 'width:216px !important; text-align:center')));?>
             <?php echo $form->error($model,'Division_iddivision'); ?>
@@ -45,7 +59,7 @@ if( isset($disabled) && $disabled ){
     </div>
 
     <div class="rowdiv">
-        <div class="green" > Team Name  </div>
+        <div class="green" > Team Name <span class="required">*</span></div>
             <div class="gray" >
         <?php echo $form->textField($model,'Name',array_merge($disabledArray,array('size'=>60,'maxlength'=>100))); ?>
         <?php echo $form->error($model,'Name'); ?>
@@ -53,7 +67,7 @@ if( isset($disabled) && $disabled ){
     </div>
 
     <div class="rowdiv">
-        <div class="green"  > Name Abbrev </div>
+        <div class="green"  > Name Abbrev <span class="required">*</span></div>
             <div class="gray" >
         <?php echo $form->textField($model,'Abv',array_merge($disabledArray,array('size'=>60,'maxlength'=>100))); ?>
         <?php echo $form->error($model,'Abv'); ?>
@@ -61,7 +75,7 @@ if( isset($disabled) && $disabled ){
     </div>
 
     <div class="rowdiv">
-        <div class="green"  >Stadium</div>
+        <div class="green"  >Stadium <span class="required">*</span></div>
             <div class="gray" >
         <?php echo $form->textField($model,'location',array_merge($disabledArray,array('size'=>60,'maxlength'=>100))); ?>
         <?php echo $form->error($model,'location'); ?>
@@ -128,12 +142,12 @@ if( isset($disabled) && $disabled ){
 <br />
     <div class="rowdiv">
         <?php if( isset($disabled) && $disabled ){
-            echo CHtml::linkButton('Close',array('submit'=>array('teams/admin','Teams_page'=>isset(Yii::app()->session['Teams_page']) ? Yii::app()->session['Teams_page'] : 1),'class'=>'save-form-btn'));
+			echo CHtml::link('Close',array('teams/admin','Teams_page'=>isset(Yii::app()->session['Teams_page']) ? Yii::app()->session['Teams_page'] : 1),array('class'=>'save-form-btn'));
         }
         else{
             echo CHtml::submitButton($model->isNewRecord ? 'Add' : 'Update',array("class"=>"save-form-btn",'style'=>'margin-top: 0;'));
             echo "&nbsp;";
-            echo CHtml::linkButton('Cancel',array('submit'=>array('teams/admin','Teams_page'=>isset(Yii::app()->session['Teams_page']) ? Yii::app()->session['Teams_page'] : 1),'class'=>'save-form-btn'));
+			echo CHtml::link('Cancel',array('teams/admin','Teams_page'=>isset(Yii::app()->session['Teams_page']) ? Yii::app()->session['Teams_page'] : 1),array('class'=>'save-form-btn'));
         } ?>
     </div>
 

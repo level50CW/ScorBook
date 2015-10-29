@@ -18,7 +18,21 @@ if( isset($disabled) && $disabled ){
 
 <?php $form = $this->beginWidget('CActiveForm', array(
     'id' => 'games-form',
-    'enableAjaxValidation' => false,
+    'enableAjaxValidation'=>true,
+	'clientOptions' => array(
+      'validateOnSubmit' => true,
+      'validateOnChange' => false,
+	  'afterValidate' => 'js: function(form, data, hasError) {
+		  if (!hasError){
+			  if ('.$model->isNewRecord.'+0){
+				  alert("Game on "+$(\'input[name="Games[date]"]\').val().split(" ")[0]+" at "+$(\'input[name="Games[date]"]\').val().split(" ")[1]+ " between "+$(\'select[name="Games[Teams_idteam_home]"] option:selected\').text()+" and "+$(\'select[name="Games[Teams_idteam_visiting]"] option:selected\').text()+" was successfully added to the Schedule.");
+			  }else{
+				  alert("Game on "+$(\'input[name="Games[date]"]\').val().split(" ")[0]+" at "+$(\'input[name="Games[date]"]\').val().split(" ")[1]+ " between "+$(\'select[name="Games[Teams_idteam_home]"] option:selected\').text()+" and "+$(\'select[name="Games[Teams_idteam_visiting]"] option:selected\').text()+" was successfully updated.");
+			  }
+			  return true;
+		  }
+	  }'
+	  )
 )); ?>
 
 <div class="row">
@@ -215,14 +229,13 @@ echo CHtml::hiddenField('link', '', array('id' => 'link'));;
 <br>
 <?php if( !isset($disabled) ){ ?>
     <div class="rowdiv">
-        <?php echo CHtml::submitButton($model->isNewRecord ? 'Add' : 'Update', array('class'=>'save-form-btn','style'=>'margin-top: 0;',
-        'onClick'=> !$model->isNewRecord ? 'alert("Game on "+$(\'input[name="Games[date]"]\').val().split(" ")[0]+" at "+$(\'input[name="Games[date]"]\').val().split(" ")[1]+ " between "+$(\'select[name="Games[Teams_idteam_home]"] option:selected\').text()+" and "+$(\'select[name="Games[Teams_idteam_visiting]"] option:selected\').text()+" was successfully updated.")' : 'alert("Game on "+$(\'input[name="Games[date]"]\').val().split(" ")[0]+" at "+$(\'input[name="Games[date]"]\').val().split(" ")[1]+ " between "+$(\'select[name="Games[Teams_idteam_home]"] option:selected\').text()+" and "+$(\'select[name="Games[Teams_idteam_visiting]"] option:selected\').text()+" was successfully added to the Schedule.")')); ?>
-        <?php echo CHtml::linkButton('Cancel',array('submit'=>array('schedule/admin', 'Schedule_page'=>isset(Yii::app()->session['Schedule_page']) ? Yii::app()->session['Schedule_page'] : 1),'class'=>'save-form-btn'));?>
+        <?php echo CHtml::submitButton($model->isNewRecord ? 'Add' : 'Update', array('class'=>'save-form-btn','style'=>'margin-top: 0;')); ?>
+        <?php echo CHtml::link('Cancel',array('schedule/admin', 'Schedule_page'=>isset(Yii::app()->session['Schedule_page']) ? Yii::app()->session['Schedule_page'] : 1), array('class'=>'save-form-btn'));?>
     </div>
 <?php } 
 else { ?>
     <div class="rowdiv">
-        <?php echo CHtml::linkButton('Close',array('submit'=>array('schedule/admin', 'Schedule_page'=>isset(Yii::app()->session['Schedule_page']) ? Yii::app()->session['Schedule_page'] : 1),'class'=>'save-form-btn'));?>
+        <?php echo CHtml::link('Close',array('schedule/admin', 'Schedule_page'=>isset(Yii::app()->session['Schedule_page']) ? Yii::app()->session['Schedule_page'] : 1), array('class'=>'save-form-btn'));?>
     </div>
 <?php } ?>
 

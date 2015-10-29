@@ -18,7 +18,7 @@ $('.search-form form').submit(function(){
 
 <h1>Users - Manage Users</h1>
 
-<?php echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
+<?php //echo CHtml::link('Advanced Search','#',array('class'=>'search-button')); ?>
 <div class="search-form" style="display:none">
 <?php $this->renderPartial('_search',array(
 	'model'=>$model,
@@ -38,6 +38,10 @@ $('.search-form form').submit(function(){
 		'role',
 		array(
 			'class'=>'CButtonColumn',
+			'afterDelete'=>"function(link,success,data){ if(success) {
+				alert('User '+$(link).parent().parent().find('td').eq(2).text()+' has been successfully deleted.')
+			} }",
+			'deleteConfirmation'=>"js: 'Please confirm you want to delete '+$(this).parent().parent().find('td').eq(2).text()+'.'"
 		),
 	),
 	'pager'=>array(

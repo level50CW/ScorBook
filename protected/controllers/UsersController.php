@@ -65,7 +65,7 @@ class UsersController extends Controller
         $model=new Users;
 
         // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
+        $this->performAjaxValidation($model);
 
         if(isset($_POST['Users']))
         {
@@ -93,13 +93,15 @@ class UsersController extends Controller
         $model=$this->loadModel($id);
 
         // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
+        $this->performAjaxValidation($model);
+		
         
         if(isset($_POST['Users']))
         {
             $model->attributes=$_POST['Users'];
             
-            if ($model->Password != Users::model()->findbyPK($model->iduser)->Password) $model->Password = md5($model->Password);
+            if ($model->Password != Users::model()->findbyPK($model->iduser)->Password)
+				$model->Password = md5($model->Password);
             
             
             if($model->save())

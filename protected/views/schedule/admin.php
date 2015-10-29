@@ -21,11 +21,22 @@ $('.search-form form').submit(function(){
 
 <?php 
 $role = Yii::app()->session['role'];
+
+$deleteAfterDelete = "function(link,success,data){ if(success) {
+				alert('Game between '+$(link).parent().parent().find('td').eq(2).text()+' and '+$(link).parent().parent().find('td').eq(3).text()+' has been successfully deleted.')
+			} }";
+$deleteConfirmation = "js: (new Date($(this).parent().parent().find('td').eq(1).text())-new Date()>0)?
+	'Please confirm you want to delete this game from schedule.':
+	'Please confirm you want to delete this game. This game has been played and scored and if deleted all statistics will be lost.'";
+
+
 switch ($role) {
     case 'admins':
         $buttons = array(
             'class'=> 'CButtonColumn',
             'template'=> '{view}{update}{delete}',
+			'afterDelete'=>$deleteAfterDelete,
+			'deleteConfirmation'=>$deleteConfirmation
         );
         break;
     case 'roster':
@@ -41,6 +52,8 @@ switch ($role) {
             'filterHtmlOptions' => array('style' => 'display:none'),
             'headerHtmlOptions' => array('style' => 'display:none'),
             'htmlOptions' => array('style' => 'display:none'),
+			'afterDelete'=>$deleteAfterDelete,
+			'deleteConfirmation'=>$deleteConfirmation
         );
         break;
     default:
@@ -50,6 +63,8 @@ switch ($role) {
             'filterHtmlOptions' => array('style' => 'display:none'),
             'headerHtmlOptions' => array('style' => 'display:none'),
             'htmlOptions' => array('style' => 'display:none'),
+			'afterDelete'=>$deleteAfterDelete,
+			'deleteConfirmation'=>$deleteConfirmation
         );
         break;
 }

@@ -49,9 +49,9 @@ $('.search-form form').submit(function(){
 		*/
 		array(
 			'class'=>'CButtonColumn',
-			'afterDelete'=>'function(link,success,data){ if(success) {
-				alert("Player deleted.")
-			} }',
+			'afterDelete'=>"function(link,success,data){ if(success) {
+				alert('Player '+$(link).parent().parent().find('td').eq(1).text()+', '+$(link).parent().parent().find('td').eq(2).text()+' deleted.')
+			} }",
 			'deleteConfirmation'=>"js: 'Please Confirm you want to delete '+$(this).parent().parent().find('td').eq(1).text()+', '+$(this).parent().parent().find('td').eq(2).text()+'. Remember deleting a player loses forever their statistics'"
 		),
 	),

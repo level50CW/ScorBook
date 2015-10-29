@@ -59,7 +59,7 @@ class ScheduleController extends Controller
         $model = $id ? $this->loadModel($id) : new Games;
         
         // Uncomment the following line if AJAX validation is needed
-        // $this->performAjaxValidation($model);
+        $this->performAjaxValidation($model);
 
         
         if(isset($_POST['Games']))
@@ -157,4 +157,13 @@ class ScheduleController extends Controller
             throw new CHttpException(404,'The requested page does not exist.');
         return $model;
     }
+	
+	protected function performAjaxValidation($model)
+	{
+		if(isset($_POST['ajax']) && $_POST['ajax']==='games-form')
+		{
+			echo CActiveForm::validate($model);
+			Yii::app()->end();
+		}
+	}
 }
