@@ -12,6 +12,10 @@ if( isset($disabled) && $disabled ){
 		"readonly"=>"readonly",
 	);
 }
+
+if ($model->isNewRecord){
+	$model->league_idleague = Settings::get()->idleague;
+}
 ?>
 
 <div class="form">
@@ -41,13 +45,6 @@ if( isset($disabled) && $disabled ){
 
 <br/>
 <div class="blacktitle">Division</div>
-<div class="rowdiv">
-    <div class="green" style="padding: 10px 0;"> Name <span class="required">*</span></div>
-    <div class="gray" style="padding: 10px 0;">
-        <?php echo $form->textField($model,'Name',array('size'=>60,'maxlength'=>150)); ?>
-        <?php echo $form->error($model,'Name'); ?>
-    </div>
-</div>
 <?php
 	$leagues = League::model()->findAll();
 	$listLeague= CHtml::listData($leagues,'idleague', 'Name');
@@ -59,6 +56,13 @@ if( isset($disabled) && $disabled ){
 		<?php echo $form->dropDownList($model,'league_idleague',$listLeague,array_merge($disabledArray,array('empty' => 'Select League','style' => 'width:216px !important; text-align:center')));?>
 		<?php echo $form->error($model,'league_idleague'); ?>
 	</div>
+</div>
+<div class="rowdiv">
+    <div class="green" style="padding: 10px 0;"> Name <span class="required">*</span></div>
+    <div class="gray" style="padding: 10px 0;">
+        <?php echo $form->textField($model,'Name',array('size'=>60,'maxlength'=>150)); ?>
+        <?php echo $form->error($model,'Name'); ?>
+    </div>
 </div>
 
 	<br/>

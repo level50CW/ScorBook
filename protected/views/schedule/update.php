@@ -1,6 +1,10 @@
 <?php
 //edit or add new one
-$header = Yii::app()->request->getParam('id') ? "Schedule - ".$model->teamsIdteamHome['Name']. " VS " . $model->teamsIdteamVisiting['Name'] .( $model->date ? ' - ' . date('F j',strtotime($model->date)) : '') : "Schedule – Add New Game";
+
+$header = Yii::app()->request->getParam('id') ? 
+	'Schedule - <span id="header-teamNameHome">'.$model->teamsIdteamHome['Name']. '</span> VS <span id="header-teamNameVisiting">' . $model->teamsIdteamVisiting['Name'] .'</span>'.
+		( $model->date ? ' - <span id="header-date">'.date_create_from_format('m-d-Y H:i', $model->date)->format('F j').'</span>' : ''):
+	'Schedule – Add New Game';
 ?>
 
 <h1><?php echo $header; ?></h1>

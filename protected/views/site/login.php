@@ -9,8 +9,9 @@ $this->pageTitle=Yii::app()->name . ' - Login';
 
 <h1>Login</h1>
 <br />
-<p style="margin: 0 264px;">Please fill out the following form with your login credentials:</p>
+<p style="margin: 0 264px;">Please enter your Username and Password below.</p>
 
+		<input type="checkbox" />
 <div class="form login-form">
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'login-form',

@@ -31,6 +31,28 @@ $('.search-form form').submit(function(){
 	'filter'=>$model,
 	'columns'=>array(
 		//'iduser',
+		array(
+			'header'=>'League',
+			'name'=>'teamsIdteam.divisionIddivision.leagueIdleague.Name',
+			'filter' => CHtml::activeDropDownList($model, 'leagueIdleague_Name',
+				CHtml::listData(League::model()->findAll(), 'idleague', 'Name'),
+				array(
+					'empty' => 'Select',
+					'style'=>'color: black; padding-top: 0px; border: 1px solid #8CB8E7 !important;')),
+		),
+		array(
+			'header'=>'Division',
+			'name'=>'teamsIdteam.divisionIddivision.Name',
+			'filter' => CHtml::activeDropDownList($model, 'division_Name',
+				CHtml::listData(
+					$model->leagueIdleague_Name? 
+						Division::model()->findAll('`league_idleague`='.$model->leagueIdleague_Name) : 
+						Division::model()->findAll(), 
+					'iddivision', 'Name'),
+				array(
+					'empty' => 'Select',
+					'style'=>'color: black; padding-top: 0px; border: 1px solid #8CB8E7 !important;')),
+		),
         'Lastname',
 		'Firstname',
 		'Email',

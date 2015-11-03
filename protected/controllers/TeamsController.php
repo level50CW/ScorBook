@@ -86,7 +86,11 @@ class TeamsController extends Controller
 
 				}
 				$model->save();
-				$this->redirect(array('view','id'=>$model->idteam));
+				if(isset($_POST['next'])){
+					$this->redirect(array('create'));
+				} else{
+					$this->redirect(array('view','id'=>$model->idteam));
+				}
 			}
 
 
@@ -133,6 +137,8 @@ class TeamsController extends Controller
 					$file->saveAs($model->logo);
 				}
 				$model->save();
+				if (isset($_POST['next']))
+					$this->redirect(array('update','id'=>$model->next()->idteam));
 				$this->redirect(array('view','id'=>$model->idteam));
 			}
 

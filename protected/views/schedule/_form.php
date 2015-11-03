@@ -44,21 +44,22 @@ if( isset($disabled) && $disabled ){
 //Seleccionamos la liga del equipo que tiene el usuario si no es admin
 
 $team_selected = Yii::app()->session['team'];
+$modelLeague = League::model()->findByPk(Settings::get()->idleague);
 
 if (Yii::app()->session['role'] == 'admins') {
 
-    $divisions = Division::model()->findAll();
+    $divisions = Division::model()->findAllByAttributes(array('league_idleague'=>$modelLeague->idleague));
     $divisionsListHome = CHtml::ListData($divisions, 'iddivision', 'Name');
 
-    $divisions = Division::model()->findAll();
+    $divisions = Division::model()->findAllByAttributes(array('league_idleague'=>$modelLeague->idleague));
     $divisionsList = CHtml::ListData($divisions, 'iddivision', 'Name');
 
 }else if (Yii::app()->session['role'] == 'roster') {
 
-    $divisions = Division::model()->findAllBySql("SELECT l.iddivision,l.Name FROM Division as l INNER JOIN Teams t ON(l.iddivision = t.Division_iddivision) WHERE l.type = 'division' AND idteam=:a",array(':a' => $team_selected,));
+    $divisions = Division::model()->findAllBySql("SELECT l.iddivision,l.Name FROM Division as l INNER JOIN Teams t ON(l.iddivision = t.Division_iddivision) WHERE l.type = 'division' AND idteam=:a AND l.league_idleague=:lid",array(':a' => $team_selected,':lid'=>$modelLeague->idleague));
     $divisionsListHome = CHtml::ListData($divisions, 'iddivision', 'Name');
 
-    $divisions = Division::model()->findAll();
+    $divisions = Division::model()->findAllByAttributes(array('league_idleague'=>$modelLeague->idleague));
     $divisionsList = CHtml::ListData($divisions, 'iddivision', 'Name');
 
 }
@@ -86,8 +87,15 @@ if (Yii::app()->session['role'] == 'admins') {
 <br/>
 <div class="blacktitle"> GAME INFO</div>
 <div class="rowdiv">
+	<div class="green"> League <span class="required">*</span></div>
+	<div class="gray">
+		<?php echo $form->textField($modelLeague, 'Name', array('size' => 60, 'maxlength' => 200,"disabled"=>"disabled","readonly"=>"readonly",)); ?>
+	</div>
+</div>
 
-    <div class="green"> Date <span class="required">*</span></div>
+<div class="rowdiv">
+
+    <div class="brown"> Date <span class="required">*</span></div>
     <div class="gray">
 
 
@@ -113,7 +121,7 @@ if (Yii::app()->session['role'] == 'admins') {
 </div>
 
 <div class="rowdiv">
-    <div class="brown"> Season <span class="required">*</span></div>
+    <div class="green"> Season <span class="required">*</span></div>
     <div class="gray">
         <?php $model->season = $model->season ? $model->season : date("Y"); ?>
         <?php echo $form->textField($model, 'season', array_merge(array("readonly"=>"readonly"),array('size' => 60, 'maxlength' => 200, 'readonly'=>'readonly'))); ?>
@@ -124,11 +132,12 @@ if (Yii::app()->session['role'] == 'admins') {
 
 
 <div class="rowdiv">
-    <div class="green"> Status <span class="required">*</span></div>
+    <div class="brown"> Status <span class="required">*</span></div>
     <div class="gray">
-        <?php echo $form->dropDownList($model, 'status', array(
-            '0' => 'Scheduled – Active', '1' => 'in progress', '2' => 'End-regulation', '3' => 'End-extraInnings', '4' => 'End-timeLimit', '5' => 'End-runRule', '6' => 'End-forfeit', '7' => 'End-darkness',
-            '8' => 'End-rainOut', '9' => 'End-other', '10' => 'Suspended - Darkness', '11' => 'Suspended-rain', '12' => 'Suspended-other'),array_merge($disabledArray,array('style' => 'width:216px !important; text-align:center')));?>
+        <?php echo $form->dropDownList($model, 'status',
+			$model->isNewRecord? array('0' => 'Scheduled – Active','-1' => 'Scheduled – Inactive',) : array(
+            '0' => 'Scheduled – Active','-1' => 'Scheduled – Inactive', '1' => 'in progress', '2' => 'End-regulation', '3' => 'End-extraInnings', '4' => 'End-timeLimit', '5' => 'End-runRule', '6' => 'End-forfeit', '7' => 'End-darkness',
+            '8' => 'End-rainOut', '9' => 'End-other', '10' => 'Suspended - Darkness', '11' => 'Suspended-rain', '12' => 'Suspended-other'),array_merge($disabledArray,array('style' => 'width:216px !important; text-align:center', )));?>
         <?php echo $form->error($model, 'status'); ?>
     </div>
 </div>
@@ -230,6 +239,7 @@ echo CHtml::hiddenField('link', '', array('id' => 'link'));;
 <?php if( !isset($disabled) ){ ?>
     <div class="rowdiv">
         <?php echo CHtml::submitButton($model->isNewRecord ? 'Add' : 'Update', array('class'=>'save-form-btn','style'=>'margin-top: 0;')); ?>
+        <?php echo CHtml::submitButton(($model->isNewRecord ? 'Add' : 'Update').'/Next',array("class"=>"save-form-btn", 'style'=>'margin-top: 0;', 'name'=>'next')); ?>
         <?php echo CHtml::link('Cancel',array('schedule/admin', 'Schedule_page'=>isset(Yii::app()->session['Schedule_page']) ? Yii::app()->session['Schedule_page'] : 1), array('class'=>'save-form-btn'));?>
     </div>
 <?php } 
@@ -244,12 +254,10 @@ else { ?>
 </div><!-- form -->
 
 
+
+
 <?php
 Yii::app()->clientScript->registerScript('update', "
-$('input[name=\"Games[date]\"]').on('change',function(){
-    var date = $(this).datepicker('getDate');
-    $('input[name=\"Games[season]\"]').val(date.getFullYear());
-});
 
 $('select[name=\"Games[Teams_idteam_home]\"]').on('change',function(){
     $('select[name=\"Games[location]\"]').val($(this).val());
@@ -261,3 +269,24 @@ var myVar = setInterval(function(){
 }, 300);
 
 "); ?>
+
+<script>
+	(function(){
+		$(".timepicker").change(function(){
+			var date = new Date($(this).val());
+			var monthNames = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"];
+			$("#header-date").text(monthNames[date.getMonth()]+" "+date.getDate());
+			$("#Games_season").val(date.getFullYear());
+		});
+		
+		$("#Games_Teams_idteam_home").change(function(){
+			var text = $("option:selected", this).text();
+			$("#header-teamNameHome").text(text);
+		});
+		
+		$("#Games_Teams_idteam_visiting").change(function(){
+			var text = $("option:selected", this).text();
+			$("#header-teamNameVisiting").text(text);
+		});
+	})();
+</script>

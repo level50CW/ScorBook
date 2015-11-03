@@ -34,8 +34,38 @@ $('.search-form form').submit(function(){
 	'columns'=>array(
 		//'idplayer',
 		array(
-		'name'=>'teamname',
-		'value'=>'isset($data->teamsIdteam->Name) ? $data->teamsIdteam->Name : ""',
+			'header'=>'League',
+			'name'=>'teamsIdteam.divisionIddivision.leagueIdleague.Name',
+			'filter' => CHtml::activeDropDownList($model, 'leagueIdleague_Name',
+				CHtml::listData(League::model()->findAll(), 'idleague', 'Name'),
+				array(
+					'empty' => 'Select',
+					'style'=>'color: black; padding-top: 0px; border: 1px solid #8CB8E7 !important;')),
+		),
+		array(
+            'header' => 'Season',
+			'value' => function($data, $row){
+				return Division::model()->getSeason($data->teamsIdteam->divisionIddivision);
+			},
+			'filter' => CHtml::activeDropDownList($model, 'division_Season',
+				array(date('Y')=>date('Y'),(2+date('Y'))=>(2+date('Y')),(1+date('Y'))=>(1+date('Y')), (-1+date('Y'))=>(-1+date('Y')),(-2+date('Y'))=>(-2+date('Y')), ),
+				array(
+					'empty' => 'Select',
+					'style'=>'color: black; padding-top: 0px; width: 50px; border: 1px solid #8CB8E7 !important;')),
+		),
+		array(
+			'header'=>'Division',
+			'name'=>'teamsIdteam.divisionIddivision.Name',
+			'filter' => CHtml::activeDropDownList($model, 'division_Name',
+				CHtml::listData(Division::model()->findAll(), 'iddivision', 'Name'),
+				array(
+					'empty' => 'Select',
+					'style'=>'color: black; padding-top: 0px; border: 1px solid #8CB8E7 !important;')),
+		),
+		
+		array(
+			'name'=>'teamname',
+			'value'=>'isset($data->teamsIdteam->Name) ? $data->teamsIdteam->Name : ""',
 		), 
 		'Lastname',
 		'Firstname',
@@ -49,6 +79,7 @@ $('.search-form form').submit(function(){
 		*/
 		array(
 			'class'=>'CButtonColumn',
+			'header'=>'Actions',
 			'afterDelete'=>"function(link,success,data){ if(success) {
 				alert('Player '+$(link).parent().parent().find('td').eq(1).text()+', '+$(link).parent().parent().find('td').eq(2).text()+' deleted.')
 			} }",

@@ -149,7 +149,7 @@ function finalizeGame(){
         <?php
         if(!Yii::app()->user->isGuest){
           echo "Welcome " .  Yii::app()->session['firstname'] . " " . Yii::app()->session['lastname'].'<br/>';
-          echo "Role: " . Yii::app()->session['role'];
+          echo "Last Login: " . Yii::app()->session['lastLoginTime'];
 		}
         ?>
     </div><!-- mainmenu -->
@@ -180,6 +180,8 @@ function finalizeGame(){
                             'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
                             array('label'=>'Manage Games', 'url'=>array('schedule/admin')),
                             array('label'=>'Add New Game', 'url'=>array('schedule/update')),
+                            array('label'=>'Import Schedule', 'url'=>array('principal/admin'), 'linkOptions'=>array('style'=>'color: #868686 !important;', 'onclick'=>'return false;')),
+                            array('label'=>'Export Schedule', 'url'=>array('principal/admin'), 'linkOptions'=>array('style'=>'color: #868686 !important;', 'onclick'=>'return false;')),
                         )),
                         // array('label'=>'Score Game', 
                             // 'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
@@ -191,13 +193,6 @@ function finalizeGame(){
                             'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
                             array('label'=>'Edit Complete Game Stats', 'url'=>array('games/admin')),
                         )),
-                        array('label'=>'Divisions', 
-                            'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
-                            array('label'=>'Manage Divisions', 'url'=>array('division/admin')),
-                            array('label'=>'Add New Division', 'url'=>array('division/create')),
-                            array('label'=>'Manage Leagues', 'url'=>array('league/admin')),
-                            array('label'=>'Add New League', 'url'=>array('league/create')),
-                        )),
                         array('label'=>'Teams', 
                             'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
                             array('label'=>'Manage Teams', 'url'=>array('teams/admin')),
@@ -207,6 +202,15 @@ function finalizeGame(){
                             'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
                             array('label'=>'Manage Players', 'url'=>array('players/admin')),
                             array('label'=>'Add New Player', 'url'=>array('players/create')),
+                            array('label'=>'Import Rosters', 'url'=>array('principal/admin'), 'linkOptions'=>array('style'=>'color: #868686 !important;', 'onclick'=>'return false;')),
+                            array('label'=>'Export Rosters', 'url'=>array('principal/admin'), 'linkOptions'=>array('style'=>'color: #868686 !important;', 'onclick'=>'return false;')),
+                        )),
+                        array('label'=>'Leagues', 
+                            'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
+                            array('label'=>'Manage Leagues', 'url'=>array('league/admin')),
+                            array('label'=>'Add New League', 'url'=>array('league/create')),
+                            array('label'=>'Manage Divisions', 'url'=>array('division/admin')),
+                            array('label'=>'Add New Division', 'url'=>array('division/create')),
                         )),
                         array('label'=>'Users', 
                             'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
@@ -214,15 +218,14 @@ function finalizeGame(){
                             array('label'=>'Add New User', 'url'=>array('users/create')),
                         )),
                         array('label'=>'Settings',
-                              'submenuOptions'=>array('class'=>'nav-sub'),
-                              'items'=>array(
-                                array(
-                                    'label' => 'Logout',
-                                    'url' => array('site/logout'),
-                                    'linkOptions' => array(
-                                        'onclick' => "if(!confirm('Are you sure you want to exit?')){ return false; };"
-                                ),
-                                ),
+                            'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
+                            array('label'=>'General Settings', 'url'=>array('settings/change'), 'linkOptions'=>array('style'=>'width: 115px;')),
+                            array('label'=>'System Settings', 'url'=>array('principal/admin'), 'linkOptions'=>array('style'=>'color: #868686 !important;', 'onclick'=>'return false;')),
+							array(
+								'label' => 'Logout',
+								'url' => array('site/logout'),
+								'linkOptions' => array(
+									'onclick' => "if(!confirm('Are you sure you want to exit?')){ return false; };")),
                                 
                         )),
                     ),
@@ -386,8 +389,7 @@ function finalizeGame(){
      
         <? } ?>
 
-        Copyright &copy; <?php echo date('Y'); ?> by Northwoods.
-        All Rights Reserved.<br/><br/> 
+		Copyright &copy; <?php echo date('Y'); ?>-<?php echo 1+date('Y'); ?> Northwoods League. All Rights Reserved.<br/><br/> 
         <hr style="width:200px; margin:0 auto;">
         <script>
             

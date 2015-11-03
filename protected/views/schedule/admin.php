@@ -33,6 +33,7 @@ $deleteConfirmation = "js: (new Date($(this).parent().parent().find('td').eq(1).
 switch ($role) {
     case 'admins':
         $buttons = array(
+			'header' => 'Actions',
             'class'=> 'CButtonColumn',
             'template'=> '{view}{update}{delete}',
 			'afterDelete'=>$deleteAfterDelete,
@@ -41,12 +42,14 @@ switch ($role) {
         break;
     case 'roster':
         $buttons = array(
+			'header' => 'Actions',
             'class'=> 'CButtonColumn',
             'template'=> '{view}',
         );
         break;
     case 'scorer':
         $buttons = array(
+			'header' => 'Actions',
             'class'=> 'CButtonColumn',
             'template'=> '{view}{update}{delete}',
             'filterHtmlOptions' => array('style' => 'display:none'),
@@ -58,6 +61,7 @@ switch ($role) {
         break;
     default:
          $buttons = array(
+			'header' => 'Actions',
             'class'=> 'CButtonColumn',
             'template'=> '{view}{update}{delete}',
             'filterHtmlOptions' => array('style' => 'display:none'),
@@ -74,7 +78,23 @@ $this->widget('zii.widgets.grid.CGridView', array(
     'dataProvider'=>$model->search(),
     'filter'=>$model,
     'columns'=>array(
-        'season',
+		array(
+			'header'=>'League',
+			'value'=>'$data->divisionIddivisionHome->leagueIdleague->Name',
+			'filter' => CHtml::activeDropDownList($model, 'leagueIdleague_Name',
+				CHtml::listData(League::model()->findAll(), 'idleague', 'Name'),
+				array(
+					'empty' => 'Select',
+					'style'=>'color: black; padding-top: 0px; border: 1px solid #8CB8E7 !important;')),
+		),
+		array(
+			'name'=>'season',
+			'filter' => CHtml::activeDropDownList($model, 'season',
+				array((2+date('Y'))=>(2+date('Y')),(1+date('Y'))=>(1+date('Y')), (-1+date('Y'))=>(-1+date('Y')),(-2+date('Y'))=>(-2+date('Y')),(-3+date('Y'))=>(-3+date('Y')), ),
+				array(
+					'empty' => array(date('Y')=>date('Y')),
+					'style'=>'color: black; padding-top: 0px; border: 1px solid #8CB8E7 !important;')),
+		),
         'date',
         array(
         'header' => 'Home',

@@ -25,6 +25,9 @@
  */
 class Games extends CActiveRecord
 {
+	
+	public $leagueIdleague_Name;
+	
     /**
      * Returns the static model of the specified AR class.
      * @param string $className active record class name.
@@ -63,7 +66,7 @@ class Games extends CActiveRecord
             array('date, end_date', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('idgame, location, date, comment, attendance, weather, temperature, Teams_idteam_visiting, Teams_idteam_home, Division_iddivision_visiting, Division_iddivision_home, season', 'safe', 'on'=>'search'),
+            array('idgame, location, date, comment, attendance, weather, temperature, Teams_idteam_visiting, Teams_idteam_home, Division_iddivision_visiting, Division_iddivision_home, season, divisionIddivisionHome.league_idleague, leagueIdleague_Name', 'safe', 'on'=>'search'),
             array('idgame, location, date, comment, attendance, weather, temperature, Teams_idteam_visiting, Teams_idteam_home, Division_iddivision_visiting, Division_iddivision_home, season', 'safe', 'on'=>'searchTodayGames'),
         );
     }
@@ -79,8 +82,8 @@ class Games extends CActiveRecord
             'gameOfficials' => array(self::HAS_MANY, 'GameOfficials', 'Games_idgame'),
             'teamsIdteamVisiting' => array(self::BELONGS_TO, 'Teams', 'Teams_idteam_visiting'),
             'teamsIdteamHome' => array(self::BELONGS_TO, 'Teams', 'Teams_idteam_home'),
-            'divisionIddivisionVisiting' => array(self::BELONGS_TO, 'Division', 'Division_iddivision_visiting','on'=>'divisionIddivisionVisiting.type="division"'),
-            'divisionIddivisionHome' => array(self::BELONGS_TO, 'Division', 'Division_iddivision_home','on'=>'divisionIddivisionVisiting.type="division"'),
+            'divisionIddivisionVisiting' => array(self::BELONGS_TO, 'Division', 'Division_iddivision_visiting'),//,'on'=>'divisionIddivisionVisiting.type="division"'),
+            'divisionIddivisionHome' => array(self::BELONGS_TO, 'Division', 'Division_iddivision_home'),//,'on'=>'divisionIddivisionVisiting.type="division"'),
             'usersiduser' => array(self::BELONGS_TO, 'Users', 'Users_iduser'),
             'lineups' => array(self::HAS_MANY, 'Lineup', 'Games_idgame'),
         );
@@ -137,6 +140,9 @@ class Games extends CActiveRecord
             $criteria->compare('Teams_idteam_home',$this->Teams_idteam_home);
             $criteria->compare('Division_iddivision_visiting',$this->Division_iddivision_visiting);
             $criteria->compare('Division_iddivision_home',$this->Division_iddivision_home);
+			
+			$criteria->with=array('divisionIddivisionHome');
+			$criteria->compare('divisionIddivisionHome.league_idleague', isset($this->leagueIdleague_Name) && $this->leagueIdleague_Name>-1? $this->leagueIdleague_Name : null);
 
         } else if (Yii::app()->session['role'] == 'roster') {
 
@@ -154,6 +160,9 @@ class Games extends CActiveRecord
             $criteria->compare('Teams_idteam_home',$teamid);
             $criteria->compare('Division_iddivision_visiting',$this->Division_iddivision_visiting);
             $criteria->compare('Division_iddivision_home',$this->Division_iddivision_home);
+			
+			$criteria->with=array('divisionIddivisionHome');
+			$criteria->compare('divisionIddivisionHome.league_idleague', isset($this->leagueIdleague_Name) && $this->leagueIdleague_Name>-1? $this->leagueIdleague_Name : null);
         } else if (Yii::app()->session['role'] == 'scorer') {
             $teamid = Yii::app()->session['team'];
             $criteria->compare('idgame',$this->idgame);
@@ -168,6 +177,9 @@ class Games extends CActiveRecord
             $criteria->compare('Teams_idteam_home',$teamid);
             $criteria->compare('Division_iddivision_visiting',$this->Division_iddivision_visiting);
             $criteria->compare('Division_iddivision_home',$this->Division_iddivision_home);
+			
+			$criteria->with=array('divisionIddivisionHome');
+			$criteria->compare('divisionIddivisionHome.league_idleague', isset($this->leagueIdleague_Name) && $this->leagueIdleague_Name>-1? $this->leagueIdleague_Name : null);
         }
 
         $criteria->order = 'date';
@@ -197,6 +209,7 @@ class Games extends CActiveRecord
         $criteria->compare('Teams_idteam_home',$this->Teams_idteam_home);
         $criteria->compare('Division_iddivision_visiting',$this->Division_iddivision_visiting);
         $criteria->compare('Division_iddivision_home',$this->Division_iddivision_home);
+		
 
         } else if (Yii::app()->session['role'] == 'roster') {
 
@@ -268,6 +281,14 @@ class Games extends CActiveRecord
         }
         return $date;
     }
+	
+	public function next()
+	{
+		$nextModel = $this->find('idgame>:id ORDER BY idgame', array(':id'=>$this->idgame));
+		if (count($nextModel) == 0)
+			$nextModel = $this->find(' 1 ORDER BY idgame');
+		return $nextModel;
+	}
 
     protected function beforeValidate()
     {

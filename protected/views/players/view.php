@@ -5,7 +5,7 @@
 
 <h1>Rosters - View Player - <?php echo $model->Firstname." ".$model->Lastname; ?> </h1>
 
-<?php echo $this->renderPartial('_form_view', array('model'=>$model)); ?>
+<?php echo $this->renderPartial('_form', array('model'=>$model, 'disabled'=>true)); ?>
 
 
 

@@ -77,10 +77,14 @@ class ScheduleController extends Controller
                     Yii::app()->user->setState('iddivisionvisiting', $_POST['Games']['Division_iddivision_visiting']);
                     Yii::app()->user->setState('idgame', Yii::app()->db->lastInsertID);
                 }
-                if ($_POST['link']){
-                    $this->redirect(array($_POST['link']));
+                if ($_POST['next']){
+					if ($id){
+						$this->redirect(array('schedule/update','id'=>$model->next()->idgame));
+					} else{
+						$this->redirect(array('schedule/update'));
+					}
                 }
-                $this->redirect(array('schedule/admin','team'=>'home'));
+                $this->redirect(array('schedule/view','id'=>$model->idgame));
             }
         }else if($id){
             //Set environment variables on load 

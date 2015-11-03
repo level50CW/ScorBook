@@ -101,6 +101,7 @@ class SiteController extends Controller
 				Yii::app()->session['lastname'] = $user->Lastname;
 				Yii::app()->session['role'] = $user->role;
 				Yii::app()->session['team'] = $user->Teams_idteam;
+				Yii::app()->session['lastLoginTime'] = date('d-M-Y H:i:s');
 				//Yii::app()->global->userInfo = "ZbUsers::model()->findall() ";//ByPk(Yii::app()->user->$id);
 				//echo Yii::trace(CVarDumper::dumpAsString(Yii::app()->params),'vardumpuser');
 				

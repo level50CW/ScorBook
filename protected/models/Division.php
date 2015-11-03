@@ -97,4 +97,23 @@ class Division extends CActiveRecord
 			'criteria'=>$criteria,
 		));
 	}
+	
+	public function getSeason($data)
+	{
+		if (!isset($data))
+			return 0;
+		
+		$id = $data->iddivision;
+		$connection = Yii::app()->db;
+		$command = $connection->createCommand("SELECT `season` 
+												FROM  `games` 
+												WHERE  `Division_iddivision_home` =$id
+												OR  `Division_iddivision_visiting` =$id
+												ORDER BY `season` DESC");
+		$row = $command->queryAll();
+		if (isset($row[0]))
+			return $row[0]['season'];
+		else
+			return "--";
+	}
 }

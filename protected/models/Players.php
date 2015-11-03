@@ -29,6 +29,9 @@ class Players extends CActiveRecord
     public $teamname;
     public $foot;
     public $inches;
+	public $leagueIdleague_Name;
+	public $division_Season;
+	public $division_Name;
 
     public static function model($className = __CLASS__)
     {
@@ -65,7 +68,7 @@ class Players extends CActiveRecord
             array('status', 'length', 'max' => 2),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('idplayer, Firstname, Lastname, Number, Teams_idteam, Position, Bats, Throws, teamname, foot, inches', 'safe', 'on' => 'search'),
+            array('idplayer, Firstname, Lastname, Number, Teams_idteam, Position, Bats, Throws, teamname, foot, inches, leagueIdleague_Name, division_Season, division_Name', 'safe', 'on' => 'search'),
         );
     }
 
@@ -92,7 +95,7 @@ class Players extends CActiveRecord
             'Firstname' => 'First Name',
             'Lastname' => 'Last Name',
             'Number' => 'Number',
-            'Teams_idteam' => 'Team Name',
+            'Teams_idteam' => 'Team',
             'teamname'=> 'Team Name',
             'Position' => 'Position',
             'Bats' => 'Bats',
@@ -111,9 +114,9 @@ class Players extends CActiveRecord
         // should not be searched.
 
         $criteria = new CDbCriteria;
-
+		
         if (Yii::app()->session['role'] == 'admins') {
-            $criteria->with = array('teamsIdteam');
+            $criteria->with = array('teamsIdteam', 'teamsIdteam.divisionIddivision');
             $criteria->order= 'teamsIdteam.Name ASC';
             $criteria->compare('teamsIdteam.Name', $this->teamname, true);
             $criteria->compare('idplayer', $this->idplayer);
@@ -124,10 +127,19 @@ class Players extends CActiveRecord
             $criteria->compare('Position', $this->Position, true);
             $criteria->compare('Bats', $this->Bats);
             $criteria->compare('Throws', $this->Throws);
+			
+            $criteria->compare('divisionIddivision.league_idleague', $this->leagueIdleague_Name);
+            $criteria->compare('divisionIddivision.iddivision', $this->division_Name);
+			
+			if (isset($this->division_Season) && $this->division_Season)
+				$criteria->addCondition("$this->division_Season in (SELECT `season` 
+										FROM  `games` 
+										WHERE  `Division_iddivision_home` =`teamsIdteam`.`Division_iddivision`
+										OR  `Division_iddivision_visiting` =`teamsIdteam`.`Division_iddivision`)");
 
         } else if (Yii::app()->session['role'] == 'roster') {
             $teamid = Yii::app()->session['team'];
-            $criteria->with = 'teamsIdteam';
+            $criteria->with = array('teamsIdteam', 'teamsIdteam.divisionIddivision');
             $criteria->order= 'teamsIdteam.Name ASC';
             $criteria->compare('Teams_idteam',$teamid);
             $criteria->compare('teamsIdteam.Name', $this->teamname, true);
@@ -139,10 +151,30 @@ class Players extends CActiveRecord
             $criteria->compare('Position', $this->Position, true);
             $criteria->compare('Bats', $this->Bats);
             $criteria->compare('Throws', $this->Throws);
+			
+			$criteria->compare('divisionIddivision.league_idleague', $this->leagueIdleague_Name);
+            $criteria->compare('divisionIddivision.iddivision', $this->division_Name);
+			
+			if (isset($this->division_Season) && $this->division_Season)
+				$criteria->addCondition("$this->division_Season in (SELECT `season` 
+										FROM  `games` 
+										WHERE  `Division_iddivision_home` =`teamsIdteam`.`Division_iddivision`
+										OR  `Division_iddivision_visiting` =`teamsIdteam`.`Division_iddivision`)");
         }
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,
+			'pagination' => array(
+				'pageSize' => Settings::get()->listSize
+			)
         ));
     }
+	
+	public function next()
+	{
+		$nextModel = $this->find('idplayer>:id ORDER BY idplayer', array(':id'=>$this->idplayer));
+		if (count($nextModel) == 0)
+			$nextModel = $this->find(' 1 ORDER BY idplayer');
+		return $nextModel;
+	}
 }

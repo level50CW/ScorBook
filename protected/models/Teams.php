@@ -22,6 +22,9 @@ class Teams extends CActiveRecord
      * @return Teams the static model class
      */
 
+	public $leagueIdleague_Name;
+	public $division_Season;
+	public $division_Name;
     public $division;
     public $uploadfile;
 
@@ -59,7 +62,7 @@ class Teams extends CActiveRecord
             array('logo', 'length', 'max'=>150),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('idteam, Name, Division_iddivision, division, location', 'safe', 'on'=>'search'),
+            array('idteam, Name, Division_iddivision, division, location, Abv, divisionIddivision.league_idleague, leagueIdleague_Name, division_Season, division_Name', 'safe', 'on'=>'search'),
         );
     }
 
@@ -112,10 +115,31 @@ class Teams extends CActiveRecord
         }
         $criteria->order= 'divisionIddivision.Name ASC, t.Name ASC';
         echo Yii::trace(CVarDumper::dumpAsString($this->division['Name']),'idlineup');
-
+		
+		$criteria->compare('divisionIddivision.league_idleague', isset($this->leagueIdleague_Name) && $this->leagueIdleague_Name>-1? $this->leagueIdleague_Name : null);
+		$criteria->compare('divisionIddivision.iddivision', $this->division_Name);
+		
+		
+		//if (!isset($this->division_Season))	$this->division_Season = date('Y');
+		
+		if (isset($this->division_Season) && $this->division_Season)
+			$criteria->addCondition("$this->division_Season IN (SELECT `season` 
+									FROM  `games` 
+									WHERE  `Division_iddivision_home` =t.`Division_iddivision`
+									OR  `Division_iddivision_visiting` =t.`Division_iddivision`)");
+		
+		$criteria->compare('Abv', $this->Abv);
 
         return new CActiveDataProvider($this, array(
             'criteria'=>$criteria,
         ));
     }
+	
+	public function next()
+	{
+		$nextModel = $this->find('idteam>:id ORDER BY idteam', array(':id'=>$this->idteam));
+		if (count($nextModel) == 0)
+			$nextModel = $this->find(' 1 ORDER BY idteam');
+		return $nextModel;
+	}
 }

@@ -73,7 +73,11 @@ class UsersController extends Controller
             $model->Password = md5($model->Password);
             if ($model->validate()) {
                 if($model->save()) {
-                    $this->redirect(array('view','id'=>$model->iduser));
+					if($_POST['next']){
+						$this->redirect(array('create'));
+					} else{
+						$this->redirect(array('view','id'=>$model->iduser));
+					}
                 }
             }
         }
@@ -104,8 +108,13 @@ class UsersController extends Controller
 				$model->Password = md5($model->Password);
             
             
-            if($model->save())
-                $this->redirect(array('view','id'=>$model->iduser));
+            if($model->save()){
+				if($_POST['next']){	
+					$this->redirect(array('update','id'=>$model->next()->iduser));
+				} else{
+					$this->redirect(array('view','id'=>$model->iduser));
+				}
+			}
         }
 
         $this->render('update',array(

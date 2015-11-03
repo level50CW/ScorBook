@@ -168,7 +168,11 @@ class PlayersController extends Controller
 			    if($model->Birthdate == '') $model->Birthdate = null;
 			    
 				$model->save();
-				$this->redirect(array('view','id'=>$model->idplayer));
+				if(isset($_POST['next'])){
+					$this->redirect(array('update','id'=>$model->next()->idplayer));
+				}else{
+					$this->redirect(array('view','id'=>$model->idplayer));
+				}
 			}
 
 		}else{

@@ -13,6 +13,6 @@ $this->menu=array(
 );
 ?>
 
-<h1>Create League</h1>
+<h1>Add New League</h1>
 
 <?php $this->renderPartial('_form', array('model'=>$model)); ?>

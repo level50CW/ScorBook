@@ -17,7 +17,7 @@ $('.search-form form').submit(function(){
 ");
 ?>
 
-<h1>Scorebook</h1>
+<h1>ScoreBook Administration</h1>
 <div>
 <!-- 
     <?php if ( Yii::app()->session['role']  == 'admins' ){ ?>

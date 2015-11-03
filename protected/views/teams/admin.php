@@ -49,19 +49,44 @@ function createTeamHasRoster(){
     'filter'=>$model,
     'columns'=>array(
         //'idteam',
+		array(
+            'header' => 'League',
+            'name'=>'divisionIddivision.leagueIdleague.Name',
+			'filter' => CHtml::activeDropDownList($model, 'leagueIdleague_Name',
+				CHtml::listData(League::model()->findAll(), 'idleague', 'Name'),
+				array(
+					'empty' => 'Select',
+					'style'=>'color: black; padding-top: 0px; border: 1px solid #8CB8E7 !important;')),
+        ),
+		array(
+            'header' => 'Season',
+			'value' => function($data, $row){
+				return Division::model()->getSeason($data->divisionIddivision);
+			},
+			'filter' => CHtml::activeDropDownList($model, 'division_Season',
+				array(date('Y')=>date('Y'),(2+date('Y'))=>(2+date('Y')),(1+date('Y'))=>(1+date('Y')), (-1+date('Y'))=>(-1+date('Y')),(-2+date('Y'))=>(-2+date('Y')), ),
+				array(
+					'empty' => 'Select',
+					'style'=>'color: black; padding-top: 0px; border: 1px solid #8CB8E7 !important;')),
+        ),
         array(
             'header' => 'Division',
             'name'=>'divisionIddivision.Name',
-            'type'=>'raw',
-            //'value'=> 'CHtml::link($data->name,array("zbProjects/show&id=$data->id"))',
+            'filter' => CHtml::activeDropDownList($model, 'division_Name',
+				CHtml::listData(Division::model()->findAll(), 'iddivision', 'Name'),
+				array(
+					'empty' => 'Select',
+					'style'=>'color: black; padding-top: 0px; border: 1px solid #8CB8E7 !important;')),
 
         ),
+		'Abv',		
 		array(
             'name'=>'Name',
 			'filter'=> CHtml::activeTextField($model, 'Name',array("placeholder"=>"Search")),
         ),
         array(
             'class'=>'CButtonColumn',
+			'header'=>'Actions',
             'buttons'=>array(
 				'delete'=>array(
 					'click'=>"function(){
