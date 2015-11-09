@@ -28,20 +28,8 @@ class PrincipalController extends Controller
     {
         return array(
             array('allow',  // allow all users to perform 'index' and 'view' actions
-                'actions'=>array('index','view'),
-                'users'=>array('*'),
-            ),
-            array('allow', // allow authenticated user to perform 'create' and 'update' actions
-                'actions'=>array('create','update'),
-                'roles'=>array('admins'),
-            ),
-            array('allow', // allow admin user to perform 'admin' and 'delete' actions
                 'actions'=>array('admin'),
-                'roles'=>array('admins','scorer','roster'),
-            ),
-            array('allow', // allow admin user to perform 'admin' and 'delete' actions
-                'actions'=>array('admin','delete'),
-                'roles'=>array('admins'),
+                'roles'=>array('admins','leagueadmin','teamadmin','roster','scorer','user'),
             ),
             array('deny',  // deny all users
                 'users'=>array('*'),
@@ -76,10 +64,10 @@ class PrincipalController extends Controller
      */
     public function actionAdmin()
     {
-        $model=new Division('search');
-        $model->unsetAttributes();  // clear any default values
-        if(isset($_GET['Division']))
-            $model->attributes=$_GET['Division'];
+        // $model=new Division('search');
+        // $model->unsetAttributes();  // clear any default values
+        // if(isset($_GET['Division']))
+            // $model->attributes=$_GET['Division'];
 
         $this->render('admin',array(
             'model'=>$model,

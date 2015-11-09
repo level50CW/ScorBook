@@ -18,19 +18,10 @@ switch ($role) {
             'template'=> '{view}{update}{delete}',
         );
         break;
-    case 'roster':
+	case 'leagueadmin':
         $buttons = array(
             'class'=> 'CButtonColumn',
             'template'=> '{view}{update}{delete}',
-        );
-        break;
-    case 'scorer':
-        $buttons = array(
-            'class'=> 'CButtonColumn',
-            'template'=> '{view}{update}{delete}',
-            'filterHtmlOptions' => array('style' => 'display:none'),
-            'headerHtmlOptions' => array('style' => 'display:none'),
-            'htmlOptions' => array('style' => 'display:none'),
         );
         break;
     default:

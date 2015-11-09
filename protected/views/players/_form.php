@@ -13,20 +13,28 @@ if( isset($disabled) && $disabled ){
 
 function createLeagueSeasonDivisionTeamDependency()
 {
-	$list= Yii::app()->db->createCommand('SELECT DISTINCT d.`league_idleague`, l.`Name` AS `LN`, g.`season`, d.`iddivision`, d.`Name` AS `DN`, t.`idteam`, t.`Name` AS TN
-											FROM `games` g
-											JOIN `division` d ON d.`iddivision`=g.`Division_iddivision_visiting` OR d.`iddivision`=g.`Division_iddivision_home`
-											JOIN `league` l ON l.`idleague`=d.`league_idleague`
-											JOIN `teams` t ON t.`Division_iddivision`=d.`iddivision`')->queryAll();
+	if (Yii::app()->session['role'] == 'admins' || Yii::app()->session['role'] == 'leagueadmin') {
+		$list= Yii::app()->db->createCommand('SELECT DISTINCT d.`league_idleague`, l.`Name` AS `LN`, d.`iddivision`, d.`Name` AS `DN`, t.`idteam`, t.`Name` AS TN
+												FROM `teams` t
+												JOIN `division` d ON t.`Division_iddivision`=d.`iddivision`
+												JOIN `league` l ON l.`idleague`=d.`league_idleague`')->queryAll();
+	}else if (Yii::app()->session['role'] == 'roster' || Yii::app()->session['role'] == 'teamadmin') {
+		$team_selected = Yii::app()->session['team'];
+		$list= Yii::app()->db->createCommand('SELECT DISTINCT d.`league_idleague`, l.`Name` AS `LN`, d.`iddivision`, d.`Name` AS `DN`, t.`idteam`, t.`Name` AS TN
+												FROM `teams` t
+												JOIN `division` d ON t.`Division_iddivision`=d.`iddivision`
+												JOIN `league` l ON l.`idleague`=d.`league_idleague`
+												WHERE t.`idteam`=:userTeamId')->queryAll(true,array(':userTeamId'=>$team_selected));
+	}
+											
 	for($i=0; $i<count($list); $i++){
 		$idl = $list[$i]['league_idleague'];
 		$nl = $list[$i]['LN'];
-		$s = $list[$i]['season'];
 		$idd = $list[$i]['iddivision'];
 		$nd = $list[$i]['DN'];
 		$idt = $list[$i]['idteam'];
 		$nt = $list[$i]['TN'];
-		echo "add($idl,'$nl',$s,$idd,'$nd',$idt,'$nt');\n";
+		echo "add($idl,'$nl',$idd,'$nd',$idt,'$nt');\n";
 	}
 }
 ?>
@@ -70,7 +78,14 @@ function createLeagueSeasonDivisionTeamDependency()
 	<div class="rowdiv">
         <div class="green"> Season <span class="required">*</span></div>
             <div class="gray">
-			<select style="width:216px !important; text-align:center" id="Teams_Season"></select>
+			<select style="width:216px !important; text-align:center" id="Teams_Season">
+				<?php
+					for($i=4;$i>=0;$i--){
+						$season = $i+date('Y')-1;
+						echo "<option value='$season'>$season</option>";
+					}
+				?>
+			</select>
 			</div>
     </div>
 
@@ -139,8 +154,9 @@ function createLeagueSeasonDivisionTeamDependency()
 
             <?php //echo $form->textField($model,'Position',array('size'=>2,'maxlength'=>2)); ?>
             <?php echo $form->dropDownList($model, 'Position',
-                $positions, array_merge($disabledArray,array('class' => 'selectpositions', 'style' => 'width:216px !important; text-align:center', 'options' => array($model->Position => array('selected' => true))))
-            );?>
+                $positions, array_merge($disabledArray,array('class' => 'selectpositions', 
+				'style' => 'width:216px !important; text-align:center', 
+				'empty'=>'Select Position')));?>
             <?php echo $form->error($model, 'Position'); ?>
         </div>
     </div>
@@ -164,9 +180,19 @@ function createLeagueSeasonDivisionTeamDependency()
     <div class="rowdiv">
         <div class="green"> Height<span class="required">*</span></div>
         <div class="gray">
-            <?php echo $form->dropDownList($model, 'foot', array("4"=>"4","5"=>"5","6"=>"6","7"=>"7",), array_merge($disabledArray,array('style' => 'width:65px !important; text-align:center')));?>
+            <?php echo $form->dropDownList($model, 'foot', 
+				array("4"=>"4","5"=>"5","6"=>"6","7"=>"7",), 
+				array_merge($disabledArray,
+					array(
+						'style' => 'width:65px !important; text-align:center', 
+						'options'=>$model->isNewRecord? array('5'=>array('selected'=>true)): array())));?>
              feet
-            <?php echo $form->dropDownList($model, 'inches', array("0"=>"0","1"=>"1","2"=>"2","3"=>"3","4"=>"4","5"=>"5","6"=>"6","7"=>"7","8"=>"8","9"=>"9","10"=>"10","11"=>"11"), array_merge($disabledArray,array('style' => 'width:65px !important; text-align:center')));?>
+            <?php echo $form->dropDownList($model, 'inches', 
+				array("0"=>"0","1"=>"1","2"=>"2","3"=>"3","4"=>"4","5"=>"5","6"=>"6","7"=>"7","8"=>"8","9"=>"9","10"=>"10","11"=>"11"), 
+				array_merge($disabledArray,
+					array(
+						'style' => 'width:65px !important; text-align:center', 
+						'options'=>$model->isNewRecord? array('7'=>array('selected'=>true)): array())));?>
             inches
             <?php //echo $form->textField($model, 'Height'); ?>
             <?php echo $form->error($model, 'Height'); ?>
@@ -211,7 +237,7 @@ function createLeagueSeasonDivisionTeamDependency()
         </div>
     </div>
 
-    <?php  $states = array(""=>"","AL"=>"AL","AK"=>"AK","AZ"=>"AZ","AR"=>"AR","CA"=>"CA","CO"=>"CO",
+    <?php  $states = array("AL"=>"AL","AK"=>"AK","AZ"=>"AZ","AR"=>"AR","CA"=>"CA","CO"=>"CO",
                 "CT"=>"CT","DE"=>"DE","FL"=>"FL","GA"=>"GA","HI"=>"HI","ID"=>"ID","IL"=>"IL",
                 "IN"=>"IN","IA"=>"IA","KS"=>"KS","KY"=>"KY","LA"=>"LA","ME"=>"ME","MD"=>"MD",
                 "MA"=>"MA","MI"=>"MI","MN"=>"MN","MS"=>"MS","MO"=>"MO","MT"=>"MT","NE"=>"NE",
@@ -223,7 +249,9 @@ function createLeagueSeasonDivisionTeamDependency()
     <div class="rowdiv">
         <div class="green"> Home Town</div>
         <div class="gray">
-            <?php echo $form->dropDownList($model, 'State', $states, array_merge($disabledArray,array('style' => 'width:62px !important; text-align:center')));?>
+            <?php echo $form->dropDownList($model, 'State', $states, array_merge($disabledArray,array(
+				'style' => 'width:62px !important; text-align:center',
+				'empty'=> 'Select')));?>
             <?php echo $form->textField($model, 'Hometown', array_merge($disabledArray,array('style' => 'width:140px !important;')));?>
             <?php echo $form->error($model, 'Hometown'); ?>
         </div>
@@ -333,27 +361,21 @@ function createLeagueSeasonDivisionTeamDependency()
 	var counter = 0;
 	
 	var data = {};
-	function add(idleague, leagueName, season, iddivision, divisionName, idteam, teamName){
+	function add(idleague, leagueName, iddivision, divisionName, idteam, teamName){
 		if (!data[idleague])
 			data[idleague] = {
 				id: idleague,
 				name: leagueName,
-				seasons: []
-			};
-		if (!data[idleague].seasons[season])
-			data[idleague].seasons[season] = {
-				id: season,
-				name: season,
 				divisions: []
 			};
-		if (!data[idleague].seasons[season].divisions[iddivision])
-			data[idleague].seasons[season].divisions[iddivision] = {
+		if (!data[idleague].divisions[iddivision])
+			data[idleague].divisions[iddivision] = {
 				id: iddivision,
 				name: divisionName,
 				teams: []
 			};
 			
-		data[idleague].seasons[season].divisions[iddivision].teams[idteam] = {
+		data[idleague].divisions[iddivision].teams[idteam] = {
 			id: idteam,
 			name: teamName
 		};
@@ -377,15 +399,14 @@ function createLeagueSeasonDivisionTeamDependency()
 	<?php
 	createLeagueSeasonDivisionTeamDependency();
 	echo 'var isUiDisabled='.($disabled? 'true': 'false').';';
+	echo 'var defaultSeason='.Settings::get()->season.";\n";
 	
 	if ($model->isNewRecord){
 		echo 'var defaultLeague='.Settings::get()->idleague.";\n";
-		echo 'var defaultSeason='.Settings::get()->season.";\n";
-		echo "var defaultDision=data[defaultLeague].seasons[defaultSeason].divisions.find(function(q){return q;}).id;\n";
-		echo "var defaultTeam=data[defaultLeague].seasons[defaultSeason].divisions[defaultDision].teams.find(function(q){return q;}).id;\n";
+		echo "var defaultDision=data[defaultLeague].divisions.find(function(q){return q;}).id;\n";
+		echo "var defaultTeam=data[defaultLeague].divisions[defaultDision].teams.find(function(q){return q;}).id;\n";
 	} else {
 		echo 'var defaultLeague='.$model->teamsIdteam->divisionIddivision->league_idleague.";\n";
-		echo 'var defaultSeason='.Division::model()->getSeason($model->teamsIdteam->divisionIddivision).";\n";
 		echo "var defaultDision=".$model->teamsIdteam->divisionIddivision->iddivision.";\n";
 		echo "var defaultTeam=".$model->teamsIdteam->idteam.";\n";
 	}
@@ -400,30 +421,27 @@ function createLeagueSeasonDivisionTeamDependency()
 	}
 	
 	$leagueSelect.prop("disabled",counter == 1 || isUiDisabled);
+	$seasonSelect.prop("disabled",counter == 1 || isUiDisabled);
 	
 	var selectedLeague = 0;
 	var selectedSeason = 0;
 	$leagueSelect.change(function(){
 		var id = $("option:selected", this).val();
 		selectedLeague = id;
-		updateSelect($seasonSelect, data[id].seasons, defaultSeason);
-	});
-	
-	$seasonSelect.change(function(){
-		var id = $("option:selected", this).val();
-		selectedSeason = id;
-		updateSelect($divisionSelect, data[selectedLeague].seasons[id].divisions, defaultDision);
+		updateSelect($divisionSelect, data[id].divisions, defaultDision);
 	});
 	
 	$divisionSelect.change(function(){
 		var id = $("option:selected", this).val();
-		updateSelect($teamSelect, data[selectedLeague].seasons[selectedSeason].divisions[id].teams, defaultTeam);
+		updateSelect($teamSelect, data[selectedLeague].divisions[id].teams, defaultTeam);
 	});
 	
 	$teamSelect.change(function(){
 		var id = $("option:selected", this).val();
 		$("#Players_Teams_idteam_second").val(id);
 	})
+	
+	$seasonSelect.val(defaultSeason);
 	
 	$leagueSelect.change();
 })();

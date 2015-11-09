@@ -27,6 +27,8 @@ class Games extends CActiveRecord
 {
 	
 	public $leagueIdleague_Name;
+	public $teamsIdteamHome_Name;
+	public $teamsIdteamVisiting_Name;
 	
     /**
      * Returns the static model of the specified AR class.
@@ -57,7 +59,7 @@ class Games extends CActiveRecord
             
 
             array('Teams_idteam_visiting, Teams_idteam_home, Division_iddivision_visiting, Division_iddivision_home,season', 'required'),
-            array('idgame, attendance, Teams_idteam_visiting, Teams_idteam_home, Division_iddivision_visiting, Division_iddivision_home, Users_iduser, status, regulation, last_inning, temperature', 'numerical', 'integerOnly'=>true),
+            array('idgame, attendance, Teams_idteam_visiting, Teams_idteam_home, Division_iddivision_visiting, Division_iddivision_home, Users_iduser, status, regulation, last_inning, temperature, game_type', 'numerical', 'integerOnly'=>true),
             array('location, comment, Plateump, Fieldump1, Fieldump2, Fieldump3, Fieldump4, Fieldump5 ', 'length', 'max'=>200),
             array('weather', 'length', 'max'=>150),
             array('temperature', 'length', 'max'=>4),
@@ -66,8 +68,8 @@ class Games extends CActiveRecord
             array('date, end_date', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('idgame, location, date, comment, attendance, weather, temperature, Teams_idteam_visiting, Teams_idteam_home, Division_iddivision_visiting, Division_iddivision_home, season, divisionIddivisionHome.league_idleague, leagueIdleague_Name', 'safe', 'on'=>'search'),
-            array('idgame, location, date, comment, attendance, weather, temperature, Teams_idteam_visiting, Teams_idteam_home, Division_iddivision_visiting, Division_iddivision_home, season', 'safe', 'on'=>'searchTodayGames'),
+            array('idgame, location, date, comment, attendance, weather, temperature, Teams_idteam_visiting, Teams_idteam_home, Division_iddivision_visiting, Division_iddivision_home, season, divisionIddivisionHome.league_idleague, leagueIdleague_Name, teamsIdteamHome_Name, teamsIdteamVisiting_Name, game_type', 'safe', 'on'=>'search'),
+            array('idgame, location, date, comment, attendance, weather, temperature, Teams_idteam_visiting, Teams_idteam_home, Division_iddivision_visiting, Division_iddivision_home, season, game_type', 'safe', 'on'=>'searchTodayGames'),
         );
     }
 
@@ -112,6 +114,8 @@ class Games extends CActiveRecord
             'Division_name_division_visiting' => 'Visiting division',
             'Division_name_division_home' => 'Home division',
             'Users_iduser' => 'Scorekeeper',
+			'teamsIdteamHome.Name' => 'Home',
+			'teamsIdteamVisiting.Name' => 'Visitor',
         );
     }
 
@@ -126,7 +130,7 @@ class Games extends CActiveRecord
 
         $criteria=new CDbCriteria;
 
-        if (Yii::app()->session['role'] == 'admins') {
+        if (Yii::app()->session['role'] == 'admins' || Yii::app()->session['role'] == 'leagueadmin') {
 
             $criteria->compare('idgame',$this->idgame);
             $criteria->compare('location',$this->location,true);
@@ -141,10 +145,15 @@ class Games extends CActiveRecord
             $criteria->compare('Division_iddivision_visiting',$this->Division_iddivision_visiting);
             $criteria->compare('Division_iddivision_home',$this->Division_iddivision_home);
 			
-			$criteria->with=array('divisionIddivisionHome');
+			
+			$criteria->with=array('divisionIddivisionHome', 'teamsIdteamHome', 'teamsIdteamVisiting');
+			
+            $criteria->compare('teamsIdteamHome.Name',$this->teamsIdteamHome_Name);
+            $criteria->compare('teamsIdteamVisiting.Name',$this->teamsIdteamVisiting_Name);
+			
 			$criteria->compare('divisionIddivisionHome.league_idleague', isset($this->leagueIdleague_Name) && $this->leagueIdleague_Name>-1? $this->leagueIdleague_Name : null);
 
-        } else if (Yii::app()->session['role'] == 'roster') {
+        } else if (Yii::app()->session['role'] == 'roster' || Yii::app()->session['role'] == 'teamadmin') {
 
             $teamid = Yii::app()->session['team'];
 
@@ -180,7 +189,9 @@ class Games extends CActiveRecord
 			
 			$criteria->with=array('divisionIddivisionHome');
 			$criteria->compare('divisionIddivisionHome.league_idleague', isset($this->leagueIdleague_Name) && $this->leagueIdleague_Name>-1? $this->leagueIdleague_Name : null);
-        }
+        } else {
+			$criteria->compare('idgame',-1);
+		}
 
         $criteria->order = 'date';
 
@@ -196,22 +207,22 @@ class Games extends CActiveRecord
 
         $criteria=new CDbCriteria;
 
-        if (Yii::app()->session['role'] == 'admins') {
+        if (Yii::app()->session['role'] == 'admins' || Yii::app()->session['role'] == 'leagueadmin') {
 
-        $criteria->compare('idgame',$this->idgame);
-        $criteria->compare('location',$this->location,true);
-        $criteria->compare('date',date("Y-m-d"),true);
-        $criteria->compare('comment',$this->comment,true);
-        $criteria->compare('attendance',$this->attendance);
-        $criteria->compare('weather',$this->weather,true);
-        $criteria->compare('temperature',$this->temperature,true);
-        $criteria->compare('Teams_idteam_visiting',$this->Teams_idteam_visiting);
-        $criteria->compare('Teams_idteam_home',$this->Teams_idteam_home);
-        $criteria->compare('Division_iddivision_visiting',$this->Division_iddivision_visiting);
-        $criteria->compare('Division_iddivision_home',$this->Division_iddivision_home);
+			$criteria->compare('idgame',$this->idgame);
+			$criteria->compare('location',$this->location,true);
+			$criteria->compare('date',date("Y-m-d"),true);
+			$criteria->compare('comment',$this->comment,true);
+			$criteria->compare('attendance',$this->attendance);
+			$criteria->compare('weather',$this->weather,true);
+			$criteria->compare('temperature',$this->temperature,true);
+			$criteria->compare('Teams_idteam_visiting',$this->Teams_idteam_visiting);
+			$criteria->compare('Teams_idteam_home',$this->Teams_idteam_home);
+			$criteria->compare('Division_iddivision_visiting',$this->Division_iddivision_visiting);
+			$criteria->compare('Division_iddivision_home',$this->Division_iddivision_home);
 		
 
-        } else if (Yii::app()->session['role'] == 'roster') {
+        } else if (Yii::app()->session['role'] == 'roster' || Yii::app()->session['role'] == 'teamadmin') {
 
             $teamid = Yii::app()->session['team'];
 

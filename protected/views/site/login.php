@@ -7,11 +7,29 @@ $this->pageTitle=Yii::app()->name . ' - Login';
 
 ?>
 
+<style>
+#rememberMe-checkbox{
+    width: 8px;
+    height: 8px;
+    display: inline-block;
+    background-color: #FAFFBD;
+    border: 2px solid #FAFFBD;
+    outline: 1px solid black;
+}
+
+#rememberMe-checkbox:hover{
+	background-color: #85CAA7;
+}
+
+#rememberMe-checkbox[checked], #rememberMe-checkbox[checked]:hover{
+	background-color: #0C713F;
+}
+</style>
+
 <h1>Login</h1>
 <br />
-<p style="margin: 0 264px;">Please enter your Username and Password below.</p>
+<p style="margin: 0 288px;">Please enter your Username and Password below.</p>
 
-		<input type="checkbox" />
 <div class="form login-form">
 <?php $form=$this->beginWidget('CActiveForm', array(
 	'id'=>'login-form',
@@ -36,10 +54,13 @@ $this->pageTitle=Yii::app()->name . ' - Login';
 	</div>
 
 	<div class="row rememberMe">
+		<span id="rememberMe-checkbox"></span>
 		<?php echo $form->checkBox($model,'rememberMe'); ?>
 		<?php echo $form->label($model,'rememberMe'); ?>
 		<?php echo $form->error($model,'rememberMe'); ?>
 	</div>
+	
+	<br/>
 
 	<div class="row buttons">
 		<?php echo CHtml::submitButton('Login',array('class'=>'save-form-btn')); ?>
@@ -47,3 +68,25 @@ $this->pageTitle=Yii::app()->name . ' - Login';
 
 <?php $this->endWidget(); ?>
 </div><!-- form -->
+
+<script>
+(function(){
+	var $originalRememberMe = $("#LoginForm_rememberMe");
+	var $fakeRememberMe = $("#rememberMe-checkbox");
+	
+	$originalRememberMe.change(function(){
+		var res = $originalRememberMe.prop("checked");
+		if (res){
+			$fakeRememberMe.attr("checked",1)
+		} else {
+			$fakeRememberMe.removeAttr("checked");
+		}
+	});
+	
+	$fakeRememberMe.click(function(){
+		$originalRememberMe.click();
+	});
+	
+	$originalRememberMe.change().hide();
+})();
+</script>

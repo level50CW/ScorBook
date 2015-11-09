@@ -44,40 +44,42 @@ if( isset($disabled) && $disabled ){
 //Seleccionamos la liga del equipo que tiene el usuario si no es admin
 
 $team_selected = Yii::app()->session['team'];
-$modelLeague = League::model()->findByPk(Settings::get()->idleague);
+if ($model->isNewRecord)
+	$modelLeague = League::model()->findByPk(Settings::get()->idleague);
+else
+	$modelLeague = League::model()->findByPk($model->divisionIddivisionHome->league_idleague);
+	
 
-if (Yii::app()->session['role'] == 'admins') {
+if (Yii::app()->session['role'] == 'admins' || Yii::app()->session['role'] == 'leagueadmin') {
 
     $divisions = Division::model()->findAllByAttributes(array('league_idleague'=>$modelLeague->idleague));
     $divisionsListHome = CHtml::ListData($divisions, 'iddivision', 'Name');
 
     $divisions = Division::model()->findAllByAttributes(array('league_idleague'=>$modelLeague->idleague));
     $divisionsList = CHtml::ListData($divisions, 'iddivision', 'Name');
+	
+	$teams = Teams::model()->findAll(array('order' => 'Name'));
+    $teamsListHome = CHtml::ListData($teams, 'idteam', 'Name');
 
-}else if (Yii::app()->session['role'] == 'roster') {
+    $teams = Teams::model()->findAll(array('order' => 'Name'));
+    $teamsList = CHtml::ListData($teams, 'idteam', 'Name');
 
-    $divisions = Division::model()->findAllBySql("SELECT l.iddivision,l.Name FROM Division as l INNER JOIN Teams t ON(l.iddivision = t.Division_iddivision) WHERE l.type = 'division' AND idteam=:a AND l.league_idleague=:lid",array(':a' => $team_selected,':lid'=>$modelLeague->idleague));
+}else if (Yii::app()->session['role'] == 'roster' || Yii::app()->session['role'] == 'teamadmin') {
+
+    $divisions = Division::model()->findAllBySql("SELECT l.iddivision,l.Name FROM Division as l INNER JOIN Teams t ON(l.iddivision = t.Division_iddivision) WHERE idteam=:a AND l.league_idleague=:lid",array(':a' => $team_selected,':lid'=>$modelLeague->idleague));
     $divisionsListHome = CHtml::ListData($divisions, 'iddivision', 'Name');
 
     $divisions = Division::model()->findAllByAttributes(array('league_idleague'=>$modelLeague->idleague));
     $divisionsList = CHtml::ListData($divisions, 'iddivision', 'Name');
-
-}
-
-if (Yii::app()->session['role'] == 'admins') {
-    $teams = Teams::model()->findAll(array('order' => 'Name'));
+	
+	$teams = Teams::model()->findAll(array("condition" => "idteam =  $team_selected", 'order' => 'Name'));
     $teamsListHome = CHtml::ListData($teams, 'idteam', 'Name');
 
     $teams = Teams::model()->findAll(array('order' => 'Name'));
     $teamsList = CHtml::ListData($teams, 'idteam', 'Name');
 
-} else if (Yii::app()->session['role'] == 'roster') {
-    $teams = Teams::model()->findAll(array("condition" => "idteam =  $team_selected", 'order' => 'Name'));
-    $teamsListHome = CHtml::ListData($teams, 'idteam', 'Name');
-
-    $teams = Teams::model()->findAll(array('order' => 'Name'));
-    $teamsList = CHtml::ListData($teams, 'idteam', 'Name');
 }
+
 
 ?>
 
@@ -93,9 +95,35 @@ if (Yii::app()->session['role'] == 'admins') {
 	</div>
 </div>
 
+
+<div class="rowdiv">
+    <div class="brown"> Season <span class="required">*</span></div>
+    <div class="gray">
+		<?php
+			$seasons = array();
+			for($i=4;$i>=0;$i--){
+				$seasons[''+$i+date('Y')-1] = $i+date('Y')-1;
+			}
+			
+			if ($model->isNewRecord){
+				echo $form->dropDownList($model, 'season', $seasons, array(
+					"style"=>"width:216px !important;",
+					'options'=>array(Settings::get()->season => array('selected'=>true))));
+			} else {
+				echo $form->dropDownList($model, 'season', $seasons, array(
+					"style"=>"width:216px !important;",
+					'disabled' => true,
+					'options'=>array(''+$model->season => array('selected'=>true))));
+			}
+		?>
+
+        <?php echo $form->error($model, 'season'); ?>
+    </div>
+</div>
+
 <div class="rowdiv">
 
-    <div class="brown"> Date <span class="required">*</span></div>
+    <div class="green"> Date <span class="required">*</span></div>
     <div class="gray">
 
 
@@ -110,7 +138,8 @@ if (Yii::app()->session['role'] == 'admins') {
                 'options' => array(
                     'showOn'=>'focus',
                     'timeFormat'=>'hh:mm',
-                    'dateFormat' => 'mm-dd-yy'
+                    'dateFormat' => 'mm-dd-yy',
+					'value'=>'01-01-'.Settings::get()->season.' 00:00',
                 ),
             ));
         }
@@ -120,14 +149,6 @@ if (Yii::app()->session['role'] == 'admins') {
     </div>
 </div>
 
-<div class="rowdiv">
-    <div class="green"> Season <span class="required">*</span></div>
-    <div class="gray">
-        <?php $model->season = $model->season ? $model->season : date("Y"); ?>
-        <?php echo $form->textField($model, 'season', array_merge(array("readonly"=>"readonly"),array('size' => 60, 'maxlength' => 200, 'readonly'=>'readonly'))); ?>
-        <?php echo $form->error($model, 'season'); ?>
-    </div>
-</div>
 
 
 
@@ -137,8 +158,20 @@ if (Yii::app()->session['role'] == 'admins') {
         <?php echo $form->dropDownList($model, 'status',
 			$model->isNewRecord? array('0' => 'Scheduled – Active','-1' => 'Scheduled – Inactive',) : array(
             '0' => 'Scheduled – Active','-1' => 'Scheduled – Inactive', '1' => 'in progress', '2' => 'End-regulation', '3' => 'End-extraInnings', '4' => 'End-timeLimit', '5' => 'End-runRule', '6' => 'End-forfeit', '7' => 'End-darkness',
-            '8' => 'End-rainOut', '9' => 'End-other', '10' => 'Suspended - Darkness', '11' => 'Suspended-rain', '12' => 'Suspended-other'),array_merge($disabledArray,array('style' => 'width:216px !important; text-align:center', )));?>
+            '8' => 'End-rainOut', '9' => 'End-other', '10' => 'Suspended - Darkness', '11' => 'Suspended-rain', '12' => 'Suspended-other'),
+			array_merge($disabledArray,
+			array(
+				'style' => 'width:216px !important; text-align:center', 
+				'options'=> $model->isNewRecord? array('-1'=>array('selected'=>true)): array())));?>
         <?php echo $form->error($model, 'status'); ?>
+    </div>
+</div>
+
+<div class="rowdiv">
+    <div class="green">Type</div>
+    <div class="gray">
+        <?php echo $form->dropDownList($model, 'game_type', array('0' => 'Regular','1' => 'Playoff', '2' => 'Championship'),array_merge($disabledArray,array('style' => 'width:216px !important; text-align:center')));?>
+        <?php echo $form->error($model, 'game_type'); ?>
     </div>
 </div>
 
@@ -223,7 +256,8 @@ if (Yii::app()->session['role'] == 'admins') {
     <div class="gray">
         <? echo Yii::trace(CVarDumper::dumpAsString($model->Teams_idteam_visiting), 'varVisi'); ?>
         <?php echo $form->dropDownList($model, 'Teams_idteam_visiting', $model->Teams_idteam_visiting ? $teamsList : array(), array_merge($disabledArray,array('empty' => 'Select Team'))); ?>
-    </div>
+		<?php echo $form->error($model, 'Teams_idteam_visiting'); ?>
+	</div>
 </div>
 
 
@@ -272,11 +306,29 @@ var myVar = setInterval(function(){
 
 <script>
 	(function(){
+		var timer = 0;
+		
+		function defaultDate(){
+			return "01-01-"+$("#Games_season").val()+" 00:00";
+		}
+		
 		$(".timepicker").change(function(){
-			var date = new Date($(this).val());
-			var monthNames = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"];
-			$("#header-date").text(monthNames[date.getMonth()]+" "+date.getDate());
-			$("#Games_season").val(date.getFullYear());
+			if (!timer){
+				var $self = $(this);
+				timer = setTimeout(function(){
+					var date = new Date($self.val());
+					
+					if (+$("#Games_season").val() != date.getFullYear()){
+						alert("Season of the selected date does not coincide with the current season.");
+						$self.val(defaultDate());
+					} else {
+						var monthNames = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"];
+						$("#header-date").text(monthNames[date.getMonth()]+" "+date.getDate());
+					}
+					
+					timer = 0;
+				},10);
+			}
 		});
 		
 		$("#Games_Teams_idteam_home").change(function(){
@@ -288,5 +340,19 @@ var myVar = setInterval(function(){
 			var text = $("option:selected", this).text();
 			$("#header-teamNameVisiting").text(text);
 		});
+		
+		$("#Games_season").change(function(){
+			var date = new Date($(".timepicker").val());
+			if (+$(this).val() != date.getFullYear()){
+				$(".timepicker").val(defaultDate());
+			}
+		});
+		
+		$("#Games_Teams_idteam_home, #Games_Teams_idteam_visiting").change(function(){
+			if ($("#Games_Teams_idteam_home").val() == $("#Games_Teams_idteam_visiting").val() && $("#Games_Teams_idteam_home").val()!=""){
+				alert("Home Team and Visiting Team are equal.");
+				$("#Games_Teams_idteam_visiting").val(null);
+			}
+		})
 	})();
 </script>

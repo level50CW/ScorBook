@@ -1,25 +1,5 @@
 <?php
 return array (
-  'scorer' => 
-  array (
-    'type' => 2,
-    'description' => 'Scorer',
-    'bizRule' => '',
-    'data' => '',
-    'assignments' => 
-    array (
-      6 => 
-      array (
-        'bizRule' => NULL,
-        'data' => NULL,
-      ),
-      25 => 
-      array (
-        'bizRule' => NULL,
-        'data' => NULL,
-      ),
-    ),
-  ),
   'admins' => 
   array (
     'type' => 2,
@@ -28,22 +8,37 @@ return array (
     'data' => '',
     'assignments' => 
     array (
-      2 => 
-      array (
-        'bizRule' => NULL,
-        'data' => NULL,
-      ),
-      0 => 
-      array (
-        'bizRule' => NULL,
-        'data' => NULL,
-      ),
       4 => 
       array (
         'bizRule' => NULL,
         'data' => NULL,
       ),
-      1 => 
+    ),
+  ),
+  'leagueadmin' => 
+  array (
+    'type' => 2,
+    'description' => 'Site Admin',
+    'bizRule' => '',
+    'data' => '',
+    'assignments' => 
+    array (
+      9 => 
+      array (
+        'bizRule' => NULL,
+        'data' => NULL,
+      ),
+    ),
+  ),
+  'teamadmin' => 
+  array (
+    'type' => 2,
+    'description' => 'Team Admin',
+    'bizRule' => '',
+    'data' => '',
+    'assignments' => 
+    array (
+      9 => 
       array (
         'bizRule' => NULL,
         'data' => NULL,
@@ -58,27 +53,37 @@ return array (
     'data' => '',
     'assignments' => 
     array (
-      2 => 
+      9 => 
       array (
         'bizRule' => NULL,
         'data' => NULL,
       ),
-      0 => 
+    ),
+  ),
+  'scorer' => 
+  array (
+    'type' => 2,
+    'description' => 'Scorer',
+    'bizRule' => '',
+    'data' => '',
+    'assignments' => 
+    array (
+      9 => 
       array (
         'bizRule' => NULL,
         'data' => NULL,
       ),
-      29 => 
-      array (
-        'bizRule' => NULL,
-        'data' => NULL,
-      ),
-      31 => 
-      array (
-        'bizRule' => NULL,
-        'data' => NULL,
-      ),
-      32 => 
+    ),
+  ),
+  'user' => 
+  array (
+    'type' => 2,
+    'description' => 'Scorer',
+    'bizRule' => '',
+    'data' => '',
+    'assignments' => 
+    array (
+      9 => 
       array (
         'bizRule' => NULL,
         'data' => NULL,

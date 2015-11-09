@@ -74,7 +74,7 @@ class Division extends CActiveRecord
 	{
 		return array(
 			'iddivision' => 'Iddivision',
-			'Name' => 'Name',
+			'Name' => 'Division',
 			'league_idleague' => 'League Idleague',
 		);
 	}

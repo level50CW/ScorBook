@@ -55,7 +55,7 @@ class League extends CActiveRecord
 	{
 		return array(
 			'idleague' => 'Idleague',
-			'Name' => 'Name',
+			'Name' => 'League',
 		);
 	}
 

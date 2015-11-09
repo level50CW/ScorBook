@@ -37,6 +37,7 @@ $('.search-form form').submit(function(){
 		// 'idleague',
 		'Name',
 		array(
+			'header'=>'Actions',
 			'class'=>'CButtonColumn',
 			'template'=>'{update}{delete}',
 		),

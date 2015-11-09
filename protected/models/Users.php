@@ -95,17 +95,33 @@ class Users extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('iduser',$this->iduser);
-		$criteria->compare('Firstname',$this->Firstname,true);
-		$criteria->compare('Lastname',$this->Lastname,true);
-		$criteria->compare('Email',$this->Email,true);
-		$criteria->compare('Password',$this->Password,true);
-		$criteria->compare('role',$this->role,true);
-        $criteria->order= 'Lastname ASC, Firstname ASC';
-		
-		$criteria->with = array('teamsIdteam.divisionIddivision');
-		$criteria->compare('divisionIddivision.league_idleague', $this->leagueIdleague_Name);
-        $criteria->compare('divisionIddivision.iddivision', $this->division_Name);
+		if (Yii::app()->session['role'] == 'admins' || Yii::app()->session['role'] == 'leagueadmin') {
+			$criteria->compare('iduser',$this->iduser);
+			$criteria->compare('Firstname',$this->Firstname,true);
+			$criteria->compare('Lastname',$this->Lastname,true);
+			$criteria->compare('Email',$this->Email,true);
+			$criteria->compare('Password',$this->Password,true);
+			$criteria->compare('role',$this->role,true);
+			$criteria->order= 'Lastname ASC, Firstname ASC';
+			
+			$criteria->with = array('teamsIdteam.divisionIddivision');
+			$criteria->compare('divisionIddivision.league_idleague', $this->leagueIdleague_Name);
+			$criteria->compare('divisionIddivision.iddivision', $this->division_Name);
+		} else if (Yii::app()->session['role'] == 'roster' || Yii::app()->session['role'] == 'teamadmin'){
+			$teamid = Yii::app()->session['team'];
+			$criteria->compare('iduser',$this->iduser);
+			$criteria->compare('Teams_idteam',$teamid);
+			$criteria->compare('Firstname',$this->Firstname,true);
+			$criteria->compare('Lastname',$this->Lastname,true);
+			$criteria->compare('Email',$this->Email,true);
+			$criteria->compare('Password',$this->Password,true);
+			$criteria->compare('role',$this->role,true);
+			$criteria->order= 'Lastname ASC, Firstname ASC';
+			
+			$criteria->with = array('teamsIdteam.divisionIddivision');
+			$criteria->compare('divisionIddivision.league_idleague', $this->leagueIdleague_Name);
+			$criteria->compare('divisionIddivision.iddivision', $this->division_Name);
+		}
 		
 		
 		return new CActiveDataProvider($this, array(

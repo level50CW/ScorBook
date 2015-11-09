@@ -54,7 +54,7 @@ class Teams extends CActiveRecord
 				'maxSize'=>30*1024*1024, 
 				'allowEmpty'=>true, 
 				'tooLarge'=>'{attribute} is too large to be uploaded. Maximum size is 30MB.'),
-            array('idteam, Division_iddivision', 'numerical', 'integerOnly'=>true),
+            array('idteam, Division_iddivision, status', 'numerical', 'integerOnly'=>true),
             array('Name', 'length', 'max'=>100),
             array('location', 'length', 'max'=>100),
             array('Abv', 'length', 'max'=>5),
@@ -106,7 +106,12 @@ class Teams extends CActiveRecord
 
         $criteria=new CDbCriteria;
         $criteria->with = array('divisionIddivision');
-        $criteria->compare('idteam',$this->idteam);
+		
+		$idteam = $this->idteam;
+		if (Yii::app()->session['role']  == 'roster' || Yii::app()->session['role']  == 'teamadmin')
+			$idteam = Yii::app()->session['team'];
+		
+        $criteria->compare('idteam',$idteam);
         $criteria->compare('t.Name',$this->Name,true);
         $criteria->order= 't.Name ASC';
 

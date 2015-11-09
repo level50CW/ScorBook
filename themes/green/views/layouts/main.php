@@ -160,138 +160,168 @@ function finalizeGame(){
 
 
 <!-- Begin of Menu   -->
-        <?php 
-            if ( Yii::app()->session['role']  == 'admins' ){
-
-                /*$this->menu=array(
-                array('label'=>'Teams', 'url'=>array('teams/admin')),
-                array('label'=>'Rosters', 'url'=>array('players/admin')),
-                array('label'=>'Users', 'url'=>array('users/admin')),
-                array('label'=>'New Game', 'url'=>array('create')),
-                );*/
-                //array('label'=>'Officials', 'url'=>array('officials/admin')),
-
-                $this->widget('zii.widgets.CMenu', array(
-                    'activeCssClass'=>'active',
-                    'id'=>'navigation',
-
-                    'items'=>array(
-                        array('label'=>'Schedule', 
-                            'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
-                            array('label'=>'Manage Games', 'url'=>array('schedule/admin')),
-                            array('label'=>'Add New Game', 'url'=>array('schedule/update')),
-                            array('label'=>'Import Schedule', 'url'=>array('principal/admin'), 'linkOptions'=>array('style'=>'color: #868686 !important;', 'onclick'=>'return false;')),
-                            array('label'=>'Export Schedule', 'url'=>array('principal/admin'), 'linkOptions'=>array('style'=>'color: #868686 !important;', 'onclick'=>'return false;')),
-                        )),
-                        // array('label'=>'Score Game', 
-                            // 'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
-                            // array('label'=>'Todays Games', 'url'=>array('scoreGame/admin')),
-                            // array('label'=>'Scorecard', 'url'=>array('')),
-                            // array('label'=>'Complete Game', 'url'=>array('')),
-                        // )),
-                        array('label'=>'Game Statistics', 
+        <?php
+			$itemScheduleItems = array();
+			$itemTeamsItems = array();
+			$itemUsersItems = array();
+			$itemSettingsItems = array();
+			
+			$itemScheduleItems[] = array('label'=>'Manage Games', 'url'=>array('schedule/admin'));
+			
+			$itemTeamsItems[] = array('label'=>'Manage Teams', 'url'=>array('teams/admin'));
+			
+			$itemUsersItems[] = array('label'=>'Manage Users', 'url'=>array('users/admin'));
+			
+			
+			
+			if (Yii::app()->session['role'] == 'admins' || Yii::app()->session['role'] == 'leagueadmin'){
+				$itemScheduleItems[] = array('label'=>'Add New Game', 'url'=>array('schedule/update'));
+				$itemScheduleItems[] = array('label'=>'Import Schedule', 'url'=>array('import/schedule'));
+				$itemScheduleItems[] = array('label'=>'Export Schedule', 'url'=>array('principal/admin'), 'linkOptions'=>array('style'=>'color: #868686 !important;', 'onclick'=>'return false;'));
+				
+				$itemTeamsItems[] = array('label'=>'Add New Team', 'url'=>array('teams/create'));
+				
+				$itemSettingsItems[] = array('label'=>'General Settings', 'url'=>array('settings/change'), 'linkOptions'=>array('style'=>'width: 118px;'));
+				$itemSettingsItems[] = array('label'=>'System Settings', 'url'=>array('principal/admin'), 'linkOptions'=>array('style'=>'color: #868686 !important;', 'onclick'=>'return false;'));
+			}
+			
+			if (Yii::app()->session['role'] == 'admins' || Yii::app()->session['role'] == 'leagueadmin' || Yii::app()->session['role'] == 'teamadmin' ){
+				$itemUsersItems[] = array('label'=>'Add New User', 'url'=>array('users/create'));
+			}
+			
+			$itemSettingsItems[] = array(
+								'label' => 'Logout',
+								'url' => array('site/logout'),
+								'linkOptions' => array(
+									'onclick' => "if(!confirm('Are you sure you want to exit?')){ return false; };"));
+		
+			$itemSchedule = array('label'=>'Schedule', 
+                            'submenuOptions'=>array('class'=>'nav-sub'),'items'=>$itemScheduleItems);
+							
+			$itemGameStatistics = array('label'=>'Game Statistics', 
                             'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
                             array('label'=>'Edit Complete Game Stats', 'url'=>array('games/admin')),
-                        )),
-                        array('label'=>'Teams', 
-                            'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
-                            array('label'=>'Manage Teams', 'url'=>array('teams/admin')),
-                            array('label'=>'Add New Team', 'url'=>array('teams/create')),
-                        )),
-                        array('label'=>'Rosters', 
+                        ));
+			$itemTeams = array('label'=>'Teams', 
+                            'submenuOptions'=>array('class'=>'nav-sub'),'items'=>$itemTeamsItems);
+							
+			$itemRosters = array('label'=>'Rosters', 
                             'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
                             array('label'=>'Manage Players', 'url'=>array('players/admin')),
                             array('label'=>'Add New Player', 'url'=>array('players/create')),
                             array('label'=>'Import Rosters', 'url'=>array('principal/admin'), 'linkOptions'=>array('style'=>'color: #868686 !important;', 'onclick'=>'return false;')),
                             array('label'=>'Export Rosters', 'url'=>array('principal/admin'), 'linkOptions'=>array('style'=>'color: #868686 !important;', 'onclick'=>'return false;')),
-                        )),
-                        array('label'=>'Leagues', 
+                        ));
+			$itemLeagues = array('label'=>'Leagues', 
                             'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
                             array('label'=>'Manage Leagues', 'url'=>array('league/admin')),
                             array('label'=>'Add New League', 'url'=>array('league/create')),
                             array('label'=>'Manage Divisions', 'url'=>array('division/admin')),
                             array('label'=>'Add New Division', 'url'=>array('division/create')),
-                        )),
-                        array('label'=>'Users', 
-                            'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
-                            array('label'=>'Manage Users', 'url'=>array('users/admin')),
-                            array('label'=>'Add New User', 'url'=>array('users/create')),
-                        )),
-                        array('label'=>'Settings',
-                            'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
-                            array('label'=>'General Settings', 'url'=>array('settings/change'), 'linkOptions'=>array('style'=>'width: 115px;')),
-                            array('label'=>'System Settings', 'url'=>array('principal/admin'), 'linkOptions'=>array('style'=>'color: #868686 !important;', 'onclick'=>'return false;')),
-							array(
-								'label' => 'Logout',
-								'url' => array('site/logout'),
-								'linkOptions' => array(
-									'onclick' => "if(!confirm('Are you sure you want to exit?')){ return false; };")),
-                                
-                        )),
-                    ),
-                    'htmlOptions'=>array('class'=>'nav-main'),
-                ));
-
-            }else if ( Yii::app()->session['role']  == 'scorer' ){
-
-                $this->widget('zii.widgets.CMenu', array(
-                    'activeCssClass'=>'active',
-                    'id'=>'navigation',
-
-                    'items'=>array(
-                        
-
-                        array('label'=>'Schedule', 
-                            'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
-                            array('label'=>'Manage Games', 'url'=>array('schedule/admin')),
-                        )),
-
-                        array('label'=>'Score Game', 
+                        ));
+			$itemUsers = array('label'=>'Users', 
+                            'submenuOptions'=>array('class'=>'nav-sub'),'items'=>$itemUsersItems);
+							
+			$itemSettings = array('label'=>'Settings',
+                            'submenuOptions'=>array('class'=>'nav-sub'),'items'=>$itemSettingsItems);
+							
+			$itemScoreGame = array('label'=>'Score Game', 
                             'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
                             array('label'=>'Todays Games', 'url'=>array('scoreGame/admin')),
-                        )),
-                        array('label'=>'Settings',
-                              'submenuOptions'=>array('class'=>'nav-sub'),
-                              'items'=>array(
-                                array('label'=>'League', 'url'=>array('teams/admin')),
-                                array('label'=>'Logout', 'url'=>array('site/logout'), 'onclick'=>'if(!confirm("asdasd")){ return false; }'),
-                        )),
-                    ),
-                    'htmlOptions'=>array('class'=>'nav-main'),
-                ));
-
-            }else if(Yii::app()->session['role']  == 'roster'){
-
-                $this->widget('zii.widgets.CMenu', array(
+                            array('label'=>'Scorecard', 'url'=>array('')),
+                            array('label'=>'Complete Game', 'url'=>array('')),
+                        ));
+		
+			$menu = null;
+			if ( Yii::app()->session['role']  == 'admins' || Yii::app()->session['role']  == 'leagueadmin' ){
+				$menu = array($itemSchedule, $itemGameStatistics, $itemTeams, $itemRosters, $itemLeagues, $itemUsers, $itemSettings);
+			} else if ( Yii::app()->session['role']  == 'scorer' ){
+				$menu = array($itemScoreGame, $itemSettings);
+			} else if(Yii::app()->session['role']  == 'roster' || Yii::app()->session['role']  == 'teamadmin'){
+				$menu = array($itemSchedule, $itemTeams, $itemRosters, $itemUsers, $itemSettings);
+			} else if ( Yii::app()->session['role']  == 'user' ){
+				$menu = array($itemSettings);
+			}
+			
+			if (isset($menu)){
+				$this->widget('zii.widgets.CMenu', array(
                     'activeCssClass'=>'active',
                     'id'=>'navigation',
-                    'items'=>array(
-                        array('label'=>'Schedule', 
-                            'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
-                            array('label'=>'Manage Games', 'url'=>array('schedule/admin')),
-                        )),
-                        array('label'=>'Rosters', 
-                            'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
-                            array('label'=>'Manage Players', 'url'=>array('players/admin')),
-                            array('label'=>'Add New Player', 'url'=>array('players/create')),
-                        )),
-                        array('label'=>'Settings',
-                              'submenuOptions'=>array('class'=>'nav-sub'),
-                              'items'=>array(
-                                array('label'=>'League', 'url'=>array('teams/admin')),
-                                array(
-                                    'label' => 'Logout',
-                                    'url' => 'site/logout',
-                                    'linkOptions' => array(
-                                        'submit' => array('delete', 'id' => $model->id),
-                                        'confirm' => 'Are you sure you want to delete this model?')
-                                ),
+
+                    'items'=>$menu,
+					'htmlOptions'=>array('class'=>'nav-main')));
+			}
+
+		
+            // if ( Yii::app()->session['role']  == 'admins' ){
+
+                // $this->widget('zii.widgets.CMenu', array(
+                    // 'activeCssClass'=>'active',
+                    // 'id'=>'navigation',
+
+                    // 'items'=>array($itemSchedule, $itemGameStatistics, $itemTeams, $itemRosters, $itemLeagues, $itemUsers, $itemSettings),
+					// 'htmlOptions'=>array('class'=>'nav-main')));
+
+            // }else if ( Yii::app()->session['role']  == 'scorer' ){
+
+                // $this->widget('zii.widgets.CMenu', array(
+                    // 'activeCssClass'=>'active',
+                    // 'id'=>'navigation',
+
+                    // 'items'=>array(
+                        
+
+                        // array('label'=>'Schedule', 
+                            // 'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
+                            // array('label'=>'Manage Games', 'url'=>array('schedule/admin')),
+                        // )),
+
+                        // array('label'=>'Score Game', 
+                            // 'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
+                            // array('label'=>'Todays Games', 'url'=>array('scoreGame/admin')),
+                        // )),
+                        // array('label'=>'Settings',
+                              // 'submenuOptions'=>array('class'=>'nav-sub'),
+                              // 'items'=>array(
+                                // array('label'=>'League', 'url'=>array('teams/admin')),
+                                // array('label'=>'Logout', 'url'=>array('site/logout'), 'onclick'=>'if(!confirm("asdasd")){ return false; }'),
+                        // )),
+                    // ),
+                    // 'htmlOptions'=>array('class'=>'nav-main'),
+                // ));
+
+            // }else if(Yii::app()->session['role']  == 'roster'){
+
+                // $this->widget('zii.widgets.CMenu', array(
+                    // 'activeCssClass'=>'active',
+                    // 'id'=>'navigation',
+                    // 'items'=>array(
+                        // array('label'=>'Schedule', 
+                            // 'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
+                            // array('label'=>'Manage Games', 'url'=>array('schedule/admin')),
+                        // )),
+                        // array('label'=>'Rosters', 
+                            // 'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
+                            // array('label'=>'Manage Players', 'url'=>array('players/admin')),
+                            // array('label'=>'Add New Player', 'url'=>array('players/create')),
+                        // )),
+                        // array('label'=>'Settings',
+                              // 'submenuOptions'=>array('class'=>'nav-sub'),
+                              // 'items'=>array(
+                                // array('label'=>'League', 'url'=>array('teams/admin')),
+                                // array(
+                                    // 'label' => 'Logout',
+                                    // 'url' => 'site/logout',
+                                    // 'linkOptions' => array(
+                                        // 'submit' => array('delete', 'id' => $model->id),
+                                        // 'confirm' => 'Are you sure you want to delete this model?')
+                                // ),
                                 
-                        )),
-                    ),
-                    'htmlOptions'=>array('class'=>'nav-main'),
-                ));
-            }
+                        // )),
+                    // ),
+                    // 'htmlOptions'=>array('class'=>'nav-main'),
+                // ));
+            // }
 
         ?>
     

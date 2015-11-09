@@ -33,6 +33,24 @@ function createTeamHasRoster(){
 	';
 }
 
+switch (Yii::app()->session['role']) {
+    case 'admins':
+        $template='{view}{update}{delete}';
+        break;
+	case 'leagueadmin':
+        $template='{view}{update}{delete}';
+        break;
+	case 'teamadmin':
+        $template='{view}{update}';
+        break;
+    case 'roster':
+        $template='{view}';
+        break;
+    default:
+        $template='';
+        break;
+}
+
 ?>
 
 <h1>Teams - Manage Teams</h1>
@@ -87,6 +105,7 @@ function createTeamHasRoster(){
         array(
             'class'=>'CButtonColumn',
 			'header'=>'Actions',
+			'template'=>$template,
             'buttons'=>array(
 				'delete'=>array(
 					'click'=>"function(){

@@ -35,7 +35,7 @@ class SettingsController extends Controller
 		return array(
 			array('allow',
 				'actions'=>array('change'),
-				'roles'=>array('admins','scorer','roster'),
+				'roles'=>array('admins','leagueadmin'),
 			),
 			array('deny',  // deny all users
 				'users'=>array('*'),

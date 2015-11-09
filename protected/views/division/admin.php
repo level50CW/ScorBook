@@ -44,8 +44,10 @@ function createDivisionHasTeam(){
 	'dataProvider'=>$model->search(),
 	'columns'=>array(
 		//'iddivision',
+		'leagueIdleague.Name',
 		'Name',
 		array(
+			'header'=>'Actions',
 			'class'=>'CButtonColumn',
 			'template'=>'{update}{delete}',
 			'buttons'=>array(

@@ -27,6 +27,7 @@ class SiteController extends Controller
 	 */
 	public function actionIndex()
 	{
+		
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
 		$this->render('index');
@@ -36,7 +37,7 @@ class SiteController extends Controller
 	 * This is the action to handle external exceptions.
 	 */
 	public function actionError()
-	{
+	{		
 		if($error=Yii::app()->errorHandler->error)
 		{
 			if(Yii::app()->request->isAjaxRequest)
@@ -76,7 +77,7 @@ class SiteController extends Controller
 	 * Displays the login page
 	 */
 	public function actionLogin()
-	{
+	{		
 		$model=new LoginForm;
 
 		// if it is ajax validation request
@@ -114,6 +115,22 @@ class SiteController extends Controller
 		$this->render('login',array('model'=>$model));
 	}
 
+	
+	public function actionCreateTable()
+	{
+		Yii::app()->db->createCommand("CREATE TABLE IF NOT EXISTS `settings` (
+		  `idsettings` int(11) NOT NULL AUTO_INCREMENT,
+		  `iduser` int(11) NOT NULL,
+		  `idleague` int(11) NOT NULL,
+		  `season` int(11) NOT NULL,
+		  `monthStart` int(11) NOT NULL,
+		  `monthEnd` int(11) NOT NULL,
+		  `listSize` int(11) NOT NULL DEFAULT '25',
+		  PRIMARY KEY (`idsettings`),
+		  UNIQUE KEY `iduser` (`iduser`)
+		)")->execute();
+		echo 'Good';
+	}
 	/**
 	 * Logs out the current user and redirect to homepage.
 	 */
@@ -133,20 +150,17 @@ class SiteController extends Controller
 	public function accessRules()
     {
         return array(
-			array('allow', // Allow to admins all actions
-                  'roles'=>array('admins')
-            ),
-            array('allow', // 
-                  'actions'=>array('view','index'),
-                  'roles'=>array('scorer','roster')
-            ),
  			array('allow', // Give access to all users to make them able to login
  				'actions' => array('error','index','logout','login',),
                 'users' => array('*'),
             ),
+			array('allow', // Give access to all users to make them able to login
+ 				'actions' => array('error','index','logout','login',),
+                'roles'=>array('admins','leagueadmin','teamadmin', 'roster', 'scorer', 'user'),
+            ),
 			array('allow', // 
                   'actions'=>array('contact'),
-                  'roles'=>array('admins','scorer','roster'),
+                  'roles'=>array('admins','leagueadmin','teamadmin', 'roster', 'scorer', 'user'),
             ),
 			array('deny', // deny everybody else
                 'users' => array('*')

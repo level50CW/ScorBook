@@ -14,6 +14,24 @@ $('.search-form form').submit(function(){
 	return false;
 });
 ");
+
+switch (Yii::app()->session['role']) {
+    case 'admins':
+        $template='{view}{update}{delete}';
+        break;
+	case 'leagueadmin':
+        $template='{view}{update}{delete}';
+        break;
+	case 'teamadmin':
+        $template='{view}{update}{delete}';
+        break;
+    case 'roster':
+        $template='{view}{update}';
+        break;
+    default:
+        $template='';
+        break;
+}
 ?>
 
 <h1>Users - Manage Users</h1>
@@ -58,8 +76,25 @@ $('.search-form form').submit(function(){
 		'Email',
 		//'Password',
 		'role',
+		// array(
+			// 'name' => 'role',
+			// 'value' => function($data){
+				// $roles = array(
+					// 'admins' => 'System Admin',
+					// 'leagueadmin' => 'League Admin',
+					// 'teamadmin' => 'Team Admin',
+					// 'roster' => 'Team Roster Admin',
+					// 'scorer' => 'Scorekeeper',
+					// 'user' => 'User'
+				// );
+				// return $roles[$data->role];
+			// },
+			// 'filter' => CHtml::activeTextField($model, 'role')
+		// ),		
 		array(
+			'header'=>'Actions',
 			'class'=>'CButtonColumn',
+			'template'=>$template,
 			'afterDelete'=>"function(link,success,data){ if(success) {
 				alert('User '+$(link).parent().parent().find('td').eq(2).text()+' has been successfully deleted.')
 			} }",

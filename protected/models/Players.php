@@ -115,7 +115,7 @@ class Players extends CActiveRecord
 
         $criteria = new CDbCriteria;
 		
-        if (Yii::app()->session['role'] == 'admins') {
+        if (Yii::app()->session['role'] == 'admins' || Yii::app()->session['role'] == 'leagueadmin') {
             $criteria->with = array('teamsIdteam', 'teamsIdteam.divisionIddivision');
             $criteria->order= 'teamsIdteam.Name ASC';
             $criteria->compare('teamsIdteam.Name', $this->teamname, true);
@@ -137,7 +137,7 @@ class Players extends CActiveRecord
 										WHERE  `Division_iddivision_home` =`teamsIdteam`.`Division_iddivision`
 										OR  `Division_iddivision_visiting` =`teamsIdteam`.`Division_iddivision`)");
 
-        } else if (Yii::app()->session['role'] == 'roster') {
+        } else if (Yii::app()->session['role'] == 'roster' || Yii::app()->session['role'] == 'teamadmin') {
             $teamid = Yii::app()->session['team'];
             $criteria->with = array('teamsIdteam', 'teamsIdteam.divisionIddivision');
             $criteria->order= 'teamsIdteam.Name ASC';

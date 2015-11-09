@@ -31,38 +31,36 @@ if( isset($disabled) && $disabled ){
 
 $team_selected = Yii::app()->session['team'];
 
-if (Yii::app()->session['role'] == 'admins') {
+if (Yii::app()->session['role'] == 'admins' || Yii::app()->session['role'] == 'leagueadmin') {
 
     $divisions = Division::model()->findAll();
     $divisionsListHome = CHtml::ListData($divisions, 'iddivision', 'Name');
 
     $divisions = Division::model()->findAll();
     $divisionsList = CHtml::ListData($divisions, 'iddivision', 'Name');
+	
+	$teams = Teams::model()->findAll();
+    $teamsListHome = CHtml::ListData($teams, 'idteam', 'Name');
 
-}else if (Yii::app()->session['role'] == 'roster') {
+    $teams = Teams::model()->findAll();
+    $teamsList = CHtml::ListData($teams, 'idteam', 'Name');
+
+}else if (Yii::app()->session['role'] == 'roster' || Yii::app()->session['role'] == 'teamadmin') {
 
     $divisions = Division::model()->findAllBySql("SELECT l.iddivision,l.Name FROM Division as l INNER JOIN Teams t ON(l.iddivision = t.Division_iddivision) WHERE idteam=:a",array(':a' => $team_selected,));
     $divisionsListHome = CHtml::ListData($divisions, 'iddivision', 'Name');
 
     $divisions = Division::model()->findAll();
     $divisionsList = CHtml::ListData($divisions, 'iddivision', 'Name');
-
-}
-
-if (Yii::app()->session['role'] == 'admins') {
-    $teams = Teams::model()->findAll();
+	
+	$teams = Teams::model()->findAll(array("condition" => "idteam =  $team_selected"));
     $teamsListHome = CHtml::ListData($teams, 'idteam', 'Name');
 
     $teams = Teams::model()->findAll();
     $teamsList = CHtml::ListData($teams, 'idteam', 'Name');
 
-} else if (Yii::app()->session['role'] == 'roster') {
-    $teams = Teams::model()->findAll(array("condition" => "idteam =  $team_selected"));
-    $teamsListHome = CHtml::ListData($teams, 'idteam', 'Name');
-
-    $teams = Teams::model()->findAll();
-    $teamsList = CHtml::ListData($teams, 'idteam', 'Name');
 }
+
 
 ?>
 

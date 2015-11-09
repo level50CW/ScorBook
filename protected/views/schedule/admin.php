@@ -40,23 +40,27 @@ switch ($role) {
 			'deleteConfirmation'=>$deleteConfirmation
         );
         break;
+	case 'leagueadmin':
+        $buttons = array(
+			'header' => 'Actions',
+            'class'=> 'CButtonColumn',
+            'template'=> '{view}{update}{delete}',
+			'afterDelete'=>$deleteAfterDelete,
+			'deleteConfirmation'=>$deleteConfirmation
+        );
+        break;
+	case 'teamadmin':
+        $buttons = array(
+			'header' => 'Actions',
+            'class'=> 'CButtonColumn',
+            'template'=> '{view}{update}',
+        );
+        break;
     case 'roster':
         $buttons = array(
 			'header' => 'Actions',
             'class'=> 'CButtonColumn',
             'template'=> '{view}',
-        );
-        break;
-    case 'scorer':
-        $buttons = array(
-			'header' => 'Actions',
-            'class'=> 'CButtonColumn',
-            'template'=> '{view}{update}{delete}',
-            'filterHtmlOptions' => array('style' => 'display:none'),
-            'headerHtmlOptions' => array('style' => 'display:none'),
-            'htmlOptions' => array('style' => 'display:none'),
-			'afterDelete'=>$deleteAfterDelete,
-			'deleteConfirmation'=>$deleteConfirmation
         );
         break;
     default:
@@ -96,17 +100,13 @@ $this->widget('zii.widgets.grid.CGridView', array(
 					'style'=>'color: black; padding-top: 0px; border: 1px solid #8CB8E7 !important;')),
 		),
         'date',
-        array(
-        'header' => 'Home',
-        'name'=>'teamsIdteamHome.Name',
-        'type'=>'raw',
-        //'value'=> 'CHtml::link($data->name,array("zbProjects/show&id=$data->id"))',
+		array(
+			'name'=>'teamsIdteamHome.Name',
+			'filter'=> CHtml::activeTextField($model, 'teamsIdteamHome_Name')
         ),
-        array(
-        'header' => 'Visitor',
-        'name'=>'teamsIdteamVisiting.Name',
-        'type'=>'raw',
-        //'value'=> 'CHtml::link($data->name,array("zbProjects/show&id=$data->id"))',
+		array(
+			'name'=>'teamsIdteamVisiting.Name',
+			'filter'=> CHtml::activeTextField($model, 'teamsIdteamVisiting_Name')
         ),
         'location',
         /*
