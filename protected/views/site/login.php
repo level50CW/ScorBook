@@ -24,6 +24,14 @@ $this->pageTitle=Yii::app()->name . ' - Login';
 #rememberMe-checkbox[checked], #rememberMe-checkbox[checked]:hover{
 	background-color: #0C713F;
 }
+
+a{
+	color:#FFFFFF;
+}
+
+a:hover{
+	color:#E8D3B7;
+}
 </style>
 
 <h1>Login</h1>
@@ -58,6 +66,10 @@ $this->pageTitle=Yii::app()->name . ' - Login';
 		<?php echo $form->checkBox($model,'rememberMe'); ?>
 		<?php echo $form->label($model,'rememberMe'); ?>
 		<?php echo $form->error($model,'rememberMe'); ?>
+	</div>
+	
+	<div class="row">
+		<?php echo CHtml::link("Forgot your password?", array("site/reset"), array("style"=>"font-size: 12px; font-weight: bold;")); ?>
 	</div>
 	
 	<br/>
