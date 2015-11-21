@@ -13,14 +13,14 @@ class ImportController extends Controller
 			return $rows;
 		}
 		
-		$leagueName = $row[0];
+		$leagueName = $row[0].' League';
 		$season = $row[1];
 		$date = $row[2];
 		$time = $row[3];
 		$timeStandart = $row[4];
-		$homeDivisionName = $row[5];
+		$homeDivisionName = $row[5].' Division';
 		$homeTeamName = $row[6];
-		$visitorDivisionName = $row[7];
+		$visitorDivisionName = $row[7].' Division';
 		$visitorTeamName = $row[8];
 		
 		
@@ -82,9 +82,9 @@ class ImportController extends Controller
 			return $rows;
 		}
 		
-		$leagueName = $row[0];
+		$leagueName = $row[0].' League';
 		$season = $row[1];
-		$divisionName = $row[2];
+		$divisionName = $row[2].' Division';
 		$teamName = $row[3];
 		$firstName = $row[4];
 		$lastName = $row[5];
