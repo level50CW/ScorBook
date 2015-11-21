@@ -6,7 +6,7 @@ $this->pageTitle=Yii::app()->name;
 
 <?
 if (Yii::app()->user->name !="Guest") {
-	$this->redirect('index.php?r=principal/admin');
+	$this->redirect('index.php?r=scoreGame/admin');
 	// if ( Yii::app()->session['role']  == 'admins'||){
 		// $this->redirect('index.php?r=principal/admin');
 	// } else if ( Yii::app()->session['role']  == 'scorer'){

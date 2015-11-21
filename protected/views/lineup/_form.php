@@ -119,34 +119,8 @@ $(document).ready(function(){
     'enableAjaxValidation'=>true,
 )); ?>
 
-<div class='redbar' style='height:37px'>
-    <div class="rightbutton">
-        <?php echo CHtml::imageButton('images/button_options.png', array('onClick'=>'submitLink("games/create")')); ?>
-    </div>
-    <div class="centerbutton">&nbsp;
-        <?php
-            if ($_GET['team']=='home') {
-                $img = 'images/button_home.png';
-                $dis = 'disabled';
-            } else {
-                $img = 'images/button_home_red.png';
-                $dis = 'enabled';
-            }
-        ?>
-        <?php echo CHtml::imageButton($img,array($dis=>'true')); ?>
-        <?php
-            if ($_GET['team']=='visiting') {
-                $dis = 'disabled';
-                $img = 'images/button_visiting_green.png';
-            } else {
-                $dis = 'enabled';
-                $img = 'images/button_visiting.png';
-            }
-        ?>
-        <?php echo CHtml::imageButton($img,array($dis=>'true') ); ?>
-    </div>
-</div>
-    
+<div class="clear">
+</div> 
     
     <?php   echo $form->errorSummary($model); ?>
 
@@ -280,8 +254,11 @@ $(document).ready(function(){
     ?>
     
     <div class="row buttons" style="text-align: center;">
-        <?php echo CHtml::submitButton($model->Teams_idteam == Yii::app()->user->getState('idteamhome') ? 
-            (Yii::app()->user->getState('idlineuphome') ? 'Update':'Save').' Home Line Up and Switch to Visitor Line Up' : (Yii::app()->user->getState('idlineupvisiting') ? 'Update':'Save').' Visitor Line Up and Switch to Home Line Up',array('class'=>'save-form-btn',"style"=>"width: 500px !important;")); ?>
+        <?php echo CHtml::submitButton(
+			$model->Teams_idteam == Yii::app()->user->getState('idteamhome') ? 
+				(Yii::app()->user->getState('idlineuphome') ? 'Update':'Save').' and Change to Visitor Line Up' : 
+				(Yii::app()->user->getState('idlineupvisiting') ? 'Update':'Save').' and Change to Home Line Up',
+		array('class'=>'save-form-btn',"style"=>"width: 500px !important;")); ?>
     </div>
     
     <div class='redbar' style='height:37px'>
@@ -296,7 +273,8 @@ $(document).ready(function(){
 
 </div><!-- form -->
 <script>
-$(".save-form-btn").on("click",function(){
+$("#lineup-form").submit(form_onSubmit);
+function form_onSubmit(){
     var doWeBreakIt = false;
     var errorMessage = [];
     $(".grayplayer").find('select[id^=playerNumberOption]:enabled').each(function(){
@@ -320,7 +298,7 @@ $(".save-form-btn").on("click",function(){
         var len = $(".grayplayer").find('select[id^=playerNumberOption][value=' + $(this).val() + ']').size();
         if (len > 1 && $(this).val() != "") {
             doWeBreakIt = true;
-            errorMessage[1] = "You have entered the same player in Line Up multiple times. All Batters must be unique. Please remove the duplicate(s).";
+            errorMessage[1] = "You have entered the same player multiple times. Please correct so all Batters are unique.";
             return false;
         }
     });
@@ -329,7 +307,7 @@ $(".save-form-btn").on("click",function(){
         var len = $(".grayplayer").find(".selectpositions[value=" + $(this).val() + "]:enabled").size();
         if (len > 1 && $(this).val() != "") {
             doWeBreakIt = true;
-            errorMessage[2] = "You have entered the same Position for multiple Batters. All positions must be unique. Please correct the duplicate(s).";
+            errorMessage[2] = "You have entered the same player multiple times. Please correct so all Batters are unique.";
             return false;
         }
 	});
@@ -349,5 +327,6 @@ $(".save-form-btn").on("click",function(){
         alert(errorMessage.join("\n"));
         return false;
     }
-});
+	return true;
+};
 </script>

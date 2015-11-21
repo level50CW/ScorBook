@@ -309,6 +309,8 @@ function printeventtext($eventype,$idtd,$event){
 	if ($event->RBI)
 		echo "<script> scoreLabelRBI('$event->RBI',$idtd)  </script>"; 
 	
+	$event->Misce = 0;
+	
 	switch ($eventype){
 		
 			
@@ -473,9 +475,14 @@ function loadTableTeam ($id,$form,$numberTurntoBat,$idLineup){
 		}while($Batters[$s]->Inning!=1 && $s < $count);
 		
 		$sustitutionsCount++;
+		
+		////
+		$sustitutionsCount = 1;
+		////
+		
 		echo "<tr>";
 		echo "<td rowspan='$sustitutionsCount' class='scoreboardplayer'>$e</td>";
-		
+
 		//echo "<td>";		
 		//echo "<table style='margin:0px !important;height:100%'>";
 		
@@ -694,7 +701,7 @@ if (empty($numberTurntoBat) || $numberTurntoBat < 9) $numberTurntoBat = 9;
 
 $tablesize = 220+67*$numberTurntoBat;
 
-$teamname = $_GET['team']=='visit' ? 'ScoreBook – Visitors – ' . $teamname : 'ScoreBook – Home – ' . $teamname;
+$teamname = $_GET['team']=='visit' ? 'Score Pad &ndash; Visitors &ndash; ' . $teamname : 'Score Pad &ndash; Home &ndash; ' . $teamname;
 
 ?>
 

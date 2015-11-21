@@ -69,7 +69,6 @@ class LineupController extends Controller
 
         if(isset($_POST['Lineup']))
         {
-
             $model->attributes=$_POST['Lineup'];
             
             $idLineup = $_POST['Lineup']['idlineup'];

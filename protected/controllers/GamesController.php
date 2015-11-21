@@ -145,7 +145,7 @@ class GamesController extends Controller
 		if(isset($_POST['Games']))
 		{
 			$model->attributes=$_POST['Games'];
-			if($model->save())
+			if($model->save()){
 				Yii::app()->user->setState('idteamhome', $_POST['Games']['Teams_idteam_home']);
 				Yii::app()->user->setState('idteamvisiting', $_POST['Games']['Teams_idteam_visiting']);
 				Yii::app()->user->setState('iddivisionhome', $_POST['Games']['Division_iddivision_home']);
@@ -157,6 +157,7 @@ class GamesController extends Controller
 					$this->redirect(array($_POST['link']));
 				
 				$this->redirect(array('lineup/create','team'=>'home'));
+			}
 		}else{
 				//Set environment variables on load 
 				Yii::app()->user->setState('idteamhome', $model->Teams_idteam_home);

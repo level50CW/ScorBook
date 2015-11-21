@@ -62,12 +62,20 @@ function submitLink(link){
 		
         document.getElementById('link').value = 'events/create';
         break;
-    case 'lineup':
+    case 'hlineup':
         if(<? echo Yii::app()->user->getState('idgame') > 0 ? 0 : 1 ?>){
             alert('Game is not selected.');
             return false;
         }
         document.getElementById('link').value = 'lineup/create&team=home';
+        //document.getElementById('lineup-form').submit();
+        break;
+	case 'vlineup':
+        if(<? echo Yii::app()->user->getState('idgame') > 0 ? 0 : 1 ?>){
+            alert('Game is not selected.');
+            return false;
+        }
+        document.getElementById('link').value = 'lineup/create&team=visiting';
         //document.getElementById('lineup-form').submit();
         break;
     case 'gameinfo':
@@ -128,7 +136,14 @@ function submitLink(link){
       ;
     }
     
-    document.forms[0].submit();
+    //document.forms[0].submit();
+	if (window.form_onSubmit){
+		if (window.form_onSubmit())
+			$("form").first().submit();
+	} else {
+		$("form").first().submit();
+	}
+			
 return  
 }   
 
@@ -233,15 +248,15 @@ function finalizeGame(){
                         ));
 		
 			$menu = null;
-			if ( Yii::app()->session['role']  == 'admins' || Yii::app()->session['role']  == 'leagueadmin' ){
-				$menu = array($itemSchedule, $itemGameStatistics, $itemTeams, $itemRosters, $itemLeagues, $itemUsers, $itemSettings);
-			} else if ( Yii::app()->session['role']  == 'scorer' ){
-				$menu = array($itemScoreGame, $itemSettings);
-			} else if(Yii::app()->session['role']  == 'roster' || Yii::app()->session['role']  == 'teamadmin'){
-				$menu = array($itemSchedule, $itemTeams, $itemRosters, $itemUsers, $itemSettings);
-			} else if ( Yii::app()->session['role']  == 'user' ){
-				$menu = array($itemSettings);
-			}
+			// if ( Yii::app()->session['role']  == 'admins' || Yii::app()->session['role']  == 'leagueadmin' ){
+				// $menu = array($itemSchedule, $itemGameStatistics, $itemTeams, $itemRosters, $itemLeagues, $itemUsers, $itemSettings);
+			// } else if ( Yii::app()->session['role']  == 'scorer' ){
+				// $menu = array($itemScoreGame, $itemSettings);
+			// } else if(Yii::app()->session['role']  == 'roster' || Yii::app()->session['role']  == 'teamadmin'){
+				// $menu = array($itemSchedule, $itemTeams, $itemRosters, $itemUsers, $itemSettings);
+			// } else if ( Yii::app()->session['role']  == 'user' ){
+				// $menu = array($itemSettings);
+			//}
 			
 			if (isset($menu)){
 				$this->widget('zii.widgets.CMenu', array(
@@ -356,6 +371,31 @@ function finalizeGame(){
         <div align="center">
             <table style='width:20% !important'>
             <tr>
+				<td>
+                    <?php //echo CHtml::Button('GAME INFO', array('onClick'=>'submitLink("gameinfo")')); ?>
+                    <?php echo CHtml::image('images/button_bottom_gameinfo.png','',array('onClick'=>'submitLink("gameinfo")'));  ?>
+                </td>
+								
+                <td>
+                    <?php //echo CHtml::Button('VLINE UP', array('onClick'=>'submitLink("lineup")')); ?>
+                    <?php echo CHtml::image('images/button_bottom_vlineup.png','',array('onClick'=>'submitLink("vlineup")'));  ?>
+                </td>
+				
+                <td>
+                    <?php //echo CHtml::Button('HLINE UP', array('onClick'=>'submitLink("lineup")')); ?>
+                    <?php echo CHtml::image('images/button_bottom_hlineup.png','',array('onClick'=>'submitLink("hlineup")'));  ?>
+                </td>
+                
+                <td>
+                    <?php //echo CHtml::Button('AT BAT', array('onClick'=>'submitLink("atBat")')); ?>
+                    <?php echo CHtml::image('images/button_bottom_atbat.png','',array('onClick'=>'submitLink("atbat")'));  ?>
+                </td>
+
+                <td>
+                    <?php //echo CHtml::Button('BOX SCORE', array('disabled'=>'true','onClick'=>'submitLink("gameinfo")')); ?>
+                    <?php echo CHtml::image('images/button_bottom_boxscore.png','',array('onClick'=>'submitLink("boxscore")'));  ?>
+                </td>
+				
                 <td>
                     <?php //echo CHtml::Button('VISITORS', array('onClick'=>'submitLink("gameinfo")')); ?>
                     <?php echo CHtml::image('images/button_bottom_visitors.png','',array('onClick'=>'submitLink("visitorscorecard")'));  ?>
@@ -366,27 +406,6 @@ function finalizeGame(){
                     <?php echo CHtml::image('images/button_bottom_hometeam.png','',array('onClick'=>'submitLink("homescorecard")'));  ?>
                 </td>
                 
-                
-                <td>
-                    <?php //echo CHtml::Button('GAME INFO', array('onClick'=>'submitLink("gameinfo")')); ?>
-                    <?php echo CHtml::image('images/button_bottom_gameinfo.png','',array('onClick'=>'submitLink("gameinfo")'));  ?>
-                </td>
-                <td>
-                    <?php //echo CHtml::Button('AT BAT', array('onClick'=>'submitLink("atBat")')); ?>
-                    <?php echo CHtml::image('images/button_bottom_atbat.png','',array('onClick'=>'submitLink("atbat")'));  ?>
-                </td>
-                <td>
-                    <?php echo CHtml::image('images/button_bottom_games.png','',array('onClick'=>'submitLink("games")'));  ?>
-                </td>
-                <td>
-                    <?php //echo CHtml::Button('LINE UP', array('onClick'=>'submitLink("lineup")')); ?>
-                    <?php echo CHtml::image('images/button_bottom_lineup.png','',array('onClick'=>'submitLink("lineup")'));  ?>
-                </td>
-                
-                <td>
-                    <?php //echo CHtml::Button('BOX SCORE', array('disabled'=>'true','onClick'=>'submitLink("gameinfo")')); ?>
-                    <?php echo CHtml::image('images/button_bottom_boxscore.png','',array('onClick'=>'submitLink("boxscore")'));  ?>
-                </td>
                 
                 <td>
                     <?php //echo CHtml::Button('BOX SCORE', array('disabled'=>'true','onClick'=>'submitLink("gameinfo")')); ?>
@@ -404,9 +423,9 @@ function finalizeGame(){
                         }', 
                                     
                            'items' => array(
-                                        'F0' => array('name' => 'Finalize game','callback' => 'js:function(){ finalizeGame(); }'),
+                                        'complete' => array('name' => 'Complete This Game',),//'callback' => 'js:function(){ finalizeGame(); }'
                                        
-                                        'quit' => array('name' => 'Cancel','icon'=>'quit'),
+                                        'back' => array('name' => 'Back to Todays Games',), //'icon'=>'quit'
                                     ),
                                 )
                        

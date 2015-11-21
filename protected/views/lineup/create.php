@@ -12,11 +12,13 @@
 <?
 
 if ($_GET['team']) {
+	
 
     $homeTeamID = Yii::app()->user->getState('idteamhome');
     $visitingTeamID = Yii::app()->user->getState('idteamvisiting');
 
     $model->Games_idgame = Yii::app()->user->getState('idgame');
+	
 
     if ($_GET['team'] == 'home') {
         $model->Teams_idteam = Yii::app()->user->getState('idteamhome');

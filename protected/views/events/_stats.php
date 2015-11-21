@@ -32,7 +32,7 @@ function loadTableTeam ( $id, $form, $model, $idteam, $idgame ){
     
     echo "<table>";
     
-    if ($name) echo "<tr class='blacktitle'> <td colspan=40>" . $name ." - Game - ".Yii::app()->user->getState('scoretype') . " Statistics </td> </tr>";
+    if ($name) echo "<tr class='blacktitle'> <td colspan=40>" . $name ." - ".ucwords(Yii::app()->user->getState('scoretime'))." - ".ucwords(Yii::app()->user->getState('scoretype')) . " Statistics </td> </tr>";
     else echo "<tr> <td colspan=14> LINEUP MUST BE CREATED </td> </tr>";
     
     //LOAD BATTERS

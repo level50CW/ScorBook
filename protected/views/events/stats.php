@@ -21,11 +21,10 @@
 			</div>
 		</td>
 		<td >
-			<div class="score_button_div2">
+			<div class="score_button_div1">
 			<?php $scoretime = Yii::app()->user->getState('scoretime');?>
 			<?php echo CHtml::button('SEASON', array('onclick' => "submitLink('scoreseason')","class"=>($scoretime=='season') ?  'score_button_red' :  'score_button'  )); ?>
 			<?php echo CHtml::button('GAME', array('onclick' => "submitLink('scoregame')","class"=>($scoretime=='game') ?  'score_button_red' :  'score_button'  ,'style'=>'	margin-left: -5px !important;')); ?>
-			<?php echo CHtml::button('SITUATION', array('onclick' => "submitLink('scoregame')","class"=>($scoretime=='situation') ?  'score_button_red' :  'score_button'  ,'style'=>'	margin-left: -5px !important;')); ?>
 			</div>
 		</td>
 		<td >

@@ -57,33 +57,36 @@ class ScoreGameController extends Controller
         
         // Uncomment the following line if AJAX validation is needed
         // $this->performAjaxValidation($model);
-
         
         if(isset($_POST['Games']))
         {
             $model->attributes = $_POST['Games'];
 
-            if($model->save()){
+			if ($model->validate()){
+				if($model->save()){
 
-                Yii::app()->user->setState('idteamhome',       $_POST['Games']['Teams_idteam_home']);
-                Yii::app()->user->setState('idteamvisiting',   $_POST['Games']['Teams_idteam_visiting']);
-                Yii::app()->user->setState('iddivisionhome',     $_POST['Games']['Division_iddivision_home']);
-                Yii::app()->user->setState('iddivisionvisiting', $_POST['Games']['Division_iddivision_visiting']);
-                // TODO: verify if there are cases when Yii::app()->db->lastInsertID is required
-                $gameId = empty($id) ? Yii::app()->db->lastInsertID : $id;
-                Yii::app()->user->setState('idgame', $gameId);
-            }
+					Yii::app()->user->setState('idteamhome',       $_POST['Games']['Teams_idteam_home']);
+					Yii::app()->user->setState('idteamvisiting',   $_POST['Games']['Teams_idteam_visiting']);
+					Yii::app()->user->setState('iddivisionhome',     $_POST['Games']['Division_iddivision_home']);
+					Yii::app()->user->setState('iddivisionvisiting', $_POST['Games']['Division_iddivision_visiting']);
+					// TODO: verify if there are cases when Yii::app()->db->lastInsertID is required
+					$gameId = empty($id) ? Yii::app()->db->lastInsertID : $id;
+					Yii::app()->user->setState('idgame', $gameId);
+				}
+		//throw new CHttpException(404,var_export($model, true));
 
-            if ($_POST['link']) {
-                $this->redirect(array($_POST['link']));
-            }
-                
-            $this->redirect(array('lineup/create','team'=>'home'));
-
+				if ($_POST['link']) {
+					$this->redirect(array($_POST['link']));
+				}
+					
+				$this->redirect(array('lineup/create','team'=>'home'));
+			}
         }else if($id){
             //Set environment variables on load 
             Yii::app()->user->setState('idteamhome',     $model->Teams_idteam_home);
             Yii::app()->user->setState('idteamvisiting', $model->Teams_idteam_visiting);
+			
+			//throw new CHttpException(404,var_export(Yii::app()->user->getState('idteamhome'), true));
             
             $criteria = new CDbCriteria();
             $criteria->addcondition("idteam=$model->Teams_idteam_home");
