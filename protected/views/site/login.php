@@ -69,7 +69,7 @@ a:hover{
 	</div>
 	
 	<div class="row">
-		<?php echo CHtml::link("Forgot your username or password?", array("site/reset"), array("style"=>"font-size: 12px; font-weight: bold;")); ?>
+		<?php echo CHtml::link("Forgot your password?", array("site/reset"), array("style"=>"font-size: 12px; font-weight: bold;")); ?>
 	</div>
 	
 	<br/>

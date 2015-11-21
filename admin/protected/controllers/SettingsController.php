@@ -27,6 +27,7 @@ class SettingsController extends Controller
 	{
 		$webroot = Yii::getPathOfAlias('webroot');
 		$file =  $webroot . '/protected/config/main.php';
+		$file2 =  $webroot . '/../protected/config/main.php';
 		$data = file_get_contents($file);
 		
 		eval('$configs = '.substr($data, strpos($data, 'return array')+7));
@@ -91,6 +92,7 @@ class SettingsController extends Controller
 								$data);
 							
 							file_put_contents($file, $data);
+							file_put_contents($file2, $data);
 							$this->redirect(array('principal/admin'));
 							
 						}
