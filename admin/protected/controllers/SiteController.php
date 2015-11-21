@@ -179,11 +179,22 @@ class SiteController extends Controller
 	public function actionReset()
 	{
 		$result = "";
+		$username = "";
 		
 		if (isset($_POST['username'])){
 			$model = Users::model()->findByAttributes(array('Email'=>$_POST['username']));
 			if ($model == null) {
-				$result = "nouser";
+				if (isset($_POST['code'])){
+					$model = Users::model()->findByAttributes(array('code'=>$_POST['code']));
+					if ($model == null) {
+						$result = "nocode";
+					} else{
+						$username = $model->Email;
+						$result = "username";
+					}
+				} else {
+					$result = "nouser";
+				}
 			} else {
 				
 				$newPassword = $this->generatePassword();
@@ -211,7 +222,7 @@ class SiteController extends Controller
 			}
 		}
 		
-		$this->render('reset',array('result'=>$result));
+		$this->render('reset',array('result'=>$result, 'username'=>$username));
 	}
 	
 	public function filters()

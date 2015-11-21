@@ -100,10 +100,17 @@ if (Yii::app()->session['role'] == 'admins' || Yii::app()->session['role'] == 'l
     <div class="brown"> Season <span class="required">*</span></div>
     <div class="gray">
 		<?php
+			$dateNow = date_create('now');
+			$dateEndOfSeason = date_create(date('Y').'-09-30');
+			$lowestSeason = $model->isNewRecord? 
+				min(Settings::get()->season,($dateNow > $dateEndOfSeason? 1+date('Y'): +date('Y'))): 
+				min(+$model->season, +date('Y'));
+		
 			$seasons = array();
-			for($i=4;$i>=0;$i--){
-				$seasons[''+$i+date('Y')-1] = $i+date('Y')-1;
+			for($s=4+date('Y');$s>=$lowestSeason;$s--){
+				$seasons[''+$s] = $s;
 			}
+			
 			
 			if ($model->isNewRecord){
 				echo $form->dropDownList($model, 'season', $seasons, array(
@@ -139,7 +146,7 @@ if (Yii::app()->session['role'] == 'admins' || Yii::app()->session['role'] == 'l
                     'showOn'=>'focus',
                     'timeFormat'=>'hh:mm',
                     'dateFormat' => 'mm-dd-yy',
-					'value'=>'01-01-'.Settings::get()->season.' 00:00',
+					'value'=>'05-01-'.Settings::get()->season.' 00:00',
                 ),
             ));
         }
@@ -149,11 +156,17 @@ if (Yii::app()->session['role'] == 'admins' || Yii::app()->session['role'] == 'l
     </div>
 </div>
 
-
+<div class="rowdiv">
+    <div class="brown">Type</div>
+    <div class="gray">
+        <?php echo $form->dropDownList($model, 'game_type', array('0' => 'Regular','1' => 'Playoff', '2' => 'Championship'),array_merge($disabledArray,array('style' => 'width:216px !important; text-align:center')));?>
+        <?php echo $form->error($model, 'game_type'); ?>
+    </div>
+</div>
 
 
 <div class="rowdiv">
-    <div class="brown"> Status <span class="required">*</span></div>
+    <div class="green"> Status <span class="required">*</span></div>
     <div class="gray">
         <?php echo $form->dropDownList($model, 'status',
 			$model->isNewRecord? array('0' => 'Scheduled – Active','-1' => 'Scheduled – Inactive',) : array(
@@ -167,13 +180,7 @@ if (Yii::app()->session['role'] == 'admins' || Yii::app()->session['role'] == 'l
     </div>
 </div>
 
-<div class="rowdiv">
-    <div class="green">Type</div>
-    <div class="gray">
-        <?php echo $form->dropDownList($model, 'game_type', array('0' => 'Regular','1' => 'Playoff', '2' => 'Championship'),array_merge($disabledArray,array('style' => 'width:216px !important; text-align:center')));?>
-        <?php echo $form->error($model, 'game_type'); ?>
-    </div>
-</div>
+
 
 <div class="clear"></div>
 
@@ -309,7 +316,7 @@ var myVar = setInterval(function(){
 		var timer = 0;
 		
 		function defaultDate(){
-			return "01-01-"+$("#Games_season").val()+" 00:00";
+			return "05-01-"+$("#Games_season").val()+" 00:00";
 		}
 		
 		$(".timepicker").change(function(){
@@ -318,7 +325,7 @@ var myVar = setInterval(function(){
 				timer = setTimeout(function(){
 					var date = new Date($self.val());
 					
-					if (+$("#Games_season").val() != date.getFullYear()){
+					if (+$("#Games_season").val() != date.getFullYear() || date < new Date(date.getFullYear(),4,1) || date > new Date(date.getFullYear(),8,30)){
 						alert("Season of the selected date does not coincide with the current season.");
 						$self.val(defaultDate());
 					} else {
@@ -350,7 +357,7 @@ var myVar = setInterval(function(){
 		
 		$("#Games_Teams_idteam_home, #Games_Teams_idteam_visiting").change(function(){
 			if ($("#Games_Teams_idteam_home").val() == $("#Games_Teams_idteam_visiting").val() && $("#Games_Teams_idteam_home").val()!=""){
-				alert("Home Team and Visiting Team are equal.");
+				alert("You can not choose same team for Home and Visiting.");
 				$("#Games_Teams_idteam_visiting").val(null);
 			}
 		})

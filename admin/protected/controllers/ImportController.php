@@ -6,8 +6,13 @@ class ImportController extends Controller
 	
 	private $parseMessage = '';
 	
-	private function processRow($row)
-	{		
+	private function scheduleProcessRow($row)
+	{
+		if (count($row) != 9){
+			$this->parseMessage = 'Invalid columns number';
+			return $rows;
+		}
+		
 		$leagueName = $row[0];
 		$season = $row[1];
 		$date = $row[2];
@@ -70,20 +75,85 @@ class ImportController extends Controller
 		return true;
 	}
 	
-	private function processCSV($data)
+	private function rostersProcessRow($row)
+	{
+		if (count($row) != 14){
+			$this->parseMessage = 'Invalid columns number';
+			return $rows;
+		}
+		
+		$leagueName = $row[0];
+		$season = $row[1];
+		$divisionName = $row[2];
+		$teamName = $row[3];
+		$firstName = $row[4];
+		$lastName = $row[5];
+		$number = $row[6];
+		$position = $row[7];
+		$bats = $row[8];
+		$throws = $row[9];
+		$heightFeet = $row[10];
+		$heightInches = $row[11];
+		$weight = $row[12];
+		$class = $row[13];
+		
+		
+		
+		$ldtCommand = Yii::app()->db->createCommand('SELECT DISTINCT d.`league_idleague`, l.`Name` AS `LN`, d.`iddivision`, d.`Name` AS `DN`, t.`idteam`, t.`Name` AS TN, t.`location`
+												FROM `teams` t
+												JOIN `division` d ON t.`Division_iddivision`=d.`iddivision`
+												JOIN `league` l ON l.`idleague`=d.`league_idleague`
+                                                WHERE t.`Name`=:team AND d.`Name`=:division AND l.`Name`=:league');
+		$result = $ldtCommand->queryAll(true, array(':league'=>$leagueName, ':division'=>$divisionName, ':team'=>$teamName));
+		if (count($result)==0)
+		{
+			$this->parseMessage = "Combination $leagueName -> $divisionName -> $teamName is not exist";
+			return false;
+		}
+		
+		
+		$model = new Players;
+		
+		$model->Teams_idteam = $result[0]['idteam'];
+		$model->Firstname = $firstName;
+		$model->Lastname = $lastName;
+		$model->Number = $number;
+		$model->Position = $position;
+		$model->Bats = $bats;
+		$model->Throws = $throws;
+		$model->foot = +$heightFeet;
+		$model->inches = +$heightInches;
+		$model->Height = (+$heightFeet).'-'.(+$heightInches);
+		$model->Weight = +$weight;
+		$model->Class = $class;
+		$model->College = '-';
+		$model->status = 1;
+		
+		if (!$model->validate()){
+			$this->parseMessage = "Invalid data in row";
+			return false;
+		}
+		
+		if (!$model->save()){
+			$this->parseMessage = "Internal server error";
+			return false;
+		}
+		
+		return true;
+	}
+	
+	private function processCSV($data, $mode)
 	{
 		$webroot = Yii::getPathOfAlias('webroot');
 		$file =  $webroot . '/tmp/data.csv';
 		file_put_contents($file, $data);
 		$handle = fopen($file, 'r');
 		$rows = 0;
+		$mode .='ProcessRow';
+		
 		while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
-			if (count($row) != 9){
-				$this->parseMessage = 'Invalid columns number';
-				return $rows;
-			}
-			
-			if (!$this->processRow($row))
+		
+			if (!$this->$mode($row))
 			{
 				return $rows;
 			}
@@ -94,36 +164,41 @@ class ImportController extends Controller
 		return $rows;
 	}
 	
-	public function actionSchedule()
-	{
+	public function globalAction($mode){
 		$model = new Import();
-		
-		// if(isset($_POST['ajax']) && $_POST['ajax']==='import-schedule-form')
-		// {
-			// echo CActiveForm::validate($model);
-			// Yii::app()->end();
-		// } 
 		
 		if (isset($_POST['Import'])){
 			$model->attributes = $_POST['Import'];
 
 			$this->parseMessage = '';
 			if ($model->validate()){
-				$model->importedRowsCount = $this->processCSV($model->scheduleData);
+				$model->importedRowsCount = $this->processCSV($model->data, $mode);
 				$model->fileImported = $this->parseMessage == '';
 			}
 			
-			$this->render('schedule',array(
+			$this->render('form',array(
 				'model'=>$model,
+				'mode'=>$mode,
 				'result'=>true,
 				'message'=>$this->parseMessage
 			));
 			return;
 		}
 		
-		$this->render('schedule',array(
+		$this->render('form',array(
 			'model'=>$model,
+			'mode'=>$mode,
 		));
+	}
+	
+	public function actionSchedule()
+	{
+		$this->globalAction('schedule');
+	}
+	
+	public function actionRosters()
+	{
+		$this->globalAction('rosters');
 	}
 	
 	public function filters()
@@ -137,7 +212,7 @@ class ImportController extends Controller
     {
 		return array(
 			array('allow',
-				'actions'=>array('schedule'),
+				'actions'=>array('schedule','rosters'),
 				'roles'=>array('admins','scorer','roster'),
 			),
 			array('deny',  // deny all users

@@ -93,6 +93,15 @@ class Users extends CActiveRecord
 		// Warning: Please modify the following code to remove attributes that
 		// should not be searched.
 
+		$roles = array(
+			'System Admin' => 'admins',
+			'League Admin' => 'leagueadmin',
+			'Team Admin' => 'teamadmin',
+			'Team Roster Admin' => 'roster',
+			'Scorekeeper' => 'scorer',
+			'User' => 'user'
+		);
+		
 		$criteria=new CDbCriteria;
 
 		if (Yii::app()->session['role'] == 'admins' || Yii::app()->session['role'] == 'leagueadmin') {
@@ -101,7 +110,7 @@ class Users extends CActiveRecord
 			$criteria->compare('Lastname',$this->Lastname,true);
 			$criteria->compare('Email',$this->Email,true);
 			$criteria->compare('Password',$this->Password,true);
-			$criteria->compare('role',$this->role,true);
+			$criteria->compare('role',$roles[$this->role],true);
 			$criteria->order= 'Lastname ASC, Firstname ASC';
 			
 			$criteria->with = array('teamsIdteam.divisionIddivision');
@@ -115,7 +124,7 @@ class Users extends CActiveRecord
 			$criteria->compare('Lastname',$this->Lastname,true);
 			$criteria->compare('Email',$this->Email,true);
 			$criteria->compare('Password',$this->Password,true);
-			$criteria->compare('role',$this->role,true);
+			$criteria->compare('role',$roles[$this->role],true);
 			$criteria->order= 'Lastname ASC, Firstname ASC';
 			
 			$criteria->with = array('teamsIdteam.divisionIddivision');

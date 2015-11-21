@@ -51,7 +51,9 @@ switch (Yii::app()->session['role']) {
 		//'iduser',
 		array(
 			'header'=>'League',
-			'name'=>'teamsIdteam.divisionIddivision.leagueIdleague.Name',
+			'value'=> function($data){
+				return $data->teamsIdteam? $data->teamsIdteam->divisionIddivision->leagueIdleague->Name: 'NA';
+			},
 			'filter' => CHtml::activeDropDownList($model, 'leagueIdleague_Name',
 				CHtml::listData(League::model()->findAll(), 'idleague', 'Name'),
 				array(
@@ -60,7 +62,9 @@ switch (Yii::app()->session['role']) {
 		),
 		array(
 			'header'=>'Division',
-			'name'=>'teamsIdteam.divisionIddivision.Name',
+			'value'=> function($data){
+				return $data->teamsIdteam? $data->teamsIdteam->divisionIddivision->Name: 'NA';
+			},
 			'filter' => CHtml::activeDropDownList($model, 'division_Name',
 				CHtml::listData(
 					$model->leagueIdleague_Name? 
@@ -75,22 +79,22 @@ switch (Yii::app()->session['role']) {
 		'Firstname',
 		'Email',
 		//'Password',
-		'role',
-		// array(
-			// 'name' => 'role',
-			// 'value' => function($data){
-				// $roles = array(
-					// 'admins' => 'System Admin',
-					// 'leagueadmin' => 'League Admin',
-					// 'teamadmin' => 'Team Admin',
-					// 'roster' => 'Team Roster Admin',
-					// 'scorer' => 'Scorekeeper',
-					// 'user' => 'User'
-				// );
-				// return $roles[$data->role];
-			// },
-			// 'filter' => CHtml::activeTextField($model, 'role')
-		// ),		
+		//'role',
+		array(
+			'name' => 'role',
+			'value' => function($data){
+				$roles = array(
+					'admins' => 'System Admin',
+					'leagueadmin' => 'League Admin',
+					'teamadmin' => 'Team Admin',
+					'roster' => 'Team Roster Admin',
+					'scorer' => 'Scorekeeper',
+					'user' => 'User'
+				);
+				return $roles[$data->role];
+			},
+			'filter' => CHtml::activeTextField($model, 'role')
+		),		
 		array(
 			'header'=>'Actions',
 			'class'=>'CButtonColumn',

@@ -161,6 +161,14 @@ function createLeagueDivisionTeamDependency()
         </div>
     </div>
 	
+	<div class="rowdiv">
+        <div class="green">Security code</div>
+        <div class="gray">
+        <?php echo $form->textField($model,'code',array_merge($disabledArray,array('size'=>60,'maxlength'=>150))); ?>
+        <?php echo $form->error($model,'code'); ?>
+        </div>
+    </div>
+	
 <br/>
 
 <div class="rowdiv">

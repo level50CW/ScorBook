@@ -1,10 +1,13 @@
 <?php
 
-class Import extends CFormModel
+class SystemSettings extends CFormModel
 {
-	public $data;
-	public $fileImported;
-	public $importedRowsCount;
+	public $databaseUrl;
+	public $databaseUsername;
+	public $databasePassword;
+	public $databaseConfirm;
+	public $databasePasswordChanged;
+	public $adminPassword;
 	
     public static function model($className=__CLASS__)
     {
@@ -16,15 +19,12 @@ class Import extends CFormModel
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-			array('data', 'required'),
-			array('fileImported', 'boolean', 'trueValue'=>true, 'message' => 'Invalid file format.')
         );
     }
 
     public function attributeLabels()
     {
         return array(
-			'data' => 'Import data',
         );
     }
 }

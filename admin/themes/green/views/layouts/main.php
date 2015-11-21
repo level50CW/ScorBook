@@ -181,8 +181,11 @@ function finalizeGame(){
 				
 				$itemTeamsItems[] = array('label'=>'Add New Team', 'url'=>array('teams/create'));
 				
-				$itemSettingsItems[] = array('label'=>'General Settings', 'url'=>array('settings/change'), 'linkOptions'=>array('style'=>'width: 118px;'));
-				$itemSettingsItems[] = array('label'=>'System Settings', 'url'=>array('principal/admin'), 'linkOptions'=>array('style'=>'color: #868686 !important;', 'onclick'=>'return false;'));
+				$itemSettingsItems[] = array('label'=>'General Settings', 'url'=>array('settings/general'), 'linkOptions'=>array('style'=>'width: 118px;'));
+			}
+			
+			if (Yii::app()->session['role'] == 'admins'){
+				$itemSettingsItems[] = array('label'=>'System Settings', 'url'=>array('settings/system'));
 			}
 			
 			if (Yii::app()->session['role'] == 'admins' || Yii::app()->session['role'] == 'leagueadmin' || Yii::app()->session['role'] == 'teamadmin' ){
@@ -209,7 +212,7 @@ function finalizeGame(){
                             'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
                             array('label'=>'Manage Players', 'url'=>array('players/admin')),
                             array('label'=>'Add New Player', 'url'=>array('players/create')),
-                            array('label'=>'Import Rosters', 'url'=>array('principal/admin'), 'linkOptions'=>array('style'=>'color: #868686 !important;', 'onclick'=>'return false;')),
+							array('label'=>'Import Rosters', 'url'=>array('import/rosters')),
                             array('label'=>'Export Rosters', 'url'=>array('principal/admin'), 'linkOptions'=>array('style'=>'color: #868686 !important;', 'onclick'=>'return false;')),
                         ));
 			$itemLeagues = array('label'=>'Leagues', 

@@ -126,6 +126,7 @@ div.form .errorSummary
 	background: #FEE;
 	font-size: 0.9em;
 	color: #92968e;
+	text-align: left;
 }
 
 div.form .errorMessage

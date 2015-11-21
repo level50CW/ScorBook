@@ -15,7 +15,7 @@ label{
 
 <?php
 if ($result == "" || $result == "nouser")
-	echo '<p style="margin: 0 288px;">New password will be sent on you email.</p>';
+	echo '<p style="margin: 0 288px;">Your username is the email entered when account created.</p>';
 ?>
 
 <div class="form login-form">
@@ -30,14 +30,29 @@ if ($result == "" || $result == "nouser")
 					echo '<label style="text-align: center;">Password successfully reset.<br/>New password have been sent on you email.</label>';
 				}
 			
-				if ($result == "" || $result == "nouser"){
-					echo '<label>Enter your email</label>';
+				if ($result == "nouser"){
+					echo '<label style="color: #FF7B7B;">That email is not valid. Please, enter another email.</label>';
 					echo '<input type="text" name="username" style="    width: 303px;"/>';
-					if ($result == "nouser")
-						echo '<label style="color: #FF7B7B;">User is not registered. Please, enter another email.</label>';
+					echo '<label>If you forgot username, please enter your security code and press Reset to retrieve email.</label>';
+					echo '<input type="text" name="code" style="    width: 303px;"/>';
 				}
 				
+				if ($result == "nocode"){
+					echo '<label>Please enter your email and we will check if valid.</label>';
+					echo '<input type="text" name="username" style="    width: 303px;"/>';
+					echo '<label style="color: #FF7B7B;">That security code is not valid Please, enter another security code.</label>';
+					echo '<input type="text" name="code" style="    width: 303px;"/>';
+				}
 				
+				if ($result == "username"){
+					echo '<label>Your username <b style="color: #EAC495;">'.$username.'</b>. Enter it to reset your password or try to login.</label>';
+					echo '<input type="text" name="username" style="    width: 303px;"/>';
+				}
+				
+				if ($result == ""){
+					echo '<label>Please enter your email and we will check if valid.</label>';
+					echo '<input type="text" name="username" style="    width: 303px;"/>';
+				}
 			?>
 		</div>
 		

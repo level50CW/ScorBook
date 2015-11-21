@@ -39,6 +39,13 @@ function createLeagueSeasonDivisionTeamDependency()
 }
 ?>
 
+<style>
+.ui-datepicker-month,
+.ui-datepicker-year{
+	color: grey;
+}
+</style>
+
 <div class="form">
 
 <?php $form = $this->beginWidget('CActiveForm', array(
@@ -218,15 +225,17 @@ function createLeagueSeasonDivisionTeamDependency()
 					'model'     => $model,
 					'attribute' => 'Birthdate',
 					'htmlOptions' => array(
-						'size' => '10', // textField size
-						'maxlength' => '10', // textField maxlength
+						'size' => '5', // textField size
+						'maxlength' => '5', // textField maxlength
 						'value' => substr($model->Birthdate, 0, 10),
 						'style' => 'width:180px',
 					),
 					'options' => array(
 						'showOn' => 'both', // also opens with a button
 						'dateFormat' => 'yy-mm-dd', // format of "2012-12-25"
-						'defaultDate'=>"1996-01-01",
+						'defaultDate'=>"1993-01-01",
+						'minDate'=>(+date('Y')-29)."-01-01",
+						'maxDate'=>(+date('Y')-16)."-01-01",
 						'changeMonth'=> true,
 						'changeYear'=> true
 					)                
@@ -251,7 +260,7 @@ function createLeagueSeasonDivisionTeamDependency()
         <div class="gray">
             <?php echo $form->dropDownList($model, 'State', $states, array_merge($disabledArray,array(
 				'style' => 'width:62px !important; text-align:center',
-				'empty'=> 'Select')));?>
+				'empty'=> 'State')));?>
             <?php echo $form->textField($model, 'Hometown', array_merge($disabledArray,array('style' => 'width:140px !important;')));?>
             <?php echo $form->error($model, 'Hometown'); ?>
         </div>
@@ -269,14 +278,15 @@ function createLeagueSeasonDivisionTeamDependency()
         <div class="green"> Class</div>
         <div class="gray">
             <?php
-                $first = date("Y")*1-5;
-                $years = array($first=>$first);
-                for($i = 1; $i < 16 ; $i++){
-                    $years[$first+$i] = $years[$first]+$i;
+                $first = +Settings::get()->season-5;
+                $last = +Settings::get()->season+5;
+                $years = array();
+                for($i = $last; $i >=$first ; $i--){
+                    $years[$i] = $i;
                 }
             ?>
             <?php 
-                $model->Class = $model->Class ? $model->Class : date("Y");
+                $model->Class = $model->Class ? $model->Class : Settings::get()->season;
                 echo $form->dropDownList($model, 'Class', $years, array_merge($disabledArray,array('style' => 'width:216px !important; text-align:center')));?>
             <?php //echo $form->textField($model, 'Class', $disabledArray); ?>
             <?php echo $form->error($model, 'Class'); ?>
