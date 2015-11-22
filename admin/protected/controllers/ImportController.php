@@ -60,7 +60,7 @@ class ImportController extends Controller
 		
 		$model = new Games;
 		$model->location = $homeResult[0]['location'];
-		$model->season = $season;
+		$model->season = +$season;
 		$model->date = $dateTime;
 		$model->Division_iddivision_home = $homeResult[0]['iddivision'];
 		$model->Teams_idteam_home = $homeResult[0]['idteam'];
@@ -111,6 +111,12 @@ class ImportController extends Controller
 			return false;
 		}
 		
+		$dateObj = DateTime::createFromFormat('Y', $season);
+        if (!$dateObj)
+		{
+			$this->parseMessage = "Invalid season ($season)";
+			return false;
+		}
 		
 		$model = new Players;
 		
@@ -128,6 +134,7 @@ class ImportController extends Controller
 		$model->Class = $class;
 		$model->College = '-';
 		$model->status = 1;
+		$model->season = +$season;
 		
 		if (!$model->validate()){
 			$this->parseMessage = "Invalid data in row";
