@@ -42,8 +42,13 @@ function submitLink(link){
         var luh = <?php echo Yii::app()->user->getState('idlineuphome') ? 1 : 0; ?>;
         var luv = <?php echo Yii::app()->user->getState('idlineupvisiting') ? 1 : 0; ?>;
 
-        if(!luh || !luv){
-            alert("Lineups were not saved");
+		if (!luh){
+			alert("Home Lineup must be complete and saved");
+            return false;
+		}
+		
+        if(!luv){
+            alert("Visitor Lineup must be complete and saved");
             return false;
         }
 		
