@@ -90,7 +90,7 @@ class Teams extends CActiveRecord
             'idteam' => 'Idteam',
             'Name' => 'Team Name',
             'location' => 'Stadium',
-            'Division_iddivision' => 'Division Iddivision',
+            'Division_iddivision' => 'Division',
             'uploadfile' => 'uploadfile',
         );
     }
