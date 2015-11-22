@@ -30,7 +30,6 @@ class Players extends CActiveRecord
     public $foot;
     public $inches;
 	public $leagueIdleague_Name;
-	public $division_Season;
 	public $division_Name;
 
     public static function model($className = __CLASS__)
@@ -54,8 +53,8 @@ class Players extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('Teams_idteam, Firstname, Lastname,status,Weight,Height, Number, Position, Bats, Throws, foot, inches, College,', 'required'),
-            array('idplayer, Number, Teams_idteam', 'numerical', 'integerOnly' => true),
+            array('Teams_idteam, Firstname, Lastname,status,Weight,Height, Number, Position, Bats, Throws, foot, inches, College, season', 'required'),
+            array('idplayer, Number, Teams_idteam, season', 'numerical', 'integerOnly' => true),
             array('uploadfile', 'file', 'types' => 'jpg, jpeg, gif, png', 'maxSize' => 30 * 1024 * 1024, 'allowEmpty' => true, 'tooLarge' => '{attribute} is too large to be uploaded. Maximum size is 30MB.'),
             array('Firstname, Lastname', 'length', 'max' => 50),
             array('Bats, Throws', 'length', 'max' => 2),
@@ -68,7 +67,7 @@ class Players extends CActiveRecord
             array('status', 'length', 'max' => 2),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('idplayer, Firstname, Lastname, Number, Teams_idteam, Position, Bats, Throws, teamname, foot, inches, leagueIdleague_Name, division_Season, division_Name', 'safe', 'on' => 'search'),
+            array('idplayer, Firstname, Lastname, Number, Teams_idteam, Position, Bats, Throws, teamname, foot, inches, leagueIdleague_Name, season, division_Name', 'safe', 'on' => 'search'),
         );
     }
 
@@ -100,7 +99,8 @@ class Players extends CActiveRecord
             'Position' => 'Position',
             'Bats' => 'Bats',
             'Throws' => 'Throws',
-            'status' => 'status'
+            'status' => 'Status',
+			'season' => 'Season'
         );
     }
 
@@ -120,6 +120,7 @@ class Players extends CActiveRecord
             $criteria->order= 'teamsIdteam.Name ASC';
             $criteria->compare('teamsIdteam.Name', $this->teamname, true);
             $criteria->compare('idplayer', $this->idplayer);
+			$criteria->compare('t.season',$this->season);
             $criteria->compare('Firstname', $this->Firstname, true);
             $criteria->compare('Lastname', $this->Lastname, true);
             $criteria->compare('Number', $this->Number);
@@ -131,12 +132,6 @@ class Players extends CActiveRecord
             $criteria->compare('divisionIddivision.league_idleague', $this->leagueIdleague_Name);
             $criteria->compare('divisionIddivision.iddivision', $this->division_Name);
 			
-			if (isset($this->division_Season) && $this->division_Season)
-				$criteria->addCondition("$this->division_Season in (SELECT `season` 
-										FROM  `games` 
-										WHERE  `Division_iddivision_home` =`teamsIdteam`.`Division_iddivision`
-										OR  `Division_iddivision_visiting` =`teamsIdteam`.`Division_iddivision`)");
-
         } else if (Yii::app()->session['role'] == 'roster' || Yii::app()->session['role'] == 'teamadmin') {
             $teamid = Yii::app()->session['team'];
             $criteria->with = array('teamsIdteam', 'teamsIdteam.divisionIddivision');
@@ -144,6 +139,7 @@ class Players extends CActiveRecord
             $criteria->compare('Teams_idteam',$teamid);
             $criteria->compare('teamsIdteam.Name', $this->teamname, true);
             $criteria->compare('idplayer', $this->idplayer);
+			$criteria->compare('t.season',$this->season);
             $criteria->compare('Firstname', $this->Firstname, true);
             $criteria->compare('Lastname', $this->Lastname, true);
             $criteria->compare('Number', $this->Number);
@@ -155,11 +151,6 @@ class Players extends CActiveRecord
 			$criteria->compare('divisionIddivision.league_idleague', $this->leagueIdleague_Name);
             $criteria->compare('divisionIddivision.iddivision', $this->division_Name);
 			
-			if (isset($this->division_Season) && $this->division_Season)
-				$criteria->addCondition("$this->division_Season in (SELECT `season` 
-										FROM  `games` 
-										WHERE  `Division_iddivision_home` =`teamsIdteam`.`Division_iddivision`
-										OR  `Division_iddivision_visiting` =`teamsIdteam`.`Division_iddivision`)");
         }
 
         return new CActiveDataProvider($this, array(

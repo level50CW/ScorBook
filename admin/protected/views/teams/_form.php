@@ -83,21 +83,33 @@ function createLeagueSeasonDivisionDependency()
 	<div class="rowdiv">
         <div class="green"> Season <span class="required">*</span></div>
             <div class="gray">
-			<select style="width:216px !important; text-align:center" id="Teams_Season">
-				<?php
-					for($i=4;$i>=0;$i--){
-						$season = $i+date('Y')-1;
-						echo "<option value='$season'>$season</option>";
-					}
+			<?php
+				$lowestSeason = $model->isNewRecord? 
+					Settings::get()->season: 
+					min(+$model->season, Settings::get()->season);
+					
+				$highestSeason = $model->isNewRecord? 
+					Settings::get()->season+2: 
+					max(+$model->season, Settings::get()->season+2);
+			
+				$seasons = array();
+				for($s=$highestSeason;$s>=$lowestSeason;$s--){
+					$seasons[$s] = $s;
+				}
+				
 				?>
-			</select>
+			<?php echo $form->dropDownList($model,'season',$seasons,array_merge($disabledArray,array('style' => 'width:216px !important; text-align:center',
+						'options'=>$model->isNewRecord?
+							array(Settings::get()->season => array('selected'=>true)) : 
+							array())));?>
+            <?php echo $form->error($model,'season'); ?>
 			</div>
     </div>
 
     <div class="rowdiv">
         <div class="green"> Division <span class="required">*</span></div>
             <div class="gray">
-            <?php echo $form->dropDownList($model,'Division_iddivision',array(),array_merge($disabledArray,array('style' => 'width:216px !important; text-align:center', 'disabled'=>'disabled')));?>
+            <?php echo $form->dropDownList($model,'Division_iddivision',array(),array_merge($disabledArray,array('style' => 'width:216px !important; text-align:center')));?>
             <?php echo $form->error($model,'Division_iddivision'); ?>
 			<input type="hidden" name="Teams[Division_iddivision]" id="Teams_Division_iddivision_second" value="-1"/>
             </div>
@@ -238,7 +250,6 @@ function createLeagueSeasonDivisionDependency()
 	
 	
 	var $leagueSelect = $("#Teams_League_idleague");
-	var $seasonSelect = $("#Teams_Season");
 	var $divisionSelect = $("#Teams_Division_iddivision");
 	var counter = 0;
 	
@@ -342,10 +353,7 @@ function createLeagueSeasonDivisionDependency()
 		var id = $("option:selected", this).val();
 		$("#Teams_Division_iddivision_second").val(id || "");
 	})
-	
-	$seasonSelect.prop(isUiDisabled);
-	$seasonSelect.val(defaultSeason);
-	
+		
 	$leagueSelect.change();
 	
 	var defaultLeague="";

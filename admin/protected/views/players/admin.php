@@ -16,6 +16,7 @@ $('.search-form form').submit(function(){
 });
 ");
 
+$currentSeason = Settings::get()->season;
 ?>
 
 <h1>Team Rosters - Manage Players & Coaches</h1>
@@ -43,16 +44,13 @@ $('.search-form form').submit(function(){
 					'style'=>'color: black; padding-top: 0px; border: 1px solid #8CB8E7 !important;')),
 		),
 		array(
-            'header' => 'Season',
-			'value' => function($data, $row){
-				return Division::model()->getSeason($data->teamsIdteam->divisionIddivision);
-			},
-			'filter' => CHtml::activeDropDownList($model, 'division_Season',
-				array(date('Y')=>date('Y'),(2+date('Y'))=>(2+date('Y')),(1+date('Y'))=>(1+date('Y')), (-1+date('Y'))=>(-1+date('Y')),(-2+date('Y'))=>(-2+date('Y')), ),
+            'name' => 'season',
+			'filter' => CHtml::activeDropDownList($model, 'season',
+				array($currentSeason=>$currentSeason,(2+$currentSeason)=>(2+$currentSeason),(1+$currentSeason)=>(1+$currentSeason), (-1+$currentSeason)=>(-1+$currentSeason),(-2+$currentSeason)=>(-2+$currentSeason), ),
 				array(
 					'empty' => 'Select',
-					'style'=>'color: black; padding-top: 0px; width: 50px; border: 1px solid #8CB8E7 !important;')),
-		),
+					'style'=>'color: black; padding-top: 0px; border: 1px solid #8CB8E7 !important;')),
+        ),
 		array(
 			'header'=>'Division',
 			'name'=>'teamsIdteam.divisionIddivision.Name',
