@@ -215,10 +215,8 @@ function finalizeGame(){
 							array('label'=>'Import Rosters', 'url'=>array('import/rosters')),
                             array('label'=>'Export Rosters', 'url'=>array('principal/admin'), 'linkOptions'=>array('style'=>'color: #868686 !important;', 'onclick'=>'return false;')),
                         ));
-			$itemLeagues = array('label'=>'Leagues', 
+			$itemDivisions = array('label'=>'Divisions', 
                             'submenuOptions'=>array('class'=>'nav-sub'),'items'=>array(
-                            array('label'=>'Manage Leagues', 'url'=>array('league/admin')),
-                            array('label'=>'Add New League', 'url'=>array('league/create')),
                             array('label'=>'Manage Divisions', 'url'=>array('division/admin')),
                             array('label'=>'Add New Division', 'url'=>array('division/create')),
                         ));
@@ -237,7 +235,7 @@ function finalizeGame(){
 		
 			$menu = null;
 			if ( Yii::app()->session['role']  == 'admins' || Yii::app()->session['role']  == 'leagueadmin' ){
-				$menu = array($itemSchedule, $itemGameStatistics, $itemTeams, $itemRosters, $itemLeagues, $itemUsers, $itemSettings);
+				$menu = array($itemSchedule, $itemGameStatistics, $itemTeams, $itemRosters, $itemDivisions, $itemUsers, $itemSettings);
 			} else if ( Yii::app()->session['role']  == 'scorer' ){
 				$menu = array($itemScoreGame, $itemSettings);
 			} else if(Yii::app()->session['role']  == 'roster' || Yii::app()->session['role']  == 'teamadmin'){

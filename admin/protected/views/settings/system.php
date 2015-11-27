@@ -25,28 +25,28 @@
 			<?php echo $form->errorSummary($model); ?>
 			<div class="blacktitle">SYSTEM SETTINGS</div>
 			<div class="rowdiv">
-				<div class="green" style="padding-top:30px;" >Database URL</div>
+				<div class="green" style="padding-top:30px;" >Location URL</div>
 				<div class="gray" style="padding-top:30px;" >
 					<?php echo $form->textField($model,'databaseUrl',array('size'=>160,'maxlength'=>150));?>
 					<?php echo $form->error($model,'databaseUrl'); ?>
 				</div>
 			</div>
 			<div class="rowdiv">
-				<div class="green">Database Username</div>
+				<div class="green">Username</div>
 				<div class="gray">
 					<?php echo $form->textField($model,'databaseUsername',array('size'=>60,'maxlength'=>150));?>
 					<?php echo $form->error($model,'databaseUsername'); ?>
 				</div>
 			</div>
 			<div class="rowdiv">
-				<div class="green">Database Password</div>
+				<div class="green">Password</div>
 				<div class="gray">
 					<?php echo $form->passwordField($model,'databasePassword',array('size'=>60,'maxlength'=>150));?>
 					<?php echo $form->error($model,'databasePassword'); ?>
 				</div>
 			</div>
 			<div class="rowdiv">
-				<div class="green">Confirm</div>
+				<div class="green">Confirm Password</div>
 				<div class="gray">
 					<?php echo $form->passwordField($model,'databaseConfirm',array('size'=>60,'maxlength'=>150));?>
 					<?php echo $form->error($model,'databaseConfirm'); ?>

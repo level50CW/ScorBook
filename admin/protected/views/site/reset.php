@@ -10,12 +10,12 @@ label{
 }
 </style>
 
-<h1>Reset password</h1>
+<h1>Forgot Username or Password</h1>
 <br />
 
 <?php
 if ($result == "" || $result == "nouser")
-	echo '<p style="margin: 0 288px;">Your username is the email entered when account created.</p>';
+	echo '<p style="margin: 0 288px;">Enter the email associated with your account below. If valid email your password will be sent to this email.</p>';
 ?>
 
 <div class="form login-form">
@@ -59,7 +59,7 @@ if ($result == "" || $result == "nouser")
 		<div class="rowdiv">
 			<?php
 				if ($result != "success")
-					echo CHtml::submitButton('Reset', array("class"=>"save-form-btn" , 'style'=>'    margin: -10px 0px 0 0;'));
+					echo CHtml::submitButton('Send', array("class"=>"save-form-btn" , 'style'=>'    margin: -10px 0px 0 0;'));
 				echo CHtml::link('Cancel',array('site/login'),array('class'=>'save-form-btn'));
 			?>
 		</div>

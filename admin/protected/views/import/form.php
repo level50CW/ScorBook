@@ -1,10 +1,8 @@
 <?php
 	if ($mode == 'schedule'){
 		$header = 'Schedule - Import Games';
-		$info = 'Please select Schedule file to import';
 	} elseif ($mode == 'rosters'){
 		$header = 'Rosters - Import Players';
-		$info = 'Please select Roster file to import';
 	}
 ?>
 <h1><?php echo $header?></h1>
@@ -22,10 +20,7 @@
 		<div style='text-align: center; position: relative;'>
 			<div class="blacktitle">SELECT FILE</div>
 			<div class="rowdiv">
-				<div class="gray" style="padding-top: 15px; margin: 0; width: 499px; height: auto;" >
-					<div style="line-height: 16px; margin-left: 52px; text-align: left; color: #FFFFFF;"><?php echo $info?></div>
-				</div>
-				<div class="gray" style="margin: 0; width: 499px;" >
+				<div class="gray" style="padding-top: 15px; margin: 0; width: 499px;" >
 					<p style="display: inline;"><input id="importschedule" style="line-height: 16px;width:300px;" type="text" disabled="true" placeholder="Choose File"></p>
 					<div class="fileUpload btn ">
 						<span>Import</span>

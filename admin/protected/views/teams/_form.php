@@ -317,7 +317,7 @@ function createLeagueSeasonDivisionDependency()
 			if (idl == defaultLeague)
 				$opt.prop("selected",1);
 		}
-		$leagueSelect.prop("disabled",isUiDisabled);
+		$leagueSelect.prop("disabled",true);
 	}
 	
 	<?php
@@ -326,7 +326,7 @@ function createLeagueSeasonDivisionDependency()
 	echo 'var defaultSeason='.Settings::get()->season.";\n";
 	
 	if ($model->isNewRecord){
-		echo 'var defaultLeague=""'.";\n";
+		echo 'var defaultLeague='.Settings::get()->idleague.";\n";
 		echo 'var defaultDision="";'."\n";
 	} else {
 		echo 'var defaultLeague='.$model->divisionIddivision->league_idleague.";\n";
@@ -356,7 +356,7 @@ function createLeagueSeasonDivisionDependency()
 		
 	$leagueSelect.change();
 	
-	var defaultLeague="";
+	var defaultLeague=<?php echo Settings::get()->idleague;?>;
 	var defaultDision="";
 })();
 </script>

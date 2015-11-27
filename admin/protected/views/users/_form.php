@@ -289,7 +289,7 @@ function createLeagueDivisionTeamDependency()
 			if (idl == defaultLeague)
 				$opt.prop("selected",1);
 		}
-		$leagueSelect.prop("disabled",isUiDisabled);
+		$leagueSelect.prop("disabled",true);
 	}
 	
 	function disableSelectes()
@@ -309,7 +309,7 @@ function createLeagueDivisionTeamDependency()
 	echo 'var isUiDisabled='.($disabled? 'true': 'false').';';
 	
 	if ($model->isNewRecord || !$model->teamsIdteam){
-		echo 'var defaultLeague="";';
+		echo 'var defaultLeague='.Settings::get()->idleague.';';
 		echo 'var defaultDision="";';
 		echo 'var defaultTeam="";';
 	} else {
@@ -363,7 +363,7 @@ function createLeagueDivisionTeamDependency()
 	$roleSelect.change();
 	$roleSelect.prop("disabled",$roleSelect.children().length == 1 || isUiDisabled);
 	
-	var defaultLeague="";
+	var defaultLeague=<?php echo Settings::get()->idleague;?>;
 	var defaultDision="";
 	var defaultTeam="";
 })();

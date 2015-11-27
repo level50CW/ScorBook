@@ -147,6 +147,8 @@ if (Yii::app()->session['role'] == 'admins' || Yii::app()->session['role'] == 'l
                     'timeFormat'=>'hh:mm',
                     'dateFormat' => 'mm-dd-yy',
 					'value'=>'05-01-'.Settings::get()->season.' 00:00',
+					'minDate'=>'05-01-'.Settings::get()->season,
+					'maxDate'=>'09-30-'.Settings::get()->season,
                 ),
             ));
         }
@@ -353,6 +355,8 @@ var myVar = setInterval(function(){
 			if (+$(this).val() != date.getFullYear()){
 				$(".timepicker").val(defaultDate());
 			}
+			jQuery('#yw0').datetimepicker('option','minDate', new Date(+$(this).val(),4,1));
+			jQuery('#yw0').datetimepicker('option','maxDate', new Date(+$(this).val(),8,30));
 		});
 		
 		$("#Games_Teams_idteam_home, #Games_Teams_idteam_visiting").change(function(){
@@ -360,6 +364,6 @@ var myVar = setInterval(function(){
 				alert("You can not choose same team for Home and Visiting.");
 				$("#Games_Teams_idteam_visiting").val(null);
 			}
-		})
+		});
 	})();
 </script>
