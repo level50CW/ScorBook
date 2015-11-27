@@ -134,7 +134,7 @@ class Games extends CActiveRecord
 
             $criteria->compare('idgame',$this->idgame);
             $criteria->compare('location',$this->location,true);
-            $criteria->compare('season',$this->season,true);
+            $criteria->compare('t.season',$this->season);
             $criteria->compare('date',$this->dateFromAmericanFormat($this->date, false),true);
             $criteria->compare('comment',$this->comment,true);
             $criteria->compare('attendance',$this->attendance);
@@ -159,7 +159,7 @@ class Games extends CActiveRecord
 
             $criteria->compare('idgame',$this->idgame);
             $criteria->compare('location',$this->location,true);
-            $criteria->compare('season',$this->season,true); 
+            $criteria->compare('t.season',$this->season); 
             $criteria->compare('date',$this->dateFromAmericanFormat($this->date, false),true);
             $criteria->compare('comment',$this->comment,true);
             $criteria->compare('attendance',$this->attendance);
@@ -176,7 +176,7 @@ class Games extends CActiveRecord
             $teamid = Yii::app()->session['team'];
             $criteria->compare('idgame',$this->idgame);
             $criteria->compare('location',$this->location,true);
-            $criteria->compare('season',$this->season,true); 
+            $criteria->compare('t.season',$this->season); 
             $criteria->compare('date',date("Y-m-d"),true);
             $criteria->compare('comment',$this->comment,true);
             $criteria->compare('attendance',$this->attendance);
