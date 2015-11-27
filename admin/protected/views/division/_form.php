@@ -53,7 +53,8 @@ if ($model->isNewRecord){
 <div class="rowdiv">
 	<div class="green" style="padding: 10px 0;"> League <span class="required">*</span></div>
 	<div class="gray" style="padding: 10px 0;">
-		<?php echo $form->dropDownList($model,'league_idleague',$listLeague,array_merge($disabledArray,array('empty' => 'Select League','style' => 'width:216px !important; text-align:center')));?>
+		<?php echo $form->dropDownList($model,'league_idleague',$listLeague,array('empty' => 'Select League','style' => 'width:216px !important; text-align:center',"disabled"=>"disabled",
+		"readonly"=>"readonly"));?>
 		<?php echo $form->error($model,'league_idleague'); ?>
 	</div>
 </div>
