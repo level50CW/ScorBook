@@ -23,7 +23,10 @@ $('.search-form form').submit(function(){
 $role = Yii::app()->session['role'];
 
 $deleteAfterDelete = "function(link,success,data){ if(success) {
-				alert('Game between '+$(link).parent().parent().find('td').eq(2).text()+' and '+$(link).parent().parent().find('td').eq(3).text()+' has been successfully deleted.')
+				var date = $(link).parent().parent().find('td').eq(2).text().split('  ');
+				var visiting = $(link).parent().parent().find('td').eq(3).text();
+				var home = $(link).parent().parent().find('td').eq(4).text();
+				alert('The Game on '+date[0]+' at '+date[1]+' between '+visiting+' and '+home+' has been deleted.');
 			} }";
 $deleteConfirmation = "js: (new Date($(this).parent().parent().find('td').eq(1).text())-new Date()>0)?
 	'Please confirm you want to delete this game from schedule.':
@@ -92,11 +95,12 @@ $this->widget('zii.widgets.grid.CGridView', array(
 					'style'=>'color: black; padding-top: 0px; border: 1px solid #8CB8E7 !important;')),
 		),
 		array(
-			'name'=>'season',
-			'filter' => CHtml::activeDropDownList($model, 'season',
-				array((2+date('Y'))=>(2+date('Y')),(1+date('Y'))=>(1+date('Y')), (-1+date('Y'))=>(-1+date('Y')),(-2+date('Y'))=>(-2+date('Y')),(-3+date('Y'))=>(-3+date('Y')), ),
+			'header'=>'Season',
+			'value'=>'$data->season->season',
+			'filter' => CHtml::activeDropDownList($model, 'season_idseason',
+				CHtml::listData(Season::model()->findAll(), 'idseason', 'season'),
 				array(
-					'empty' => array(date('Y')=>date('Y')),
+					'empty' => 'Select',
 					'style'=>'color: black; padding-top: 0px; border: 1px solid #8CB8E7 !important;')),
 		),
         'date',

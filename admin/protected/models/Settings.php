@@ -1,7 +1,8 @@
 <?php
 
 class Settings extends CActiveRecord
-{
+{	
+	public $leagueName;
     public static function model($className=__CLASS__)
     {
         return parent::model($className);
@@ -23,8 +24,9 @@ class Settings extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('iduser, idleague, season, monthStart, monthEnd, listSize', 'required'),
-            array('iduser,', 'safe', 'on'=>'search'),
+            array('iduser, idleague, listSize, idseason, leagueName', 'required'),
+            array('iduser, idleague, idseason, listSize', 'numerical', 'integerOnly'=>true),
+			array('iduser,', 'safe', 'on'=>'search'),
         );
     }
 
@@ -38,6 +40,7 @@ class Settings extends CActiveRecord
         return array(
             'useriduser' => array(self::HAS_ONE, 'Users', 'iduser'),
             'leagueidleague' => array(self::HAS_ONE, 'Leadue', 'idleague'),
+            'seasonidseason' => array(self::HAS_ONE, 'Season', 'idseason'),
         );
     }
 
@@ -48,7 +51,8 @@ class Settings extends CActiveRecord
     {
         return array(
             'idleague' => 'Leadue ID',
-            'season' => 'Season',
+            'seasonidleague' => 'Season',
+            'idseason' => 'Season ID',
             'monthStart' => 'Season Start Month',
             'monthEnd' => 'Season End Month',
             'listSize' => 'Max List Size',
@@ -71,19 +75,17 @@ class Settings extends CActiveRecord
 	
 	public static function get()
 	{
-		$model=Settings::model()->findByAttributes(array('iduser'=>Users::model()->find()->iduser));//Yii::app()->user->id
+		$model=Settings::model()->findByAttributes(array('iduser'=>Users::model()->find()->iduser));
 		if($model==null){
 			$model = new Settings;
 			$model->iduser = Yii::app()->user->id;
 			$model->idleague = League::model()->find()->idleague;
-			$model->season = +date('Y');
-			$model->monthStart = 1;
-			$model->monthEnd = 2;
+			$model->idseason = Season::model()->find('status=1')->idseason;
 			$model->listSize = 25;
 			$model->save();
 			
-			echo 'Qwer';
 		}
+		$model->leagueName = League::model()->findByPk($model->idleague)->Name;
 		return $model;
 	}
 }

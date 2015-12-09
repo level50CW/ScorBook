@@ -1324,7 +1324,7 @@ ul.nav-sub li a {
 
 #navigation li a, #navigation li span {
     display: block;
-    padding: 16px 31px 0 32px;
+    padding: 16px 24px 0 24px;
     height: 21px;
     font: 14px Arial, Helvetica, sans-serif;
     text-decoration: none;
@@ -1526,6 +1526,23 @@ color: #680102;
 #system-settings-form textarea,
 #system-settings-form select,
 #system-settings-form .uneditable-input {
+    display: inline-block;
+    padding: 4px;
+    font-size: 13px;
+    line-height: 18px;
+    color: #000 !important;
+    border: 1px solid #000 !important;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    background-color: #fff;
+}
+
+#season-form input[type="text"],
+#season-form .ui-autocomplete-input,
+#season-form textarea,
+#season-form select,
+#season-form .uneditable-input {
     display: inline-block;
     padding: 4px;
     font-size: 13px;

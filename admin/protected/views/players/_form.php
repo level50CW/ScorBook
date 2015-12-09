@@ -85,26 +85,15 @@ function createLeagueSeasonDivisionTeamDependency()
 	<div class="rowdiv">
         <div class="green"> Season <span class="required">*</span></div>
             <div class="gray">
-			<?php
-				$lowestSeason = $model->isNewRecord? 
-					Settings::get()->season: 
-					min(+$model->season, Settings::get()->season);
-					
-				$highestSeason = $model->isNewRecord? 
-					Settings::get()->season+2: 
-					max(+$model->season, Settings::get()->season+2);
-			
-				$seasons = array();
-				for($s=$highestSeason;$s>=$lowestSeason;$s--){
-					$seasons[$s] = $s;
-				}
+			<?php			
+				$seasons = CHtml::listData(Season::model()->findAll(), 'idseason', 'season');
 				
 				?>
-			<?php echo $form->dropDownList($model,'season',$seasons,array_merge($disabledArray,array('style' => 'width:216px !important; text-align:center',
+			<?php echo $form->dropDownList($model,'season_idseason',$seasons,array_merge($disabledArray,array('style' => 'width:216px !important; text-align:center',
 						'options'=>$model->isNewRecord?
-							array(Settings::get()->season => array('selected'=>true)) : 
+							array(Settings::get()->idseason => array('selected'=>true)) : 
 							array())));?>
-            <?php echo $form->error($model,'season'); ?>
+            <?php echo $form->error($model,'season_idseason'); ?>
 			</div>
     </div>
 
@@ -290,15 +279,15 @@ function createLeagueSeasonDivisionTeamDependency()
         <div class="green"> Class</div>
         <div class="gray">
             <?php
-                $first = +Settings::get()->season-5;
-                $last = +Settings::get()->season+5;
+                $first = +date('Y')-5;
+                $last = +date('Y')+5;
                 $years = array();
                 for($i = $last; $i >=$first ; $i--){
                     $years[$i] = $i;
                 }
             ?>
             <?php 
-                $model->Class = $model->Class ? $model->Class : Settings::get()->season;
+                $model->Class = $model->Class ? $model->Class : date('Y');
                 echo $form->dropDownList($model, 'Class', $years, array_merge($disabledArray,array('style' => 'width:216px !important; text-align:center')));?>
             <?php //echo $form->textField($model, 'Class', $disabledArray); ?>
             <?php echo $form->error($model, 'Class'); ?>
@@ -468,7 +457,7 @@ function createLeagueSeasonDivisionTeamDependency()
 	<?php
 	createLeagueSeasonDivisionTeamDependency();
 	echo 'var isUiDisabled='.($disabled? 'true': 'false').';';
-	echo 'var defaultSeason='.Settings::get()->season.";\n";
+	echo 'var defaultSeason='.Settings::get()->idseason.";\n";
 	
 	if ($model->isNewRecord){
 		echo 'var defaultLeague='.Settings::get()->idleague.";\n";

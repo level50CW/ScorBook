@@ -100,31 +100,27 @@ if (Yii::app()->session['role'] == 'admins' || Yii::app()->session['role'] == 'l
     <div class="brown"> Season <span class="required">*</span></div>
     <div class="gray">
 		<?php
-			$dateNow = date_create('now');
-			$dateEndOfSeason = date_create(date('Y').'-09-30');
-			$lowestSeason = $model->isNewRecord? 
-				min(Settings::get()->season,($dateNow > $dateEndOfSeason? 1+date('Y'): +date('Y'))): 
-				min(+$model->season, +date('Y'));
+			// $dateNow = date_create('now');
+			// $dateEndOfSeason = date_create(date('Y').'-09-30');
+			// $lowestSeason = $model->isNewRecord? 
+				// min(Settings::get()->season,($dateNow > $dateEndOfSeason? 1+date('Y'): +date('Y'))): 
+				// min(+$model->season, +date('Y'));
 		
-			$seasons = array();
-			for($s=4+date('Y');$s>=$lowestSeason;$s--){
-				$seasons[''+$s] = $s;
-			}
-			
+			$seasons = CHtml::listData(Season::model()->findAll(), 'idseason', 'season');
 			
 			if ($model->isNewRecord){
-				echo $form->dropDownList($model, 'season', $seasons, array(
+				echo $form->dropDownList($model, 'season_idseason', $seasons, array(
 					"style"=>"width:216px !important;",
-					'options'=>array(Settings::get()->season => array('selected'=>true))));
+					'options'=>array(Settings::get()->idseason => array('selected'=>true))));
 			} else {
-				echo $form->dropDownList($model, 'season', $seasons, array(
+				echo $form->dropDownList($model, 'season_idseason', $seasons, array(
 					"style"=>"width:216px !important;",
 					'disabled' => true,
-					'options'=>array(''+$model->season => array('selected'=>true))));
+					'options'=>array(''+$model->season_idseason => array('selected'=>true))));
 			}
 		?>
 
-        <?php echo $form->error($model, 'season'); ?>
+        <?php echo $form->error($model, 'season_idseason'); ?>
     </div>
 </div>
 
@@ -146,9 +142,9 @@ if (Yii::app()->session['role'] == 'admins' || Yii::app()->session['role'] == 'l
                     'showOn'=>'focus',
                     'timeFormat'=>'hh:mm',
                     'dateFormat' => 'mm-dd-yy',
-					'value'=>'05-01-'.Settings::get()->season.' 00:00',
-					'minDate'=>'05-01-'.Settings::get()->season,
-					'maxDate'=>'09-30-'.Settings::get()->season,
+					'value'=>'05-01-'.Settings::get()->seasonidseason->season.' 00:00',
+					'minDate'=>'05-01-'.Settings::get()->seasonidseason->season,
+					'maxDate'=>'09-30-'.Settings::get()->seasonidseason->season,
                 ),
             ));
         }
@@ -318,7 +314,7 @@ var myVar = setInterval(function(){
 		var timer = 0;
 		
 		function defaultDate(){
-			return "05-01-"+$("#Games_season").val()+" 00:00";
+			return "05-01-"+$("#Games_season").text()+" 00:00";
 		}
 		
 		$(".timepicker").change(function(){

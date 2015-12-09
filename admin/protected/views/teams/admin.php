@@ -50,9 +50,6 @@ switch (Yii::app()->session['role']) {
         $template='';
         break;
 }
-
-$currentSeason = Settings::get()->season;
-
 ?>
 
 <h1>Teams - Manage Teams</h1>
@@ -80,8 +77,9 @@ $currentSeason = Settings::get()->season;
         ),
 		array(
             'name' => 'season',
-			'filter' => CHtml::activeDropDownList($model, 'season',
-				array($currentSeason=>$currentSeason,(2+$currentSeason)=>(2+$currentSeason),(1+$currentSeason)=>(1+$currentSeason), (-1+$currentSeason)=>(-1+$currentSeason),(-2+$currentSeason)=>(-2+$currentSeason), ),
+			'value' => '$data->season->season',
+			'filter' => CHtml::activeDropDownList($model, 'season_idseason',
+				CHtml::listData(Season::model()->findAll(), 'idseason', 'season'),
 				array(
 					'empty' => 'Select',
 					'style'=>'color: black; padding-top: 0px; border: 1px solid #8CB8E7 !important;')),

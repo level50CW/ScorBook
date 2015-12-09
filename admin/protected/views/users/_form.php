@@ -294,11 +294,9 @@ function createLeagueDivisionTeamDependency()
 	
 	function disableSelectes()
 	{
-		$leagueSelect.children().remove();
 		$divisionSelect.children().remove();
 		$teamSelect.children().remove();
 		
-		$leagueSelect.append($("<option>").val("").text("NA")).prop("disabled",true);
 		$divisionSelect.append($("<option>").val("").text("NA")).prop("disabled",true);
 		$teamSelect.append($("<option>").val("").text("NA")).prop("disabled",true);
 		$("#Users_Teams_idteam_second").val(-1);

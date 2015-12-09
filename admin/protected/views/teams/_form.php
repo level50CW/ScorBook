@@ -83,26 +83,15 @@ function createLeagueSeasonDivisionDependency()
 	<div class="rowdiv">
         <div class="green"> Season <span class="required">*</span></div>
             <div class="gray">
-			<?php
-				$lowestSeason = $model->isNewRecord? 
-					Settings::get()->season: 
-					min(+$model->season, Settings::get()->season);
-					
-				$highestSeason = $model->isNewRecord? 
-					Settings::get()->season+2: 
-					max(+$model->season, Settings::get()->season+2);
-			
-				$seasons = array();
-				for($s=$highestSeason;$s>=$lowestSeason;$s--){
-					$seasons[$s] = $s;
-				}
+			<?php			
+				$seasons = CHtml::listData(Season::model()->findAll(), 'idseason', 'season');
 				
 				?>
-			<?php echo $form->dropDownList($model,'season',$seasons,array_merge($disabledArray,array('style' => 'width:216px !important; text-align:center',
+			<?php echo $form->dropDownList($model,'season_idseason',$seasons,array_merge($disabledArray,array('style' => 'width:216px !important; text-align:center',
 						'options'=>$model->isNewRecord?
-							array(Settings::get()->season => array('selected'=>true)) : 
+							array(Settings::get()->idseason => array('selected'=>true)) : 
 							array())));?>
-            <?php echo $form->error($model,'season'); ?>
+            <?php echo $form->error($model,'season_idseason'); ?>
 			</div>
     </div>
 
@@ -139,6 +128,54 @@ function createLeagueSeasonDivisionDependency()
         </div>
     </div>
 
+	<div class="rowdiv">
+        <div class="green"  >Street</div>
+            <div class="gray" >
+        <?php echo $form->textField($model,'street',array_merge($disabledArray,array('size'=>60,'maxlength'=>25))); ?>
+        <?php echo $form->error($model,'street'); ?>
+        </div>
+    </div>
+		
+	<?php  $states = array("AL"=>"AL","AK"=>"AK","AZ"=>"AZ","AR"=>"AR","CA"=>"CA","CO"=>"CO",
+                "CT"=>"CT","DE"=>"DE","FL"=>"FL","GA"=>"GA","HI"=>"HI","ID"=>"ID","IL"=>"IL",
+                "IN"=>"IN","IA"=>"IA","KS"=>"KS","KY"=>"KY","LA"=>"LA","ME"=>"ME","MD"=>"MD",
+                "MA"=>"MA","MI"=>"MI","MN"=>"MN","MS"=>"MS","MO"=>"MO","MT"=>"MT","NE"=>"NE",
+                "NV"=>"NV","NH"=>"NH","NJ"=>"NJ","NM"=>"NM","NY"=>"NY","NC"=>"NC","ND"=>"ND",
+                "OH"=>"OH","OK"=>"OK","OR"=>"OR","PA"=>"PA","RI"=>"RI","SC"=>"SC","SD"=>"SD",
+                "TN"=>"TN","TX"=>"TX","UT"=>"UT","VT"=>"VT","VA"=>"VA","WA"=>"WA","WV"=>"WV",
+                "WI"=>"WI","WY"=>"WY"); ?>
+	
+	<div class="rowdiv">
+        <div class="green"  >City</div>
+            <div class="gray" >
+			
+			<?php echo $form->dropDownList($model, 'state', $states, array_merge($disabledArray,array(
+				'style' => 'width:62px !important; text-align:center',
+				'empty'=> 'State')));?>
+            <?php echo $form->textField($model, 'city', array_merge($disabledArray,array('style' => 'width:140px !important;')));?>
+			
+			<?php echo $form->error($model,'city'); ?>
+			<?php echo $form->error($model,'state'); ?>
+        </div>
+    </div>
+	
+	<div class="rowdiv">
+        <div class="green"  >Zipcode</div>
+            <div class="gray" >
+        <?php echo $form->textField($model,'zipcode',array_merge($disabledArray,array('size'=>60,'maxlength'=>5))); ?>
+        <?php echo $form->error($model,'zipcode'); ?>
+        </div>
+    </div>
+	
+	<div class="rowdiv">
+        <div class="green"  >Timezone</div>
+            <div class="gray" >
+        <?php echo $form->dropDownList($model,'timezone',array('EST'=>'EST','CST'=>'CST'),array_merge($disabledArray,array(
+			'style' => 'width:216px !important; text-align:center',
+			'empty'=>'Select Timezone')));?>
+        <?php echo $form->error($model,'timezone'); ?>
+        </div>
+    </div>
 
     <div class="rowdiv">
         <div class="green" > Team Color  </div>
@@ -323,7 +360,7 @@ function createLeagueSeasonDivisionDependency()
 	<?php
 	createLeagueSeasonDivisionDependency();
 	echo 'var isUiDisabled='.($disabled? 'true': 'false').';';
-	echo 'var defaultSeason='.Settings::get()->season.";\n";
+	echo 'var defaultSeason='.Settings::get()->idseason.";\n";
 	
 	if ($model->isNewRecord){
 		echo 'var defaultLeague='.Settings::get()->idleague.";\n";

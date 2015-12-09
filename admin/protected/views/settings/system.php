@@ -25,7 +25,7 @@
 			<?php echo $form->errorSummary($model); ?>
 			<div class="blacktitle">SYSTEM SETTINGS</div>
 			<div class="rowdiv">
-				<div class="green" style="padding-top:30px;" >Location URL</div>
+				<div class="green" style="padding-top:30px;" >DB URL</div>
 				<div class="gray" style="padding-top:30px;" >
 					<?php echo $form->textField($model,'databaseUrl',array('size'=>160,'maxlength'=>150));?>
 					<?php echo $form->error($model,'databaseUrl'); ?>
@@ -46,7 +46,7 @@
 				</div>
 			</div>
 			<div class="rowdiv">
-				<div class="green">Confirm Password</div>
+				<div class="green">Confirm</div>
 				<div class="gray">
 					<?php echo $form->passwordField($model,'databaseConfirm',array('size'=>60,'maxlength'=>150));?>
 					<?php echo $form->error($model,'databaseConfirm'); ?>
@@ -59,7 +59,7 @@
 				</div>
 			</div>			
 			<div class="rowdiv">
-				<div class="green" style="padding-bottom:30px;">Admin Password</div>
+				<div class="green" style="padding-bottom:30px;">Unlock</div>
 				<div class="gray" style="padding-bottom:30px;">
 					<?php echo $form->passwordField($model,'adminPassword',array('size'=>60,'maxlength'=>150));?>
 					<?php echo $form->error($model,'adminPassword'); ?>

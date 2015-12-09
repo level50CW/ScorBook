@@ -11,7 +11,27 @@ class SettingsController extends Controller
 		
 		if(isset($_POST['Settings'])){
 			$model->attributes = $_POST['Settings'];
+			$model->leagueName = $_POST['Settings']['leagueName'];
 			if($model->validate()){
+				
+				$currentSeason = Season::model()->findByPk($model->idseason);
+				$oldSeasons = Season::model()->findAll('season < '.$currentSeason->season);
+				for($i=0;$i<count($oldSeasons);$i++){
+					$oldSeasons[$i]->status = 2;
+					$oldSeasons[$i]->save();
+				}
+				$newSeasons = Season::model()->findAll('season > '.$currentSeason->season);
+				for($i=0;$i<count($newSeasons);$i++){
+					$newSeasons[$i]->status = 0;
+					$newSeasons[$i]->save();
+				}
+				$currentSeason->status = 1;
+				$currentSeason->save();
+				
+				$league = League::model()->findByPk($model->idleague);
+				$league->Name = $model->leagueName;
+				$league->save();
+								
 				if($model->save()){
 					$this->redirect(array('principal/admin'));
 				}

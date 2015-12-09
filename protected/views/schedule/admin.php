@@ -23,7 +23,10 @@ $('.search-form form').submit(function(){
 $role = Yii::app()->session['role'];
 
 $deleteAfterDelete = "function(link,success,data){ if(success) {
-				alert('Game between '+$(link).parent().parent().find('td').eq(2).text()+' and '+$(link).parent().parent().find('td').eq(3).text()+' has been successfully deleted.')
+				var date = $(link).parent().parent().find('td').eq(2).text().split('  ');
+				var visiting = +$(link).parent().parent().find('td').eq(3).text();
+				var home = +$(link).parent().parent().find('td').eq(4).text();
+				alert('The Game on '+date[0]+' at '+date[1]+' between '+visiting+' and '+home+' has been deleted.');
 			} }";
 $deleteConfirmation = "js: (new Date($(this).parent().parent().find('td').eq(1).text())-new Date()>0)?
 	'Please confirm you want to delete this game from schedule.':

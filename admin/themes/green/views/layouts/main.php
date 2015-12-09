@@ -164,6 +164,7 @@ function finalizeGame(){
 			$itemScheduleItems = array();
 			$itemTeamsItems = array();
 			$itemUsersItems = array();
+			$itemSeasonItems = array();
 			$itemSettingsItems = array();
 			
 			$itemScheduleItems[] = array('label'=>'Manage Games', 'url'=>array('schedule/admin'));
@@ -172,6 +173,7 @@ function finalizeGame(){
 			
 			$itemUsersItems[] = array('label'=>'Manage Users', 'url'=>array('users/admin'));
 			
+			$itemSeasonItems[] = array('label'=>'Manage Seasons', 'url'=>array('season/admin'));
 			
 			
 			if (Yii::app()->session['role'] == 'admins' || Yii::app()->session['role'] == 'leagueadmin'){
@@ -180,6 +182,8 @@ function finalizeGame(){
 				$itemScheduleItems[] = array('label'=>'Export Schedule', 'url'=>array('principal/admin'), 'linkOptions'=>array('style'=>'color: #868686 !important;', 'onclick'=>'return false;'));
 				
 				$itemTeamsItems[] = array('label'=>'Add New Team', 'url'=>array('teams/create'));
+				
+				$itemSeasonItems[] = array('label'=>'Add New Season', 'url'=>array('season/create'));
 				
 				$itemSettingsItems[] = array('label'=>'General Settings', 'url'=>array('settings/general'), 'linkOptions'=>array('style'=>'width: 118px;'));
 			}
@@ -222,7 +226,10 @@ function finalizeGame(){
                         ));
 			$itemUsers = array('label'=>'Users', 
                             'submenuOptions'=>array('class'=>'nav-sub'),'items'=>$itemUsersItems);
-							
+			
+			$itemSeason = array('label'=>'Seasons', 
+                            'submenuOptions'=>array('class'=>'nav-sub'),'items'=>$itemSeasonItems);
+			
 			$itemSettings = array('label'=>'Settings',
                             'submenuOptions'=>array('class'=>'nav-sub'),'items'=>$itemSettingsItems);
 							
@@ -235,7 +242,7 @@ function finalizeGame(){
 		
 			$menu = null;
 			if ( Yii::app()->session['role']  == 'admins' || Yii::app()->session['role']  == 'leagueadmin' ){
-				$menu = array($itemSchedule, $itemGameStatistics, $itemTeams, $itemRosters, $itemDivisions, $itemUsers, $itemSettings);
+				$menu = array($itemSchedule, $itemGameStatistics, $itemTeams, $itemRosters, $itemDivisions, $itemUsers, $itemSeason, $itemSettings);
 			} else if ( Yii::app()->session['role']  == 'scorer' ){
 				$menu = array($itemScoreGame, $itemSettings);
 			} else if(Yii::app()->session['role']  == 'roster' || Yii::app()->session['role']  == 'teamadmin'){

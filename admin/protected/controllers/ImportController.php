@@ -43,6 +43,24 @@ class ImportController extends Controller
 			return false;
 		}
 		
+		$dateObj = DateTime::createFromFormat('Y', $season);
+        if (!$dateObj)
+		{
+			$this->parseMessage = "Invalid season ($season)";
+			return false;
+		}
+		
+		$ldtCommand = Yii::app()->db->createCommand('SELECT DISTINCT t.`idseason`, t.`season`, t.`startdate`, t.`enddate`
+												FROM `season` t
+                                                WHERE t.`season`=:season');
+												
+		$seasonFromDb = $ldtCommand->queryAll(true, array(':season'=>$season));
+		if (count($seasonFromDb)==0)
+		{
+			$this->parseMessage = "Season $season is not exist";
+			return false;
+		}
+		
 		$dateObj = DateTime::createFromFormat('m/d/y H:i', "$date $time");
         if (!$dateObj)
 		{
@@ -51,16 +69,17 @@ class ImportController extends Controller
 		}
         $dateTime = $dateObj->format('Y-m-d H:i');
 		
-		$dateObj = DateTime::createFromFormat('Y', $season);
-        if (!$dateObj)
+		$dateStart = DateTime::createFromFormat('Y-m-d', $seasonFromDb[0]['startdate']);
+		$dateEnd = DateTime::createFromFormat('Y-m-d', $seasonFromDb[0]['enddate']);
+		if ($dateTime<$dateStart || $dateStart>$dateEnd)
 		{
-			$this->parseMessage = "Invalid season ($season)";
+			$this->parseMessage = "Time or date ($date $time) misses the $season season";
 			return false;
 		}
 		
 		$model = new Games;
 		$model->location = $homeResult[0]['location'];
-		$model->season = +$season;
+		$model->season_idseason = +$seasonFromDb[0]['idseason'];
 		$model->date = $dateTime;
 		$model->Division_iddivision_home = $homeResult[0]['iddivision'];
 		$model->Teams_idteam_home = $homeResult[0]['idteam'];
@@ -118,6 +137,17 @@ class ImportController extends Controller
 			return false;
 		}
 		
+		$ldtCommand = Yii::app()->db->createCommand('SELECT DISTINCT t.`idseason`, t.`season`, t.`startdate`, t.`enddate`
+												FROM `season` t
+                                                WHERE t.`season`=:season');
+												
+		$seasonFromDb = $ldtCommand->queryAll(true, array(':season'=>$season));
+		if (count($seasonFromDb)==0)
+		{
+			$this->parseMessage = "Season $season is not exist";
+			return false;
+		}
+		
 		$model = new Players;
 		
 		$model->Teams_idteam = $result[0]['idteam'];
@@ -134,7 +164,7 @@ class ImportController extends Controller
 		$model->Class = $class;
 		$model->College = '-';
 		$model->status = 1;
-		$model->season = +$season;
+		$model->season_idseason = +$seasonFromDb[0]['idseason'];
 		
 		if (!$model->validate()){
 			$this->parseMessage = "Invalid data in row";

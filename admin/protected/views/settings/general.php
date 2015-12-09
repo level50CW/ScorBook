@@ -42,31 +42,20 @@ $listSize = array('100'=>100,'75'=>75,'50'=>50,'25'=>25,'10'=>10);
 			<div class="rowdiv">
 				<div class="green" style="padding-top:30px;" >League</div>
 				<div class="gray" style="padding-top:30px;" >
-					<?php echo $form->dropDownList($model,'idleague',$listLeagues,array('empty' => 'Select Division','style' => 'width:216px !important; text-align:center'));?>
-					<?php echo $form->error($model,'idleague'); ?>
+					<?php echo $form->textField($model,'leagueName',array('style' => 'width:206px !important;'));?>
+					<?php echo $form->error($model,'leagueName'); ?>
 				</div>
 			</div>
 			<div class="rowdiv">
 				<div class="green">Season</div>
 				<div class="gray">
-					<?php echo $form->dropDownList($model,'season',$seasons,array('style' => 'width:216px !important; text-align:center'));?>
-					<?php echo $form->error($model,'season'); ?>
+					<?php echo $form->dropDownList($model,'idseason',
+								CHtml::listData(Season::model()->findAll(), 'idseason', 'season'),
+								array('style' => 'width:216px !important; text-align:center'));?>
+					<?php echo $form->error($model,'idseason'); ?>
 				</div>
 			</div>
-			<div class="rowdiv">
-				<div class="green">Season Start Month</div>
-				<div class="gray">
-					<?php echo $form->dropDownList($model,'monthStart',$months,array('style' => 'width:216px !important; text-align:center'));?>
-					<?php echo $form->error($model,'monthStart'); ?>
-				</div>
-			</div>
-			<div class="rowdiv">
-				<div class="green">Season End Month</div>
-				<div class="gray">
-					<?php echo $form->dropDownList($model,'monthEnd',$months,array('style' => 'width:216px !important; text-align:center'));?>
-					<?php echo $form->error($model,'monthEnd'); ?>
-				</div>
-			</div>
+
 			<div class="rowdiv">
 				<div class="green" style="padding-bottom:30px;">Max List Size</div>
 				<div class="gray" style="padding-bottom:30px;">

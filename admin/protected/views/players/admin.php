@@ -15,8 +15,6 @@ $('.search-form form').submit(function(){
 	return false;
 });
 ");
-
-$currentSeason = Settings::get()->season;
 ?>
 
 <h1>Team Rosters - Manage Players & Coaches</h1>
@@ -44,9 +42,10 @@ $currentSeason = Settings::get()->season;
 					'style'=>'color: black; padding-top: 0px; border: 1px solid #8CB8E7 !important;')),
 		),
 		array(
-            'name' => 'season',
-			'filter' => CHtml::activeDropDownList($model, 'season',
-				array($currentSeason=>$currentSeason,(2+$currentSeason)=>(2+$currentSeason),(1+$currentSeason)=>(1+$currentSeason), (-1+$currentSeason)=>(-1+$currentSeason),(-2+$currentSeason)=>(-2+$currentSeason), ),
+            'header'=>'Season',
+			'value'=>'$data->season->season',
+			'filter' => CHtml::activeDropDownList($model, 'season_idseason',
+				CHtml::listData(Season::model()->findAll(), 'idseason', 'season'),
 				array(
 					'empty' => 'Select',
 					'style'=>'color: black; padding-top: 0px; border: 1px solid #8CB8E7 !important;')),
@@ -79,9 +78,9 @@ $currentSeason = Settings::get()->season;
 			'class'=>'CButtonColumn',
 			'header'=>'Actions',
 			'afterDelete'=>"function(link,success,data){ if(success) {
-				alert('Player '+$(link).parent().parent().find('td').eq(1).text()+', '+$(link).parent().parent().find('td').eq(2).text()+' deleted.')
+				alert('Player '+$(link).parent().parent().find('td').eq(4).text()+', '+$(link).parent().parent().find('td').eq(5).text()+' deleted.')
 			} }",
-			'deleteConfirmation'=>"js: 'Please Confirm you want to delete '+$(this).parent().parent().find('td').eq(1).text()+', '+$(this).parent().parent().find('td').eq(2).text()+'. Remember deleting a player loses forever their statistics'"
+			'deleteConfirmation'=>"js: 'Please Confirm you want to delete '+$(this).parent().parent().find('td').eq(4).text()+', '+$(this).parent().parent().find('td').eq(5).text()+'. Remember deleting a player loses forever their statistics'"
 		),
 	),
 	'pager'=>array(

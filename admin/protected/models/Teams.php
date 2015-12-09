@@ -48,20 +48,25 @@ class Teams extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('Division_iddivision, Name, Abv, location, season', 'required'),
+            array('Division_iddivision, Name, Abv, location, season_idseason', 'required'),
             array('uploadfile', 'file', 'types'=>'jpg, jpeg, gif, png','safe'=>true, 
 				'maxSize'=>30*1024*1024, 
 				'allowEmpty'=>true, 
 				'tooLarge'=>'{attribute} is too large to be uploaded. Maximum size is 30MB.'),
-            array('idteam, Division_iddivision, status, season', 'numerical', 'integerOnly'=>true),
+            array('idteam, Division_iddivision, status, season_idseason', 'numerical', 'integerOnly'=>true),
             array('Name', 'length', 'max'=>100),
             array('location', 'length', 'max'=>100),
             array('Abv', 'length', 'max'=>5),
             array('RGB', 'length', 'max'=>7),
             array('logo', 'length', 'max'=>150),
+            array('street', 'length', 'max'=>25),
+            array('city', 'length', 'max'=>20),
+            array('state', 'length', 'max'=>2),
+            array('zipcode', 'length', 'max'=>5),
+            array('timezone', 'length', 'max'=>3),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('idteam, Name, Division_iddivision, division, location, Abv, divisionIddivision.league_idleague, leagueIdleague_Name, division_Name, season', 'safe', 'on'=>'search'),
+            array('idteam, Name, Division_iddivision, division, location, Abv, divisionIddivision.league_idleague, leagueIdleague_Name, division_Name, season_idseason', 'safe', 'on'=>'search'),
         );
     }
 
@@ -77,6 +82,7 @@ class Teams extends CActiveRecord
             'games1' => array(self::HAS_MANY, 'Games', 'Teams_idteam_home'),
             'players' => array(self::HAS_MANY, 'Players', 'Teams_idteam'),
             'divisionIddivision' => array(self::BELONGS_TO, 'Division', 'Division_iddivision'),
+			'season' => array(self::BELONGS_TO, 'Season', 'season_idseason'),
         );
     }
 
@@ -91,7 +97,12 @@ class Teams extends CActiveRecord
             'location' => 'Stadium',
             'Division_iddivision' => 'Division',
             'uploadfile' => 'uploadfile',
-			'season' => 'Season'
+			'season' => 'Season',
+			'street' => 'Street',
+			'city' => 'City',
+			'state' => 'State',
+			'zipcode' => 'Zipcode',
+			'timezone' => 'Timezone',
         );
     }
 
@@ -112,7 +123,7 @@ class Teams extends CActiveRecord
 			$idteam = Yii::app()->session['team'];
 		
         $criteria->compare('idteam',$idteam);
-        $criteria->compare('season',$this->season);
+        $criteria->compare('season_idseason',$this->season_idseason);
         $criteria->compare('t.Name',$this->Name,true);
         $criteria->order= 't.Name ASC';
 

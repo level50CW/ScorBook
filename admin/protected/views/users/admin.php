@@ -52,7 +52,7 @@ switch (Yii::app()->session['role']) {
 		array(
 			'header'=>'League',
 			'value'=> function($data){
-				return $data->teamsIdteam? $data->teamsIdteam->divisionIddivision->leagueIdleague->Name: 'NA';
+				return League::model()->findByPk(Settings::get()->idleague)->Name; //$data->teamsIdteam? $data->teamsIdteam->divisionIddivision->leagueIdleague->Name: 'NA';
 			},
 			'filter' => CHtml::activeDropDownList($model, 'leagueIdleague_Name',
 				CHtml::listData(League::model()->findAll(), 'idleague', 'Name'),
@@ -99,6 +99,11 @@ switch (Yii::app()->session['role']) {
 			'header'=>'Actions',
 			'class'=>'CButtonColumn',
 			'template'=>$template,
+			'buttons'=>array(
+				'delete'=>array(
+					'visible'=>'$data[role]!="admins"',
+				),
+			),
 			'afterDelete'=>"function(link,success,data){ if(success) {
 				alert('User '+$(link).parent().parent().find('td').eq(2).text()+' has been successfully deleted.')
 			} }",
