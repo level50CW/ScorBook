@@ -38,9 +38,9 @@ class Settings extends CActiveRecord
         // NOTE: you may need to adjust the relation name and the related
         // class name for the relations automatically generated below.
         return array(
-            'useriduser' => array(self::HAS_ONE, 'Users', 'iduser'),
-            'leagueidleague' => array(self::HAS_ONE, 'Leadue', 'idleague'),
-            'seasonidseason' => array(self::HAS_ONE, 'Season', 'idseason'),
+            'useriduser' => array(self::BELONGS_TO, 'Users', 'iduser'),
+            'leagueidleague' => array(self::BELONGS_TO, 'Leadue', 'idleague'),
+            'seasonidseason' => array(self::BELONGS_TO, 'Season', 'idseason'),
         );
     }
 

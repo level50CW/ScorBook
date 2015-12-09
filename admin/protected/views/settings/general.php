@@ -40,7 +40,7 @@ $listSize = array('100'=>100,'75'=>75,'50'=>50,'25'=>25,'10'=>10);
 			<?php echo $form->errorSummary($model); ?>
 			<div class="blacktitle">GENERAL SETTINGS</div>
 			<div class="rowdiv">
-				<div class="green" style="padding-top:30px;" >League</div>
+				<div class="green" style="padding-top:30px;" >League Name</div>
 				<div class="gray" style="padding-top:30px;" >
 					<?php echo $form->textField($model,'leagueName',array('style' => 'width:206px !important;'));?>
 					<?php echo $form->error($model,'leagueName'); ?>

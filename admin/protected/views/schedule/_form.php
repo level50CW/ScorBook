@@ -80,6 +80,24 @@ if (Yii::app()->session['role'] == 'admins' || Yii::app()->session['role'] == 'l
 
 }
 
+function createSeasonPeriods($model){
+	$seasons = Season::model()->findAll();
+	
+	$res = '{';
+	for($i=0;$i<count($seasons);$i++){
+		$currentSeason = $seasons[$i];
+		$id = $currentSeason->idseason;
+		$dateStart = $currentSeason->startdate.' 00:00';
+		$dateEnd = $currentSeason->enddate.' 00:00';
+		$dateUSStart = $model->dateToAmericanFormat($dateStart);
+		$dateUSEnd = $model->dateToAmericanFormat($dateEnd);
+		$season = $currentSeason->season;
+		$res.="'$id':{'season':'$season','start':'$dateStart', 'end':'$dateEnd','startUs':'$dateUSStart', 'endUs':'$dateUSEnd'},";
+	}
+	$res.='};';
+	echo $res;
+}
+
 
 ?>
 
@@ -142,9 +160,6 @@ if (Yii::app()->session['role'] == 'admins' || Yii::app()->session['role'] == 'l
                     'showOn'=>'focus',
                     'timeFormat'=>'hh:mm',
                     'dateFormat' => 'mm-dd-yy',
-					'value'=>'05-01-'.Settings::get()->seasonidseason->season.' 00:00',
-					'minDate'=>'05-01-'.Settings::get()->seasonidseason->season,
-					'maxDate'=>'09-30-'.Settings::get()->seasonidseason->season,
                 ),
             ));
         }
@@ -312,29 +327,35 @@ var myVar = setInterval(function(){
 <script>
 	(function(){
 		var timer = 0;
+		var seasons = <?php echo createSeasonPeriods($model);?>;
 		
 		function defaultDate(){
-			return "05-01-"+$("#Games_season").text()+" 00:00";
+			return seasons[+$("#Games_season_idseason").val()].startUs;
 		}
 		
-		$(".timepicker").change(function(){
-			if (!timer){
-				var $self = $(this);
-				timer = setTimeout(function(){
-					var date = new Date($self.val());
+		function updateRange(){
+			jQuery('#yw0').datetimepicker('option','minDate', new Date(seasons[+$("#Games_season_idseason").val()].start));
+			jQuery('#yw0').datetimepicker('option','maxDate', new Date(seasons[+$("#Games_season_idseason").val()].end));
+		}
+		
+		// $(".timepicker").change(function(){
+			// if (!timer){
+				// var $self = $(this);
+				// timer = setTimeout(function(){
+					// var date = new Date($self.val());
 					
-					if (+$("#Games_season").val() != date.getFullYear() || date < new Date(date.getFullYear(),4,1) || date > new Date(date.getFullYear(),8,30)){
-						alert("Season of the selected date does not coincide with the current season.");
-						$self.val(defaultDate());
-					} else {
-						var monthNames = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"];
-						$("#header-date").text(monthNames[date.getMonth()]+" "+date.getDate());
-					}
+					// if (+$("#Games_season_idseason").val() != date.getFullYear() || date < new Date(date.getFullYear(),4,1) || date > new Date(date.getFullYear(),8,30)){
+						// alert("Season of the selected date does not coincide with the current season.");
+						// $self.val(defaultDate());
+					// } else {
+						// var monthNames = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"];
+						// $("#header-date").text(monthNames[date.getMonth()]+" "+date.getDate());
+					// }
 					
-					timer = 0;
-				},10);
-			}
-		});
+					// timer = 0;
+				// },10);
+			// }
+		// });
 		
 		$("#Games_Teams_idteam_home").change(function(){
 			var text = $("option:selected", this).text();
@@ -346,13 +367,12 @@ var myVar = setInterval(function(){
 			$("#header-teamNameVisiting").text(text);
 		});
 		
-		$("#Games_season").change(function(){
+		$("#Games_season_idseason").change(function(){
+			updateRange();
 			var date = new Date($(".timepicker").val());
 			if (+$(this).val() != date.getFullYear()){
 				$(".timepicker").val(defaultDate());
 			}
-			jQuery('#yw0').datetimepicker('option','minDate', new Date(+$(this).val(),4,1));
-			jQuery('#yw0').datetimepicker('option','maxDate', new Date(+$(this).val(),8,30));
 		});
 		
 		$("#Games_Teams_idteam_home, #Games_Teams_idteam_visiting").change(function(){
@@ -361,5 +381,9 @@ var myVar = setInterval(function(){
 				$("#Games_Teams_idteam_visiting").val(null);
 			}
 		});
+		
+		setTimeout(function(){
+			$("#Games_season_idseason").change();
+		},50);
 	})();
 </script>
