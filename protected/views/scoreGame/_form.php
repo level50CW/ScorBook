@@ -86,7 +86,10 @@ if (Yii::app()->session['role'] == 'admins') {
                 'name' => 'date', 
                 'options' => array(
                     'showOn'=>'focus',
-                    
+                    'timeFormat'=>'hh:mm',
+                    'dateFormat' => 'mm-dd-yy',
+					'minDate'=>$model->dateToAmericanFormat($model->season->startdate),
+					'maxDate'=>$model->dateToAmericanFormat($model->season->enddate),
                 ),
             ));
         }
@@ -99,8 +102,9 @@ if (Yii::app()->session['role'] == 'admins') {
 <div class="rowdiv">
     <div class="green"> Season <span class="required">*</span></div>
     <div class="gray">
-        <?php echo $form->textField($model, 'season', array_merge($disabledArray,array('size' => 60, 'maxlength' => 200,"readonly"=>"readonly",))); ?>
-        <?php echo $form->error($model, 'season'); ?>
+		<input type="text" value="<?php echo $model->season->season; ?>" size="60" maxlength="200" disabled="disabled"/>
+        <?php //echo $form->textField($model, 'season', array_merge($disabledArray,array('size' => 60, 'maxlength' => 200,"readonly"=>"readonly",))); ?>
+        <?php //echo $form->error($model, 'season'); ?>
     </div>
 </div>
 

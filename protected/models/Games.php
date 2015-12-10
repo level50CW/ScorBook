@@ -58,7 +58,7 @@ class Games extends CActiveRecord
         return array(
             
 
-            array('Teams_idteam_visiting, Teams_idteam_home, Division_iddivision_visiting, Division_iddivision_home,season', 'required'),
+            array('Teams_idteam_visiting, Teams_idteam_home, Division_iddivision_visiting, Division_iddivision_home,season_idseason', 'required'),
             array('idgame, attendance, Teams_idteam_visiting, Teams_idteam_home, Division_iddivision_visiting, Division_iddivision_home, Users_iduser, status, regulation, last_inning, temperature, game_type', 'numerical', 'integerOnly'=>true),
             array('location, comment, Plateump, Fieldump1, Fieldump2, Fieldump3, Fieldump4, Fieldump5 ', 'length', 'max'=>200),
             array('weather', 'length', 'max'=>150),
@@ -68,8 +68,8 @@ class Games extends CActiveRecord
             array('date, end_date', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('idgame, location, date, comment, attendance, weather, temperature, Teams_idteam_visiting, Teams_idteam_home, Division_iddivision_visiting, Division_iddivision_home, season, divisionIddivisionHome.league_idleague, leagueIdleague_Name, teamsIdteamHome_Name, teamsIdteamVisiting_Name, game_type', 'safe', 'on'=>'search'),
-            array('idgame, location, date, comment, attendance, weather, temperature, Teams_idteam_visiting, Teams_idteam_home, Division_iddivision_visiting, Division_iddivision_home, season, game_type', 'safe', 'on'=>'searchTodayGames'),
+            array('idgame, location, date, comment, attendance, weather, temperature, Teams_idteam_visiting, Teams_idteam_home, Division_iddivision_visiting, Division_iddivision_home, season_idseason, divisionIddivisionHome.league_idleague, leagueIdleague_Name, teamsIdteamHome_Name, teamsIdteamVisiting_Name, game_type', 'safe', 'on'=>'search'),
+            array('idgame, location, date, comment, attendance, weather, temperature, Teams_idteam_visiting, Teams_idteam_home, Division_iddivision_visiting, Division_iddivision_home, season_idseason, game_type', 'safe', 'on'=>'searchTodayGames'),
         );
     }
 
@@ -88,6 +88,7 @@ class Games extends CActiveRecord
             'divisionIddivisionHome' => array(self::BELONGS_TO, 'Division', 'Division_iddivision_home'),//,'on'=>'divisionIddivisionVisiting.type="division"'),
             'usersiduser' => array(self::BELONGS_TO, 'Users', 'Users_iduser'),
             'lineups' => array(self::HAS_MANY, 'Lineup', 'Games_idgame'),
+            'season' => array(self::BELONGS_TO, 'Season', 'season_idseason'),
         );
     }
 
@@ -134,7 +135,7 @@ class Games extends CActiveRecord
 
             $criteria->compare('idgame',$this->idgame);
             $criteria->compare('location',$this->location,true);
-            $criteria->compare('season',$this->season,true);
+            $criteria->compare('t.season_idseason',$this->season_idseason);
             $criteria->compare('date',$this->dateFromAmericanFormat($this->date, false),true);
             $criteria->compare('comment',$this->comment,true);
             $criteria->compare('attendance',$this->attendance);
@@ -159,7 +160,7 @@ class Games extends CActiveRecord
 
             $criteria->compare('idgame',$this->idgame);
             $criteria->compare('location',$this->location,true);
-            $criteria->compare('season',$this->season,true); 
+            $criteria->compare('t.season_idseason',$this->season_idseason); 
             $criteria->compare('date',$this->dateFromAmericanFormat($this->date, false),true);
             $criteria->compare('comment',$this->comment,true);
             $criteria->compare('attendance',$this->attendance);
@@ -176,7 +177,7 @@ class Games extends CActiveRecord
             $teamid = Yii::app()->session['team'];
             $criteria->compare('idgame',$this->idgame);
             $criteria->compare('location',$this->location,true);
-            $criteria->compare('season',$this->season,true); 
+            $criteria->compare('t.season_idseason',$this->season_idseason); 
             $criteria->compare('date',date("Y-m-d"),true);
             $criteria->compare('comment',$this->comment,true);
             $criteria->compare('attendance',$this->attendance);

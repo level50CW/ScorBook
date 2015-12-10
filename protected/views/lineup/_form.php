@@ -263,10 +263,11 @@ $(document).ready(function(){
     
     <div class='redbar' style='height:37px'>
         <div class="centerbutton1" style='text-align: center'>
-            <a onClick="submitLink('atbat')" style="
+		<!--submitLink('atbat')-->
+            <a onClick="" style="
 	height: 27px;
     font-weight: 700;
-    color: #F7F3F3;
+    color: #6B6060;
     display: inline-block;
     background: #280001;
     background: -moz-linear-gradient(top, #280001 0%, #670801 21%);
@@ -274,7 +275,7 @@ $(document).ready(function(){
     background: linear-gradient(to bottom, #210001 0%,#670801 23%);
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#280001', endColorstr='#670801',GradientType=0 );
     padding: 10px 10px 0px 10px;
-	cursor: pointer;">
+	cursor: default;">
 				AT BAT SCREEN
             </a>
         </div>  

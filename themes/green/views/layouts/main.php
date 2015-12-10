@@ -168,7 +168,7 @@ function finalizeGame(){
     <div id="mainmenu">
         <?php
         if(!Yii::app()->user->isGuest){
-          echo "Welcome " .  Yii::app()->session['firstname'] . " " . Yii::app()->session['lastname'].'<br/>';
+          echo "Welcome " .  Yii::app()->session['firstname'] . " " . Yii::app()->session['lastname'].', '.CHtml::link('Logout',array('site/logout')).'<br/>';
           echo "Last Login: " . Yii::app()->session['lastLoginTime'];
 		}
         ?>
