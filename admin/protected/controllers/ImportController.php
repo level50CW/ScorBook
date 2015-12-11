@@ -153,6 +153,13 @@ class ImportController extends Controller
 			return false;
 		}
 		
+		$classes = array('Freshman'=>0, 'Sophomore'=>1, 'Junior'=>2, 'Senior'=>3, 'Grad School'=>4);
+		if (!isset($classes[$class])){
+			$this->parseMessage = "Invalid class $class";
+			return false;
+		}
+		
+		
 		$model = new Players;
 		
 		$model->Teams_idteam = $result[0]['idteam'];
@@ -166,7 +173,7 @@ class ImportController extends Controller
 		$model->inches = +$heightInches;
 		$model->Height = (+$heightFeet).'-'.(+$heightInches);
 		$model->Weight = +$weight;
-		$model->Class = $class;
+		$model->Class = +$classes[$class];
 		$model->College = '-';
 		$model->status = 1;
 		$model->season_idseason = +$seasonFromDb[0]['idseason'];
