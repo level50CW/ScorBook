@@ -88,11 +88,7 @@ $this->widget('zii.widgets.grid.CGridView', array(
 		array(
 			'header'=>'League',
 			'value'=>'$data->divisionIddivisionHome->leagueIdleague->Name',
-			'filter' => CHtml::activeDropDownList($model, 'leagueIdleague_Name',
-				CHtml::listData(League::model()->findAll(), 'idleague', 'Name'),
-				array(
-					'empty' => 'Select',
-					'style'=>'color: black; padding-top: 0px; border: 1px solid #8CB8E7 !important;')),
+			'filter' => '',
 		),
 		array(
 			'header'=>'Season',
