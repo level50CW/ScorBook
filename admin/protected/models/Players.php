@@ -53,8 +53,9 @@ class Players extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('Teams_idteam, Firstname, Lastname,status,Weight,Height, Number, Position, Bats, Throws, foot, inches, College, season_idseason', 'required'),
-            array('idplayer, Number, Teams_idteam, season_idseason', 'numerical', 'integerOnly' => true),
+            array('Teams_idteam, Firstname, Lastname,status,Height, Number, Position, Bats, Throws, foot, inches, season_idseason', 'required'),
+			array('Weight, College', 'checkPosition'),            
+            array('idplayer, Number, Teams_idteam, season_idseason, Class', 'numerical', 'integerOnly' => true),
             array('uploadfile', 'file', 'types' => 'jpg, jpeg, gif, png', 'maxSize' => 30 * 1024 * 1024, 'allowEmpty' => true, 'tooLarge' => '{attribute} is too large to be uploaded. Maximum size is 30MB.'),
             array('Firstname, Lastname', 'length', 'max' => 50),
             array('Bats, Throws', 'length', 'max' => 2),
@@ -62,7 +63,7 @@ class Players extends CActiveRecord
             array('Weight','length', 'max' => 5),
             array('Position', 'length', 'max' => 2),
             array('Birthdate', 'safe'),
-            array('Hometown, State, College, Class', 'length', 'max' => 50),
+            array('Hometown, State, College', 'length', 'max' => 50),
             array('Biography', 'length', 'max' => 500),
             array('status', 'length', 'max' => 2),
             // The following rule is used by search().
@@ -70,6 +71,16 @@ class Players extends CActiveRecord
             array('idplayer, Firstname, Lastname, Number, Teams_idteam, Position, Bats, Throws, teamname, foot, inches, leagueIdleague_Name, season_idseason, division_Name', 'safe', 'on' => 'search'),
         );
     }
+	
+	public function checkPosition($value) {        
+		if ($this->Position != 'MG' &&
+				$this->Position != 'AC' &&
+				$this->Position != 'BC' &&
+				$this->Position != 'PC') {
+			if (empty($this->$value))
+				$this->addError($value, "$value term cannot be blank.");
+		}
+	}
 
     /**
      * @return array relational rules.

@@ -74,14 +74,15 @@ return array(
 
 		'db'=>
 		#---this-is-required-comment-for-system-settings---
-		array(
-			'connectionString' => 'mysql:host=localhost;dbname=northwoods',
-			'emulatePrepare' => true,
-			'username' => 'northwoods',
-			'password' => '%north2014',
-			'charset' => 'utf8',
-		),
-		#---this-is-required-comment-for-system-settings---
+array (
+  'connectionString' => 'mysql:host=localhost;dbname=northwoods',
+  'emulatePrepare' => true,
+  'username' => 'root',
+  'password' => '',
+  'charset' => 'utf8',
+),
+#---this-is-required-comment-for-system-settings---
+
        /* 'db'=>array(
             'connectionString' => 'mysql:host=localhost;dbname=827572_nwapp',
             'emulatePrepare' => true,

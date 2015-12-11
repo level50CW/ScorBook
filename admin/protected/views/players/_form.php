@@ -153,7 +153,7 @@ function createLeagueSeasonDivisionTeamDependency()
     <?
     $positions = array('P' => 'P', 'C' => 'C', '1B' => '1B', '2B' => '2B', '3B' => '3B', 'SS' => 'SS',
         'LF' => 'LF', 'CF' => 'CF', 'RF' => 'RF', 'EF' => 'EF', 'DH' => 'DH', 'PH' => 'PH',
-        'PR' => 'PR', 'CR' => 'CR', 'EH' => 'EH', 'X' => 'X', 'SF' => 'staff');
+        'PR' => 'PR', 'CR' => 'CR', 'MG' => 'Manager', 'AC' => 'Asst. Coach', 'BC' => 'Batting Coach', 'PC' => 'Pitching Coach');
     ?>
 
     <div class="rowdiv">
@@ -174,6 +174,7 @@ function createLeagueSeasonDivisionTeamDependency()
         <div class="gray">
             <?php echo $form->dropDownList($model, 'Bats', array('R' => 'Right', 'S' => 'Switch', 'L' => 'Left'), array_merge($disabledArray,array('style' => 'width:216px !important; text-align:center')));?>
             <?php echo $form->error($model, 'Bats'); ?>
+			<input type="hidden" name="Players[Bats]" id="Players_Bats_h" disabled="disabled" value="NA"/>
         </div>
     </div>
 
@@ -182,6 +183,7 @@ function createLeagueSeasonDivisionTeamDependency()
         <div class="gray">
             <?php echo $form->dropDownList($model, 'Throws', array('R' => 'Right', 'L' => 'Left'), array_merge($disabledArray,array('style' => 'width:216px !important; text-align:center')));?>
             <?php echo $form->error($model, 'Throws'); ?>
+			<input type="hidden" name="Players[Throws]" id="Players_Throws_h" disabled="disabled" value="NA"/>
         </div>
     </div>
 
@@ -278,17 +280,10 @@ function createLeagueSeasonDivisionTeamDependency()
     <div class="rowdiv">
         <div class="green"> Class</div>
         <div class="gray">
-            <?php
-                $first = +date('Y')-5;
-                $last = +date('Y')+5;
-                $years = array();
-                for($i = $last; $i >=$first ; $i--){
-                    $years[$i] = $i;
-                }
-            ?>
             <?php 
-                $model->Class = $model->Class ? $model->Class : date('Y');
-                echo $form->dropDownList($model, 'Class', $years, array_merge($disabledArray,array('style' => 'width:216px !important; text-align:center')));?>
+                echo $form->dropDownList($model, 'Class', 
+					array(0=>'Freshman', 1=>'Sophomore', 2=>'Junior', 3=>'Senior', 4=>'Grad School'), 
+					array_merge($disabledArray,array('style' => 'width:216px !important; text-align:center')));?>
             <?php //echo $form->textField($model, 'Class', $disabledArray); ?>
             <?php echo $form->error($model, 'Class'); ?>
         </div>
@@ -499,7 +494,27 @@ function createLeagueSeasonDivisionTeamDependency()
 		var id = $("option:selected", this).val();
 		$("#Players_Teams_idteam_second").val(id || "");
 	});
-		
+	
+	$("#Players_Position").change(function(){
+		if ($(this).val() == 'MG' ||
+				$(this).val() == 'AC' ||
+				$(this).val() == 'BC' ||
+				$(this).val() == 'PC'){
+			$("#Players_Bats").append($("<option>").val("NA").text("NA")).val("NA").prop("disabled",true);
+			$("#Players_Throws").append($("<option>").val("NA").text("NA")).val("NA").prop("disabled",true);
+			$("#Players_Bats_h").prop("disabled",false);
+			$("#Players_Throws_h").prop("disabled",false);
+		} else {
+			$("option[value=NA]","#Players_Bats").remove();
+			$("option[value=NA]","#Players_Throws").remove();
+			$("#Players_Bats").prop("disabled",false).change();
+			$("#Players_Throws").prop("disabled",false).change();
+			$("#Players_Bats_h").prop("disabled",true);
+			$("#Players_Throws_h").prop("disabled",true);
+		}
+	});
+	
+	$("#Players_Position").change();	
 	$leagueSelect.change();
 	
 	var defaultLeague=<?php echo Settings::get()->idleague;?>;

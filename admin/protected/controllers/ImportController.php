@@ -6,22 +6,27 @@ class ImportController extends Controller
 	
 	private $parseMessage = '';
 	
-	private function scheduleProcessRow($row)
+	private function scheduleProcessRow($row, $rowid)
 	{
-		if (count($row) != 9){
+		if ($rowid == 0)
+			return true;
+		
+		if (count($row) != 11){
 			$this->parseMessage = 'Invalid columns number';
-			return $rows;
+			return false;
 		}
 		
-		$leagueName = $row[0].' League';
+		$leagueName = $row[0];
 		$season = $row[1];
 		$date = $row[2];
 		$time = $row[3];
 		$timeStandart = $row[4];
-		$homeDivisionName = $row[5].' Division';
-		$homeTeamName = $row[6];
-		$visitorDivisionName = $row[7].' Division';
-		$visitorTeamName = $row[8];
+		$homeDivisionName = ucfirst(strtolower($row[5])).' Division';
+		$homeTeamAbv = $row[6];
+		$homeTeamName = $row[7];
+		$visitorDivisionName = ucfirst(strtolower($row[8])).' Division';
+		$visitorTeamAbv = $row[9];
+		$visitorTeamName = $row[10];
 		
 		
 		$ldtCommand = Yii::app()->db->createCommand('SELECT DISTINCT d.`league_idleague`, l.`Name` AS `LN`, d.`iddivision`, d.`Name` AS `DN`, t.`idteam`, t.`Name` AS TN, t.`location`
@@ -71,7 +76,7 @@ class ImportController extends Controller
 		
 		$dateStart = DateTime::createFromFormat('Y-m-d', $seasonFromDb[0]['startdate']);
 		$dateEnd = DateTime::createFromFormat('Y-m-d', $seasonFromDb[0]['enddate']);
-		if ($dateTime<$dateStart || $dateStart>$dateEnd)
+		if ($dateObj<$dateStart || $dateObj>$dateEnd)
 		{
 			$this->parseMessage = "Time or date ($date $time) misses the $season season";
 			return false;
@@ -94,7 +99,7 @@ class ImportController extends Controller
 		return true;
 	}
 	
-	private function rostersProcessRow($row)
+	private function rostersProcessRow($row, $rowid)
 	{
 		if (count($row) != 14){
 			$this->parseMessage = 'Invalid columns number';
@@ -190,7 +195,7 @@ class ImportController extends Controller
 		
 		while (($row = fgetcsv($handle, 1000, ",")) !== FALSE) {
 		
-			if (!$this->$mode($row))
+			if (!$this->$mode($row,$rows))
 			{
 				return $rows;
 			}

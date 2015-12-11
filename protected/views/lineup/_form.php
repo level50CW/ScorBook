@@ -53,7 +53,7 @@
 <?
 $positions = array('0'=>'*', '1' => 'P', '2' => 'C', '3' => '1B', '4' => '2B', '5' => '3B', '6' => 'SS',
                   '7' => 'LF', '8' => 'CF', '9' => 'RF', '10' => 'EF', '11' => 'DH', '12' => 'PH',
-                  '13' => 'PR', '14' => 'CR', '15' => 'EH', '16' => 'X');
+                  '13' => 'PR', '14' => 'CR');
 ?>
 <script type="text/javascript">
 var positions = <?php echo json_encode($positions); ?>;
