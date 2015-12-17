@@ -77,22 +77,7 @@ if (Yii::app()->session['role'] == 'admins') {
 
 
         <?php
-        if( isset($disabled) && $disabled ){
-            echo $form->textField($model, 'date', array_merge($disabledArray,array('size' => 60, 'maxlength' => 200)));
-        }
-        else{
-            $this->widget('application.extensions.timepicker.timepicker', array(
-                'model' => $model,
-                'name' => 'date', 
-                'options' => array(
-                    'showOn'=>'focus',
-                    'timeFormat'=>'hh:mm',
-                    'dateFormat' => 'mm-dd-yy',
-					'minDate'=>$model->dateToAmericanFormat($model->season->startdate),
-					'maxDate'=>$model->dateToAmericanFormat($model->season->enddate),
-                ),
-            ));
-        }
+			echo $form->textField($model, 'date', array('size' => 60, 'maxlength' => 200, 'readonly'=>'readonly'));
         ?>
 
         <?php echo $form->error($model, 'date'); ?>
@@ -212,14 +197,14 @@ echo $form->hiddenField($model, 'Users_iduser', array('value' => Yii::app()->use
 
 <div class="blacktitle">CONDITIONS</div>
 <div class="rowdiv">
-    <div class="green">Comment <span class="required">*</span></div>
+    <div class="green">Comment</div>
     <div class="gray">
         <?php echo $form->textField($model, 'comment', array_merge($disabledArray,array('size' => 60, 'maxlength' => 200))); ?>
         <?php echo $form->error($model, 'comment'); ?>
     </div>
 </div>
 <div class="rowdiv">
-    <div class="green">Attendance <span class="required">*</span></div>
+    <div class="green">Attendance</div>
     <div class="gray">
         <?php echo $form->textField($model, 'attendance',$disabledArray); ?>
         <?php echo $form->error($model, 'attendance'); ?>
@@ -354,8 +339,8 @@ function scoreGame_form_validate(){
 		});
 	}
 	
-	if (isEmpty("#Games_comment", "#Games_Plateump", "#Games_Fieldump1", "#Games_Fieldump2", "#Games_Fieldump3") ||
-		!isNumber("#Games_temperature","#Games_attendance")){
+	if (isEmpty("#Games_Plateump", "#Games_Fieldump1", "#Games_Fieldump2", "#Games_Fieldump3") ||
+		!isNumber("#Games_temperature")){
 		alert("Please, fill all required fields.");
 		return false;
 	}else{

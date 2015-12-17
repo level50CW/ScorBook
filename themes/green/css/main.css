@@ -855,9 +855,9 @@ input{
 	background-color: #680102;
 	color: #ffffff;
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#480102', endColorstr='#680102'); /* for IE */
-	background: -webkit-gradient(linear, left top, left bottom, from(#480102), to(#680102)); /* for webkit browsers */
-	background: -moz-linear-gradient(top, #480102, #680102); /* for firefox 3.6+ */
-
+    background: -moz-linear-gradient(top, #280001 0%, #670801 35%);
+    background: -webkit-linear-gradient(top, #280001 0%,#670801 35%);
+    background: linear-gradient(to bottom, #210001 0%,#670801 35%);
 }
 
 .scoreboardplayer{

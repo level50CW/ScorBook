@@ -23,18 +23,21 @@ $role = Yii::app()->session['role'];
 switch ($role) {
     case 'admins':
         $buttons = array(
+			'header'=> 'Actions',
             'class'=> 'CButtonColumn',
             'template'=> '{update}{delete}',
         );
         break;
     case 'roster':
         $buttons = array(
+			'header'=> 'Actions',
             'class'=> 'CButtonColumn',
             'template'=> '{update}{delete}',
         );
         break;
     case 'scorer':
         $buttons = array(
+			'header'=> 'Actions',
             'class'=> 'CButtonColumn',
             'template'=> '{update}{delete}',
             'filterHtmlOptions' => array('style' => 'display:none'),
@@ -44,6 +47,7 @@ switch ($role) {
         break;
     default:
          $buttons = array(
+			'header'=> 'Actions',
             'class'=> 'CButtonColumn',
             'template'=> '{update}{delete}',
             'filterHtmlOptions' => array('style' => 'display:none'),
