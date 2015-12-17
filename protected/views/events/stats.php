@@ -1,5 +1,5 @@
 <?php 
-	$title = 'BOX SCORE - ' . Yii::app()->user->getState('teamhome') . ' VS ' . Yii::app()->user->getState('teamvisiting');
+	$title = 'STATISTICS - ' . Yii::app()->user->getState('teamhome') . ' VS ' . Yii::app()->user->getState('teamvisiting');
 ?>
 <h1> <?php echo $title;?> </h1>
 

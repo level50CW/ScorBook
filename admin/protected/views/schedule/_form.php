@@ -334,8 +334,15 @@ var myVar = setInterval(function(){
 		}
 		
 		function updateRange(){
-			jQuery('#yw0').datetimepicker('option','minDate', new Date(seasons[+$("#Games_season_idseason").val()].start));
-			jQuery('#yw0').datetimepicker('option','maxDate', new Date(seasons[+$("#Games_season_idseason").val()].end));
+			var current = new Date($(".timepicker").val());
+			var start =  new Date(seasons[+$("#Games_season_idseason").val()].start);
+			var end =  new Date(seasons[+$("#Games_season_idseason").val()].end);
+			
+			jQuery('#yw0').datetimepicker('option','minDate', start);
+			jQuery('#yw0').datetimepicker('option','maxDate', end);
+			
+			if (start<=current && current<=end)
+				jQuery('#yw0').datetimepicker('setDate', current);
 		}
 		
 		// $(".timepicker").change(function(){
@@ -370,7 +377,7 @@ var myVar = setInterval(function(){
 		$("#Games_season_idseason").change(function(){
 			updateRange();
 			var date = new Date($(".timepicker").val());
-			if (+$(this).val() != date.getFullYear()){
+			if (+$("option:selected",this).text() != date.getFullYear()){
 				$(".timepicker").val(defaultDate());
 			}
 		});

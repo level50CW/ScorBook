@@ -398,7 +398,7 @@ function finalizeGame(){
 
                 <td>
                     <?php //echo CHtml::Button('BOX SCORE', array('disabled'=>'true','onClick'=>'submitLink("gameinfo")')); ?>
-                    <?php echo CHtml::image('images/button_bottom_boxscore.png','',array('onClick'=>'submitLink("boxscore")'));  ?>
+                    <?php echo CHtml::image('images/button_bottom_statistics.png','',array('onClick'=>'submitLink("boxscore")'));  ?>
                 </td>
 				
                 <td>
