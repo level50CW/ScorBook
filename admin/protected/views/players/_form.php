@@ -9,6 +9,8 @@ if( isset($disabled) && $disabled ){
         "disabled"=>"disabled",
         "readonly"=>"readonly",
     );
+} else {
+	$disabled = false;
 }
 
 function createLeagueSeasonDivisionTeamDependency()
@@ -108,7 +110,7 @@ function createLeagueSeasonDivisionTeamDependency()
         <div class="green"> Team<span class="required">*</span></div>
         <div class="gray">
 
-            <?
+            <?php 
             // $team_selected = Yii::app()->session['team'];
 
             // if (Yii::app()->session['role'] == 'admins') {
@@ -150,7 +152,7 @@ function createLeagueSeasonDivisionTeamDependency()
         </div>
     </div>
 
-    <?
+    <?php 
     $positions = array('P' => 'P', 'C' => 'C', '1B' => '1B', '2B' => '2B', '3B' => '3B', 'SS' => 'SS',
         'LF' => 'LF', 'CF' => 'CF', 'RF' => 'RF', 'EF' => 'EF', 'DH' => 'DH', 'PH' => 'PH',
         'PR' => 'PR', 'CR' => 'CR', 'MG' => 'Manager', 'AC' => 'Asst. Coach', 'BC' => 'Batting Coach', 'PC' => 'Pitching Coach');
@@ -341,7 +343,7 @@ function createLeagueSeasonDivisionTeamDependency()
     </div>
 
     <div class='playerphoto' >
-        <? if ($model->Photo) { ?>
+        <?php if ($model->Photo) { ?>
             <?php $this->beginWidget('application.extensions.thumbnailer.Thumbnailer', array(
                     'thumbsDir' => 'images/thumbs',
                     'thumbWidth' => 125,
@@ -350,7 +352,7 @@ function createLeagueSeasonDivisionTeamDependency()
             ); ?>
             <img src="images/players/<?php echo $model->thumb ?>"/>
             <?php $this->endWidget(); ?>
-        <?
+        <?php 
         }
         ?>
     </div>

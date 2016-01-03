@@ -110,7 +110,10 @@ class Users extends CActiveRecord
 			$criteria->compare('Lastname',$this->Lastname,true);
 			$criteria->compare('Email',$this->Email,true);
 			$criteria->compare('Password',$this->Password,true);
-			$criteria->compare('role',$roles[$this->role],true);
+			
+			if (isset($roles[$this->role]))
+				$criteria->compare('role',$roles[$this->role],true);
+			
 			$criteria->order= 'Lastname ASC, Firstname ASC';
 			
 			$criteria->with = array('teamsIdteam.divisionIddivision');

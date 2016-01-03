@@ -118,7 +118,7 @@ class TeamsController extends Controller
 		{
 
 			$model->attributes=$_POST['Teams'];
-			$model->uploadfile = $_POST['Teams']['uploadfile'];
+			$model->uploadfile = isset($_POST['Teams']['uploadfile']) ? $_POST['Teams']['uploadfile'] : null;
 			$model->RGB = $_POST['RGB'];
 			$model->logo = '';
 

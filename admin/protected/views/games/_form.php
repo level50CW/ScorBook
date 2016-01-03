@@ -129,14 +129,14 @@ if (Yii::app()->session['role'] == 'admins' || Yii::app()->session['role'] == 'l
     <div class="brown"> Team</div>
     <div class="gray">
 
-        <? echo Yii::trace(CVarDumper::dumpAsString($model->Teams_idteam_visiting), 'varVisi'); ?>
+        <?php echo Yii::trace(CVarDumper::dumpAsString($model->Teams_idteam_visiting), 'varVisi'); ?>
         <?php echo $form->dropDownList($model, 'Teams_idteam_visiting', $model->Teams_idteam_visiting ? $teamsList : array(), array_merge($disabledArray,array('empty' => 'Select the Team'))); ?>
         <?php echo $form->error($model, 'Teams_idteam_visiting'); ?>
     </div>
 </div>
 
 
-<? //USERS ID SCOREKEEPER
+<?php //USERS ID SCOREKEEPER
 echo $form->hiddenField($model, 'Users_iduser', array('value' => Yii::app()->user->id));
 ?>
 

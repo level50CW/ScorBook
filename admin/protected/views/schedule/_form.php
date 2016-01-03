@@ -40,7 +40,7 @@ if( isset($disabled) && $disabled ){
     <?php echo $form->error($model, 'idgame'); ?>
 </div>
 
-<?
+<?php
 //Seleccionamos la liga del equipo que tiene el usuario si no es admin
 
 $team_selected = Yii::app()->session['team'];
@@ -201,7 +201,7 @@ function createSeasonPeriods($model){
 <div class="rowdiv">
     <div class="green"> Division <span class="required">*</span></div>
     <div class="gray">
-        <?
+        <?php 
         echo $form->dropDownList($model, 'Division_iddivision_home', $divisionsListHome,
             array_merge($disabledArray,
             array(
@@ -252,7 +252,7 @@ function createSeasonPeriods($model){
 <div class="rowdiv">
     <div class="green"> Division <span class="required">*</span></div>
     <div class="gray">
-        <?
+        <?php 
         echo $form->dropDownList($model, 'Division_iddivision_visiting', $divisionsList,
             array_merge($disabledArray,
             array(
@@ -274,18 +274,18 @@ function createSeasonPeriods($model){
 <div class="rowdiv">
     <div class="brown"> Team <span class="required">*</span></div>
     <div class="gray">
-        <? echo Yii::trace(CVarDumper::dumpAsString($model->Teams_idteam_visiting), 'varVisi'); ?>
+        <?php echo Yii::trace(CVarDumper::dumpAsString($model->Teams_idteam_visiting), 'varVisi'); ?>
         <?php echo $form->dropDownList($model, 'Teams_idteam_visiting', $model->Teams_idteam_visiting ? $teamsList : array(), array_merge($disabledArray,array('empty' => 'Select Team'))); ?>
 		<?php echo $form->error($model, 'Teams_idteam_visiting'); ?>
 	</div>
 </div>
 
 
-<? //USERS ID SCOREKEEPER
+<?php //USERS ID SCOREKEEPER
 echo $form->hiddenField($model, 'Users_iduser', array('value' => Yii::app()->user->id));
 ?>
 
-<?
+<?php 
 echo CHtml::hiddenField('link', '', array('id' => 'link'));;
 ?>
 

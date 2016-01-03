@@ -109,7 +109,7 @@ class UsersController extends Controller
             
             
             if($model->save()){
-				if($_POST['next']){	
+				if(isset($_POST['next'])){	
 					$this->redirect(array('update','id'=>$model->next()->iduser));
 				} else{
 					$this->redirect(array('view','id'=>$model->iduser));

@@ -69,9 +69,7 @@ class PrincipalController extends Controller
         // if(isset($_GET['Division']))
             // $model->attributes=$_GET['Division'];
 
-        $this->render('admin',array(
-            'model'=>$model,
-        ));
+        $this->render('admin');
     }
 
     /**

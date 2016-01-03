@@ -9,6 +9,8 @@ if( isset($disabled) && $disabled ){
         "disabled"=>"disabled",
         "readonly"=>"readonly",
     );
+} else {
+	$disabled = false;
 }
 
 function createLeagueSeasonDivisionDependency()
@@ -258,7 +260,7 @@ function createLeagueSeasonDivisionDependency()
 
 
     <div class='teamphoto'>
-    <? if ($model->logo) { ?>
+    <?php if ($model->logo) { ?>
     <?php $this->beginWidget('application.extensions.thumbnailer.Thumbnailer', array(
                                         'thumbsDir' => 'images/thumbs',
                                         'thumbWidth' => 125,
@@ -267,7 +269,7 @@ function createLeagueSeasonDivisionDependency()
                                 ); ?>
     <img src="images/team_logo/<?php echo $model->thumb?>"/>
     <?php $this->endWidget(); ?>
-    <?}
+    <?php }
     ?>
     </div>
 

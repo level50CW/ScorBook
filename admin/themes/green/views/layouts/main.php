@@ -63,7 +63,7 @@ function submitLink(link){
         document.getElementById('link').value = 'events/create';
         break;
     case 'lineup':
-        if(<? echo Yii::app()->user->getState('idgame') > 0 ? 0 : 1 ?>){
+        if(<?php echo Yii::app()->user->getState('idgame') > 0 ? 0 : 1 ?>){
             alert('Game is not selected.');
             return false;
         }
@@ -71,7 +71,7 @@ function submitLink(link){
         //document.getElementById('lineup-form').submit();
         break;
     case 'gameinfo':
-        document.getElementById('link').value = 'scoreGame/update&id=<? echo Yii::app()->user->getState('idgame'); ?>';
+        document.getElementById('link').value = 'scoreGame/update&id=<?php echo Yii::app()->user->getState('idgame'); ?>';
         break;
     case 'games':
         document.getElementById('link').value = 'scoreGame/admin';
@@ -341,7 +341,7 @@ function finalizeGame(){
     
     <div id="footer" align="center">
     
-        <?
+        <?php
         //Check if URL contains 
         $pos = strpos(Yii::app()->request->url, 'events');
         if (!$pos) $pos = strpos(Yii::app()->request->url, 'games/update');
@@ -360,7 +360,8 @@ function finalizeGame(){
         var_dump(Yii::app()->user->getState('idteamhome'));*/
         
         ?>
-        <? if (Yii::app()->user->name !="Guest" && $pos)  { ?>
+		
+        <?php if (Yii::app()->user->name !="Guest" && $pos)  { ?>
         <div align="center">
             <table style='width:20% !important'>
             <tr>
@@ -425,7 +426,7 @@ function finalizeGame(){
             </table>
         </div>
      
-        <? } ?>
+        <?php } ?>
 
 		Copyright &copy; <?php echo date('Y'); ?>-<?php echo 1+date('Y'); ?> Northwoods League. All Rights Reserved.<br/><br/> 
         <hr style="width:200px; margin:0 auto;">

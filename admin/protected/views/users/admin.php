@@ -97,7 +97,7 @@ switch (Yii::app()->session['role']) {
 			'template'=>$template,
 			'buttons'=>array(
 				'delete'=>array(
-					'visible'=>'$data[role]!="admins"',
+					'visible'=>'$data->role!="admins"',
 				),
 			),
 			'afterDelete'=>"function(link,success,data){ if(success) {

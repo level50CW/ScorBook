@@ -1,9 +1,17 @@
 <?php
 //edit or add new one
+if (isset($model->date)){
+	$date = date_create_from_format('m-d-Y H:i', $model->date);
+	if ($date != false)
+		$date = $date->format('F j');
+}
+
 
 $header = Yii::app()->request->getParam('id') ? 
 	'Schedule - <span id="header-teamNameHome">'.$model->teamsIdteamHome['Name']. '</span> VS <span id="header-teamNameVisiting">' . $model->teamsIdteamVisiting['Name'] .'</span>'.
-		( $model->date ? ' - <span id="header-date">'.date_create_from_format('m-d-Y H:i', $model->date)->format('F j').'</span>' : ''):
+		( isset($date)? 
+			' - <span id="header-date">'.$date.'</span>' :
+			''):
 	'Schedule – Add New Game';
 ?>
 

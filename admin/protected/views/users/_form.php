@@ -7,6 +7,8 @@ if( isset($disabled) && $disabled ){
         "readonly"=>"readonly",
     );
 	$disabledConfirm = true;
+} else {
+	$disabled = false;
 }
 
 
@@ -104,7 +106,7 @@ function createLeagueDivisionTeamDependency()
         <div class="green"> Team<span class="required">*</span></div>
         <div class="gray">
 
-            <?
+            <?php 
             // $team_selected = Yii::app()->session['team'];
 
             // if (Yii::app()->session['role'] == 'admins') {

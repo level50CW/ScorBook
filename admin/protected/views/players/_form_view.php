@@ -187,7 +187,7 @@ $disabledArray= array(
 
 
     <div class='playerphoto'>
-        <? if ($model->Photo) { ?>
+        <?php if ($model->Photo) { ?>
             <?php $this->beginWidget('application.extensions.thumbnailer.Thumbnailer', array(
                     'thumbsDir' => 'images/thumbs',
                     'thumbWidth' => 125,

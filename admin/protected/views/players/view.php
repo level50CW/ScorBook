@@ -28,7 +28,7 @@
 	
 	<div align='center'> 
 		
-	<? /*if ($model->Photo) { ?>
+	<?php /*if ($model->Photo) { ?>
 	<?php $this->beginWidget('application.extensions.thumbnailer.Thumbnailer', array(
 								        'thumbsDir' => 'images/thumbs',
 								        'thumbWidth' => 125,

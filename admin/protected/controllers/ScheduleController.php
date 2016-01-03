@@ -72,7 +72,7 @@ class ScheduleController extends Controller
                     Yii::app()->user->setState('iddivisionvisiting', $_POST['Games']['Division_iddivision_visiting']);
                     Yii::app()->user->setState('idgame', Yii::app()->db->lastInsertID);
                 }
-                if ($_POST['next']){
+                if (isset($_POST['next'])){
 					if ($id){
 						$this->redirect(array('schedule/update','id'=>$model->next()->idgame));
 					} else {

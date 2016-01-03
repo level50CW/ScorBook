@@ -18,7 +18,7 @@
 	</div>
 
 	<div class="row">
-		<? 
+		<?php
 		$division = new Division;
 		
 		?>
