@@ -29,7 +29,7 @@ class Lineup extends CActiveRecord
      */
     public function tableName()
     {
-        return 'Lineup';
+        return 'lineup';
     }
 
     /**

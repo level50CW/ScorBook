@@ -185,7 +185,7 @@ function createLeagueDivisionTeamDependency()
 			alert("The passwords you entered do not match");
 			return false;
 		}
-		if ($("#Users_Password").val().match(/^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z_$%-]{8,16}$/) == null){
+		if ($("#Users_Password").val().match(/^(?=.*[a-z])(?=.*[A-Z])[a-zA-Z0-9_$%-]{8,16}$/) == null){
 			alert("You have entered an invalid password. Passwords must have between 8 and 16 characters with at least 1 uppercase and 1 lowercase letter. The only special characters allowed are $, %, - and _.");
 			return false;
 		}

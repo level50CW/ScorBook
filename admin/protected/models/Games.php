@@ -45,7 +45,7 @@ class Games extends CActiveRecord
      */
     public function tableName()
     {
-        return 'Games';
+        return 'games';
     }
 
     /**

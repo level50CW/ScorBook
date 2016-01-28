@@ -13,7 +13,7 @@ class Settings extends CActiveRecord
      */
     public function tableName()
     {
-        return 'Settings';
+        return 'settings';
     }
 
     /**

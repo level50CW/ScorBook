@@ -33,7 +33,7 @@ class Batters extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'Batters';
+		return 'batters';
 	}
 
 	/**

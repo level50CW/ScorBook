@@ -31,7 +31,7 @@ class Division extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'Division';
+		return 'division';
 	}
 
 	/**

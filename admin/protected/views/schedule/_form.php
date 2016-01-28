@@ -236,7 +236,7 @@ function createSeasonPeriods($model){
             $tmpLocList = CHtml::listData(Teams::model()->findAll(),'location','idteam');
             $locSTR = $model->location;
             if (!empty($locSTR)) {
-                $model->location = $tmpLocList[$model->location];
+                $model->location = $tmpLocList[$model->teamsIdteamHome->location];
             }
         ?>
         <?php echo $form->dropDownList($model, 'location', CHtml::listData(Teams::model()->findAll(), 'idteam', 'location'), array('empty' => '', 'style' => 'width:216px !important; text-align:center; display:none;','readonly'=>'readonly')); ?>

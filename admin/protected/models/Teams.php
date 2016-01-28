@@ -37,7 +37,7 @@ class Teams extends CActiveRecord
      */
     public function tableName()
     {
-        return 'Teams';
+        return 'teams';
     }
 
     /**
