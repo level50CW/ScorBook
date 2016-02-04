@@ -88,7 +88,7 @@ function createSeasonPeriods($model){
 		$currentSeason = $seasons[$i];
 		$id = $currentSeason->idseason;
 		$dateStart = $currentSeason->startdate.' 00:00';
-		$dateEnd = $currentSeason->enddate.' 00:00';
+		$dateEnd = $currentSeason->enddate.' 23:59';
 		$dateUSStart = $model->dateToAmericanFormat($dateStart);
 		$dateUSEnd = $model->dateToAmericanFormat($dateEnd);
 		$season = $currentSeason->season;
@@ -328,15 +328,19 @@ var myVar = setInterval(function(){
 	(function(){
 		var timer = 0;
 		var seasons = <?php echo createSeasonPeriods($model);?>;
+
+        function _date(str){
+            return new Date(str.replace(/(\d\d)-(\d\d)-/,'$1/$2/'));
+        }
 		
 		function defaultDate(){
 			return seasons[+$("#Games_season_idseason").val()].startUs;
 		}
 		
 		function updateRange(){
-			var current = new Date($(".timepicker").val());
-			var start =  new Date(seasons[+$("#Games_season_idseason").val()].start);
-			var end =  new Date(seasons[+$("#Games_season_idseason").val()].end);
+			var current = _date($(".timepicker").val());
+			var start =  _date(seasons[+$("#Games_season_idseason").val()].start);
+			var end =  _date(seasons[+$("#Games_season_idseason").val()].end);
 			
 			jQuery('#yw0').datetimepicker('option','minDate', start);
 			jQuery('#yw0').datetimepicker('option','maxDate', end);
@@ -349,9 +353,9 @@ var myVar = setInterval(function(){
 			// if (!timer){
 				// var $self = $(this);
 				// timer = setTimeout(function(){
-					// var date = new Date($self.val());
+					// var date = _date($self.val());
 					
-					// if (+$("#Games_season_idseason").val() != date.getFullYear() || date < new Date(date.getFullYear(),4,1) || date > new Date(date.getFullYear(),8,30)){
+					// if (+$("#Games_season_idseason").val() != date.getFullYear() || date < _date(date.getFullYear(),4,1) || date > new Date(date.getFullYear(),8,30)){
 						// alert("Season of the selected date does not coincide with the current season.");
 						// $self.val(defaultDate());
 					// } else {
@@ -376,7 +380,7 @@ var myVar = setInterval(function(){
 		
 		$("#Games_season_idseason").change(function(){
 			updateRange();
-			var date = new Date($(".timepicker").val());
+			var date = _date($(".timepicker").val());
 			if (+$("option:selected",this).text() != date.getFullYear()){
 				$(".timepicker").val(defaultDate());
 			}
