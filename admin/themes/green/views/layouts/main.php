@@ -147,9 +147,15 @@ function finalizeGame(){
 
     <div id="mainmenu">
         <?php
-        if(!Yii::app()->user->isGuest){
-          echo "Welcome " .  Yii::app()->session['firstname'] . " " . Yii::app()->session['lastname'].'<br/>';
-          echo "Last Login: " . Yii::app()->session['lastLoginTime'];
+        if(!Yii::app()->user->getIsGuest()){
+			if (!empty(Yii::app()->session['lastLoginTime'])){
+				echo "Welcome " .  Yii::app()->session['firstname'] . " " . Yii::app()->session['lastname'].'<br/>';
+				echo "Last Login: " . Yii::app()->session['lastLoginTime'];
+			} else {
+				// TODO: Refactor this to the middleware
+				Yii::app()->user->logout();
+				$this->redirect(Yii::app()->homeUrl);
+			}
 		}
         ?>
     </div><!-- mainmenu -->
