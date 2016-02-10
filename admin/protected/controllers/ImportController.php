@@ -16,7 +16,7 @@ class ImportController extends Controller
 			return false;
 		}
 		
-		$leagueName = $row[0];
+		$leagueName = ucfirst(strtolower($row[0])).' League';
 		$season = $row[1];
 		$date = $row[2];
 		$time = $row[3];
@@ -101,14 +101,17 @@ class ImportController extends Controller
 	
 	private function rostersProcessRow($row, $rowid)
 	{
+		if ($rowid == 0)
+			return true;
+		
 		if (count($row) != 14){
 			$this->parseMessage = 'Invalid columns number';
 			return $rows;
 		}
 		
-		$leagueName = $row[0].' League';
+		$leagueName = ucfirst(strtolower($row[0])).' League';
 		$season = $row[1];
-		$divisionName = $row[2].' Division';
+		$divisionName = ucfirst(strtolower($row[2])).' Division';
 		$teamName = $row[3];
 		$firstName = $row[4];
 		$lastName = $row[5];
@@ -210,7 +213,7 @@ class ImportController extends Controller
 			$rows++;
 		}
 		fclose($handle);
-		return $rows;
+		return $rows - 1; // header excluded
 	}
 	
 	public function globalAction($mode){
