@@ -326,11 +326,19 @@ var myVar = setInterval(function(){
 
 <script>
 	(function(){
+        var isNewRecord = <?php echo $model->isNewRecord? 'true': 'false'; ?>;
 		var timer = 0;
 		var seasons = <?php echo createSeasonPeriods($model);?>;
 
         function _date(str){
             return new Date(str.replace(/(\d\d)-(\d\d)-/,'$1/$2/'));
+        }
+
+        function headerFormat(date){
+            var monthNames = ["January", "February", "March", "April", "May", "June",
+                "July", "August", "September", "October", "November", "December"
+            ];
+            return monthNames[date.getMonth()]+" "+date.getDate();
         }
 		
 		function defaultDate(){
@@ -345,8 +353,10 @@ var myVar = setInterval(function(){
 			jQuery('#yw0').datetimepicker('option','minDate', start);
 			jQuery('#yw0').datetimepicker('option','maxDate', end);
 			
-			if (start<=current && current<=end)
-				jQuery('#yw0').datetimepicker('setDate', current);
+			if (start<=current && current<=end) {
+                jQuery('#yw0').datetimepicker('setDate', current);
+                jQuery('#header-date').text(headerFormat(current));
+            }
 		}
 		
 		// $(".timepicker").change(function(){
@@ -394,6 +404,9 @@ var myVar = setInterval(function(){
 		});
 		
 		setTimeout(function(){
+            if(isNewRecord){
+                jQuery('#yw0').datetimepicker('setDate', new Date());
+            }
 			$("#Games_season_idseason").change();
 		},50);
 	})();

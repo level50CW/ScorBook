@@ -73,7 +73,7 @@ class PlayersController extends Controller
 		{
 			$model->attributes=$_POST['Players'];
 			
-			$file = CUploadedFile::getInstance($model,'uploadfile'); 
+			$file = CUploadedFile::getInstance($model,'uploadfile');
 			$model->Photo = '';
 			
 			$model->Height =  implode("-", array($_POST['Players']['foot'], $_POST['Players']['inches'] ));
@@ -83,7 +83,7 @@ class PlayersController extends Controller
 			if($model->validate()){
 
 				$model->save();
-				if ($file->name != "") {
+				if (isset($file) && !empty($file->name)) {
 					$model->Photo = 'images/players/'.$model->primaryKey.$file->name;
 					$model->thumb = $model->primaryKey.$file->name;
 					$file->saveAs($model->Photo);
@@ -142,12 +142,12 @@ class PlayersController extends Controller
 		{
 			$model->attributes=$_POST['Players'];
 			$model->Photo = '';
-			$file = CUploadedFile::getInstance($model,'uploadfile'); 
-			
+			$file = CUploadedFile::getInstance($model,'uploadfile');
+
 			$model->Height =  implode("-", array($_POST['Players']['foot'], $_POST['Players']['inches'] ));
 
 			if ($model->validate()) {
-				if ($file && $file->name != "") {
+				if (isset($file) && !empty($file->name)) {
 					$model->Photo = 'images/players/'.$model->primaryKey.$file->name;
 					$model->thumb = $model->primaryKey.$file->name;
 					if ($photoOri) unlink($photoOri);
@@ -260,27 +260,28 @@ class PlayersController extends Controller
 	{
 		if(isset($_POST['ajax']) && $_POST['ajax']==='players-form')
 		{
+			$model->Height = implode("-", array($_POST['Players']['foot'], $_POST['Players']['inches'] ));
 			echo CActiveForm::validate($model);
 			Yii::app()->end();
 		}
 	}
 	
-	protected function performAjaxSaving($model)
-	{
-		if (isset($_POST['ajax']) && $_POST['ajax']==='players-form')
-		{
-			$result = CActiveForm::validate($model);
-			if ($result == '[]'){
-				if($model->save())
-					echo '{"id":"'.$model->idleague.'"}';
-				else
-					echo '{"error":"Data not saved"}';
-			}
-			else
-			{
-				echo $result;
-			}
-			Yii::app()->end();				
-		}
-	}
+//	protected function performAjaxSaving($model)
+//	{
+//		if (isset($_POST['ajax']) && $_POST['ajax']==='players-form')
+//		{
+//			$result = CActiveForm::validate($model);
+//			if ($result == '[]'){
+//				if($model->save())
+//					echo '{"id":"'.$model->idleague.'"}';
+//				else
+//					echo '{"error":"Data not saved"}';
+//			}
+//			else
+//			{
+//				echo $result;
+//			}
+//			Yii::app()->end();
+//		}
+//	}
 }

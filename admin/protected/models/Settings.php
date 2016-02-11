@@ -24,8 +24,8 @@ class Settings extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('iduser, idleague, listSize, idseason, leagueName', 'required'),
-            array('iduser, idleague, idseason, listSize', 'numerical', 'integerOnly'=>true),
+            array('iduser, idleague, listSize, idseason, leagueName, numberUmps', 'required'),
+            array('iduser, idleague, idseason, listSize, numberUmps', 'numerical', 'integerOnly'=>true),
 			array('iduser,', 'safe', 'on'=>'search'),
         );
     }
@@ -56,6 +56,7 @@ class Settings extends CActiveRecord
             'monthStart' => 'Season Start Month',
             'monthEnd' => 'Season End Month',
             'listSize' => 'Max List Size',
+            'numberUmps' => 'Number of Umps'
         );
     }
 
@@ -82,6 +83,7 @@ class Settings extends CActiveRecord
 			$model->idleague = League::model()->find()->idleague;
 			$model->idseason = Season::model()->find('status=1')->idseason;
 			$model->listSize = 25;
+            $model->numberUmps = 3;
 			$model->save();
 			
 		}

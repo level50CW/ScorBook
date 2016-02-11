@@ -26,7 +26,7 @@ class PlayerTeam extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'Player_team';
+		return 'player_team';
 	}
 
 	/**
