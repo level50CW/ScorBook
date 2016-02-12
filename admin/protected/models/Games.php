@@ -134,7 +134,7 @@ class Games extends CActiveRecord
         if (Yii::app()->session['role'] == 'admins' || Yii::app()->session['role'] == 'leagueadmin') {
 
             $criteria->compare('idgame',$this->idgame);
-            $criteria->compare('location',$this->location,true);
+            $criteria->compare('t.location',$this->location,true);
             $criteria->compare('t.season_idseason',$this->season_idseason);
             $criteria->compare('date',$this->dateFromAmericanFormat($this->date, false),true);
             $criteria->compare('comment',$this->comment,true);
@@ -159,7 +159,7 @@ class Games extends CActiveRecord
             $teamid = Yii::app()->session['team'];
 
             $criteria->compare('idgame',$this->idgame);
-            $criteria->compare('location',$this->location,true);
+            $criteria->compare('t.location',$this->location,true);
             $criteria->compare('t.season_idseason',$this->season_idseason); 
             $criteria->compare('date',$this->dateFromAmericanFormat($this->date, false),true);
             $criteria->compare('comment',$this->comment,true);
@@ -176,7 +176,7 @@ class Games extends CActiveRecord
         } else if (Yii::app()->session['role'] == 'scorer') {
             $teamid = Yii::app()->session['team'];
             $criteria->compare('idgame',$this->idgame);
-            $criteria->compare('location',$this->location,true);
+            $criteria->compare('t.location',$this->location,true);
             $criteria->compare('t.season_idseason',$this->season_idseason); 
             $criteria->compare('date',date("Y-m-d"),true);
             $criteria->compare('comment',$this->comment,true);

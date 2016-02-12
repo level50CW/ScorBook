@@ -1707,3 +1707,8 @@ a.save-form-btn {
 .gray .ui-datepicker-trigger{
 	padding: 3px 7px 0px 6px;
 }
+
+a.ui-clear-button{
+	color: #3D7A9C;
+    text-decoration: underline;
+}

@@ -15,6 +15,22 @@ $('.search-form form').submit(function(){
 	return false;
 });
 ");
+
+$functionClearFilter = '
+    (function(){
+        $(".filters td").last().append(
+            $("<a>")
+                .attr("href","#")
+                .addClass("ui-clear-button")
+                .text("Clear")
+                .click(function(){
+                    $(".filters input, .filters select")
+                        .val(null)
+                        .first().change();
+                }));
+    })();
+';
+
 ?>
 
 <h1>Team Rosters - Manage Players & Coaches</h1>
@@ -87,4 +103,8 @@ $('.search-form form').submit(function(){
         'prevPageLabel'  => '&lt; Previous',
         'nextPageLabel'  => 'Next &gt;',
     ),
+	'afterAjaxUpdate'=> "function(){ $functionClearFilter }"
 )); ?>
+<script>
+	<?php echo $functionClearFilter; ?>
+</script>

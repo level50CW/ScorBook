@@ -50,6 +50,22 @@ switch (Yii::app()->session['role']) {
         $template='';
         break;
 }
+
+$functionClearFilter = '
+    (function(){
+        $(".filters td").last().append(
+            $("<a>")
+                .attr("href","#")
+                .addClass("ui-clear-button")
+                .text("Clear")
+                .click(function(){
+                    $(".filters input, .filters select")
+                        .val(null)
+                        .first().change();
+                }));
+    })();
+';
+
 ?>
 
 <h1>Teams - Manage Teams</h1>
@@ -136,8 +152,10 @@ switch (Yii::app()->session['role']) {
         'prevPageLabel'  => '&lt; Previous',
         'nextPageLabel'  => 'Next &gt;',
     ),
+	'afterAjaxUpdate'=> "function(){ $functionClearFilter }"
 )); ?>
 
 <script>
 	<?php createTeamHasRoster(); ?>
+	<?php echo $functionClearFilter; ?>
 </script>

@@ -32,53 +32,47 @@ $deleteConfirmation = "js: (new Date($(this).parent().parent().find('td').eq(1).
 	'Please confirm you want to delete this game from schedule.':
 	'Please confirm you want to delete this game. This game has been played and scored and if deleted all statistics will be lost.'";
 
+$buttons = array(
+    'header' => 'Actions',
+    'class'=> 'CButtonColumn',
+    'template'=> '{view}{update}{delete}',
+    'afterDelete'=>$deleteAfterDelete,
+    'deleteConfirmation'=>$deleteConfirmation
+);
+
 
 switch ($role) {
     case 'admins':
-        $buttons = array(
-			'header' => 'Actions',
-            'class'=> 'CButtonColumn',
-            'template'=> '{view}{update}{delete}',
-			'afterDelete'=>$deleteAfterDelete,
-			'deleteConfirmation'=>$deleteConfirmation
-        );
         break;
 	case 'leagueadmin':
-        $buttons = array(
-			'header' => 'Actions',
-            'class'=> 'CButtonColumn',
-            'template'=> '{view}{update}{delete}',
-			'afterDelete'=>$deleteAfterDelete,
-			'deleteConfirmation'=>$deleteConfirmation
-        );
         break;
 	case 'teamadmin':
-        $buttons = array(
-			'header' => 'Actions',
-            'class'=> 'CButtonColumn',
-            'template'=> '{view}{update}',
-        );
+        $buttons['template'] = '{view}{update}';
         break;
     case 'roster':
-        $buttons = array(
-			'header' => 'Actions',
-            'class'=> 'CButtonColumn',
-            'template'=> '{view}',
-        );
+        $buttons['template'] = '{view}';
         break;
     default:
-         $buttons = array(
-			'header' => 'Actions',
-            'class'=> 'CButtonColumn',
-            'template'=> '{view}{update}{delete}',
-            'filterHtmlOptions' => array('style' => 'display:none'),
-            'headerHtmlOptions' => array('style' => 'display:none'),
-            'htmlOptions' => array('style' => 'display:none'),
-			'afterDelete'=>$deleteAfterDelete,
-			'deleteConfirmation'=>$deleteConfirmation
-        );
+        $buttons['filterHtmlOptions'] = array('style' => 'display:none');
+        $buttons['headerHtmlOptions'] = array('style' => 'display:none');
+        $buttons['htmlOptions'] = array('style' => 'display:none');
         break;
 }
+
+$functionClearFilter = '
+    (function(){
+        $(".filters td").last().append(
+            $("<a>")
+                .attr("href","#")
+                .addClass("ui-clear-button")
+                .text("Clear")
+                .click(function(){
+                    $(".filters input, .filters select")
+                        .val(null)
+                        .first().change();
+                }));
+    })();
+';
 
 $this->widget('zii.widgets.grid.CGridView', array(
     'id'=>'games-grid',
@@ -126,8 +120,11 @@ $this->widget('zii.widgets.grid.CGridView', array(
         'prevPageLabel'  => '&lt; Previous',
         'nextPageLabel'  => 'Next &gt;',
     ),
+    'afterAjaxUpdate'=> "function(){ $functionClearFilter }"
 )); ?>
 
-    
+<script>
+    <?php echo $functionClearFilter; ?>
+</script>
     
 
