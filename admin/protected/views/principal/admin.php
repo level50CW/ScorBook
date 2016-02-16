@@ -2,7 +2,6 @@
 /* @var $this DivisionController */
 /* @var $model Division */
 
-
 Yii::app()->clientScript->registerScript('search', "
 $('.search-button').click(function(){
 	$('.search-form').toggle();

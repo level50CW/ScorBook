@@ -71,6 +71,18 @@ $functionClearFilter = '
                         .val(null)
                         .first().change();
                 }));
+
+        $(".js-grid-time").each(function() {
+            var date = moment($(this).attr("value")).format("MM-DD-YYYY HH:mm");
+            $(this).text(date);
+        });
+
+        $("#Games_date").on("input",function(){
+            if (!!$("#Games_date").val()){
+                var date = moment($("#Games_date").val());
+                $("#Games_dateUtc").val(date.toISOString());
+            }
+        });
     })();
 ';
 
@@ -93,7 +105,17 @@ $this->widget('zii.widgets.grid.CGridView', array(
 					'empty' => 'Select',
 					'style'=>'color: black; padding-top: 0px; border: 1px solid #8CB8E7 !important;')),
 		),
-        'date',
+        array(
+            'name'=>'date',
+            'type' => 'raw',
+            'value'=>function($data){
+                return '<span class="js-grid-time" value="'
+                    .DateTime::createFromFormat("m-d-Y H:i",$data->date)->format(DATE_ISO8601)
+                    .'"></span>';
+            },
+            'filter' => CHtml::activeTextField($model, 'date')
+                        .CHtml::activeHiddenField($model, 'dateUtc'),
+        ),
 		array(
 			'name'=>'teamsIdteamHome.Name',
 			'filter'=> CHtml::activeTextField($model, 'teamsIdteamHome_Name')

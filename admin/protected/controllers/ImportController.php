@@ -66,12 +66,13 @@ class ImportController extends Controller
 			return false;
 		}
 		
-		$dateObj = DateTime::createFromFormat('m/d/y H:i', "$date $time");
+		$dateObj = DateTime::createFromFormat('m/d/y H:i T', "$date $time $timeStandart");
         if (!$dateObj)
 		{
 			$this->parseMessage = "Invalid time or date ($date $time)";
 			return false;
 		}
+		$dateObj->setTimezone(new DateTimeZone('UTC'));
         $dateTime = $dateObj->format('Y-m-d H:i');
 		
 		$dateStart = DateTime::createFromFormat('Y-m-d', $seasonFromDb[0]['startdate']);

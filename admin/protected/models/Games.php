@@ -29,6 +29,7 @@ class Games extends CActiveRecord
 	public $leagueIdleague_Name;
 	public $teamsIdteamHome_Name;
 	public $teamsIdteamVisiting_Name;
+    public $dateUtc;
 	
     /**
      * Returns the static model of the specified AR class.
@@ -68,7 +69,7 @@ class Games extends CActiveRecord
             array('date, end_date', 'safe'),
             // The following rule is used by search().
             // Please remove those attributes that should not be searched.
-            array('idgame, location, date, comment, attendance, weather, temperature, Teams_idteam_visiting, Teams_idteam_home, Division_iddivision_visiting, Division_iddivision_home, season_idseason, divisionIddivisionHome.league_idleague, leagueIdleague_Name, teamsIdteamHome_Name, teamsIdteamVisiting_Name, game_type', 'safe', 'on'=>'search'),
+            array('idgame, location, date, comment, attendance, weather, temperature, Teams_idteam_visiting, Teams_idteam_home, Division_iddivision_visiting, Division_iddivision_home, season_idseason, divisionIddivisionHome.league_idleague, leagueIdleague_Name, teamsIdteamHome_Name, teamsIdteamVisiting_Name, game_type, dateUtc', 'safe', 'on'=>'search'),
             array('idgame, location, date, comment, attendance, weather, temperature, Teams_idteam_visiting, Teams_idteam_home, Division_iddivision_visiting, Division_iddivision_home, season_idseason, game_type', 'safe', 'on'=>'searchTodayGames'),
         );
     }
@@ -131,12 +132,18 @@ class Games extends CActiveRecord
 
         $criteria=new CDbCriteria;
 
+        if (!empty($this->dateUtc) && !empty($this->date)){
+            $dateDb = (new DateTime($this->dateUtc))->format('Y-m-d H:i');
+        } else {
+            $dateDb = $this->date;
+        }
+
         if (Yii::app()->session['role'] == 'admins' || Yii::app()->session['role'] == 'leagueadmin') {
 
             $criteria->compare('idgame',$this->idgame);
             $criteria->compare('t.location',$this->location,true);
             $criteria->compare('t.season_idseason',$this->season_idseason);
-            $criteria->compare('date',$this->dateFromAmericanFormat($this->date, false),true);
+            $criteria->compare('date',$dateDb,true);
             $criteria->compare('comment',$this->comment,true);
             $criteria->compare('attendance',$this->attendance);
             $criteria->compare('weather',$this->weather,true);
@@ -161,7 +168,7 @@ class Games extends CActiveRecord
             $criteria->compare('idgame',$this->idgame);
             $criteria->compare('t.location',$this->location,true);
             $criteria->compare('t.season_idseason',$this->season_idseason); 
-            $criteria->compare('date',$this->dateFromAmericanFormat($this->date, false),true);
+            $criteria->compare('date',$dateDb,true);
             $criteria->compare('comment',$this->comment,true);
             $criteria->compare('attendance',$this->attendance);
             $criteria->compare('weather',$this->weather,true);
@@ -178,7 +185,7 @@ class Games extends CActiveRecord
             $criteria->compare('idgame',$this->idgame);
             $criteria->compare('t.location',$this->location,true);
             $criteria->compare('t.season_idseason',$this->season_idseason); 
-            $criteria->compare('date',date("Y-m-d"),true);
+            $criteria->compare('date',$dateDb,true);
             $criteria->compare('comment',$this->comment,true);
             $criteria->compare('attendance',$this->attendance);
             $criteria->compare('weather',$this->weather,true);

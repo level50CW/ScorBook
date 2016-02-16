@@ -17,6 +17,8 @@
     <title><?php echo CHtml::encode($this->pageTitle); ?></title>
 </head>
 
+<script type="text/javascript" src="<?php echo Yii::app()->theme->baseUrl; ?>/js/moment/moment.js"></script>
+
 <script>
 
     
@@ -150,7 +152,7 @@ function finalizeGame(){
         if(!Yii::app()->user->getIsGuest()){
 			if (!empty(Yii::app()->session['lastLoginTime'])){
 				echo "Welcome " .  Yii::app()->session['firstname'] . " " . Yii::app()->session['lastname'].'<br/>';
-				echo "Last Login: " . Yii::app()->session['lastLoginTime'];
+				echo 'Last Login: <span id="lastLoginTime"></span> ' .LocalDateTime::fromDateTimeValue(Yii::app()->session['lastLoginTime'],'#lastLoginTime','DD-MMM-YYYY HH:mm:ss');
 			} else {
 				// TODO: Refactor this to the middleware
 				Yii::app()->user->logout();

@@ -61,6 +61,8 @@ class ScheduleController extends Controller
         if(isset($_POST['Games']))
         {
             $model->attributes = $_POST['Games'];
+            $model->date = (new DateTime($_POST['utcTime']))->format('m-d-Y H:i');
+
             
             $tmpLocList = CHtml::listData(Teams::model()->findAll(),'idteam','location');
             $model->location = $tmpLocList[$model->location];

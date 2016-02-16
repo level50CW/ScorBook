@@ -151,17 +151,20 @@ function createSeasonPeriods($model){
         <?php
         if( isset($disabled) && $disabled ){
             echo $form->textField($model, 'date', array_merge($disabledArray,array('size' => 60, 'maxlength' => 200)));
+            echo LocalDateTime::fromDateTimeValue(DateTime::createFromFormat('m-d-Y H:i', $model->date),'#Games_date');
         }
         else{
             $this->widget('application.extensions.timepicker.timepicker', array(
                 'model' => $model,
-                'name' => 'date', 
+                'name' => 'date',
                 'options' => array(
                     'showOn'=>'focus',
                     'timeFormat'=>'hh:mm',
                     'dateFormat' => 'mm-dd-yy',
                 ),
             ));
+            echo CHtml::hiddenField('utcTime');
+            echo LocalDateTime::fromDateTimeValue(DateTime::createFromFormat('m-d-Y H:i', $model->date),'#yw0');
         }
         ?>
 
@@ -402,12 +405,17 @@ var myVar = setInterval(function(){
 				$("#Games_Teams_idteam_visiting").val(null);
 			}
 		});
-		
+
+        $(".timepicker").change(function(){
+            $("#utcTime").val(_date($(this).val()).toISOString());
+        });
+
 		setTimeout(function(){
             if(isNewRecord){
                 jQuery('#yw0').datetimepicker('setDate', new Date());
             }
 			$("#Games_season_idseason").change();
+            $(".timepicker").change();
 		},50);
 	})();
 </script>
