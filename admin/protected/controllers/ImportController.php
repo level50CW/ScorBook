@@ -16,15 +16,15 @@ class ImportController extends Controller
 			return false;
 		}
 		
-		$leagueName = ucfirst(strtolower($row[0])).' League';
+		$leagueName = ucfirst(strtolower($row[0]));
 		$season = $row[1];
 		$date = $row[2];
 		$time = $row[3];
 		$timeStandart = $row[4];
-		$homeDivisionName = ucfirst(strtolower($row[5])).' Division';
+		$homeDivisionName = ucfirst(strtolower($row[5]));
 		$homeTeamAbv = $row[6];
 		$homeTeamName = $row[7];
-		$visitorDivisionName = ucfirst(strtolower($row[8])).' Division';
+		$visitorDivisionName = ucfirst(strtolower($row[8]));
 		$visitorTeamAbv = $row[9];
 		$visitorTeamName = $row[10];
 		
@@ -110,9 +110,9 @@ class ImportController extends Controller
 			return $rows;
 		}
 		
-		$leagueName = ucfirst(strtolower($row[0])).' League';
+		$leagueName = ucfirst(strtolower($row[0]));
 		$season = $row[1];
-		$divisionName = ucfirst(strtolower($row[2])).' Division';
+		$divisionName = ucfirst(strtolower($row[2]));
 		$teamName = $row[3];
 		$firstName = $row[4];
 		$lastName = $row[5];
