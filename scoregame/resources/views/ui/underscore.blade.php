@@ -1,0 +1,1 @@
+{!! Html::script('/libs/underscore/underscore.js') !!}

@@ -1,0 +1,80 @@
+.ui-header{
+    margin: 0;
+    padding: 0;
+    background-image: url('../images/Scorebook_logo.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    height: 125px;
+}
+
+.ui-logo{
+    padding: 10px 20px;
+    font-size: 200%;
+    color: #678b1d;
+}
+
+.ui-user{
+    margin-top: -80px;
+    height: 55px;
+    float: right;
+    clear: both;
+    font-weight: bold;
+    color: #FFF;
+}
+
+.ui-content{
+    padding: 20px;
+    width: 940px;
+}
+
+.ui-menu{
+    text-align: center;
+    font-size: 0;
+}
+
+.ui-menu-element{
+    display: inline-block;
+}
+
+.ui-footer{
+    padding: 10px;
+    margin: 10px 20px;
+    font-size: 0.8em;
+    text-align: center !important;
+    color: #FFF;
+}
+
+.ui-row{
+    text-align: center;
+}
+
+.ui-errors{
+    border: 2px solid #A22B2B;
+    background-color: #FAFFBD;
+    color: #A22B2B;
+    padding: 10px 10px 0 30px;
+    margin: 20px 0 10px 0;
+}
+
+.ui-error-message{
+
+}
+
+.ui-required{
+    color: red;
+}
+
+ul.context-menu-list{
+    background-color: #212121;
+    border: 2px solid #212121;
+}
+li.context-menu-item{
+    background-color: #212121;
+    border-top: 2px solid #434343;
+    color: #C5C5C5;
+    font-size: 13px;
+}
+li.context-menu-item:not(.disabled):hover{
+    background-color: #FFAE00;
+    color: #404040;
+}

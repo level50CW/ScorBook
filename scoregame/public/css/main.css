@@ -1,0 +1,109 @@
+body{
+    margin: 0;
+    padding: 0;
+    color: #555;
+    font: normal 11pt Helvetica,Arial,sans-serif;
+    background-image: url("../images/background.jpg");
+}
+
+div{
+    margin: 0;
+    padding: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: normal;
+    color: #111;
+}
+
+h1{
+    font-weight: bold;
+    line-height: 35px;
+    text-align: center;
+    font-size: 1.5em;
+    background: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#ccc));
+    background: -moz-linear-gradient(top, #fff, #ccc);
+    background-image: -ms-linear-gradient(top, #FFFFFF 0%, #CCCCCC 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#cccccc');
+    box-shadow: 0px 0px 25px 5px #000000;
+}
+
+h2 {
+    background: #999;
+    color: #FFFFFF;
+    text-align: center;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#cccccc', endColorstr='#000000');
+    background: -webkit-gradient(linear, left top, left bottom, from(#ccc), to(#000));
+    background: -moz-linear-gradient(top, #ccc, #000);
+    width: 500px;
+    height: 35px;
+    font-weight: bold;
+    line-height: 35px;
+    vertical-align: middle;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 14px;
+    margin-bottom: 0;
+}
+
+input[type="text"],
+input[type="password"],
+textarea,
+select {
+    display: inline-block;
+    padding: 4px;
+    font-size: 13px;
+    line-height: 18px;
+    color: #000;
+    border: 1px solid #000;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    background-color: #fff;
+    font-weight: normal;
+    margin: 0;
+}
+
+.ui-button{
+    background-color: #014d27;
+    text-indent: 0px;
+    display: inline-block;
+    color: #eac495;
+    font-size: 20px;
+    font-weight: bold;
+    font-style: normal;
+    height: 33px;
+    line-height: 28px;
+    text-decoration: none;
+    text-align: center;
+    border-color: #014d27;
+    padding: 0 1em  !important;
+ }
+
+.ui-button:hover {
+    color: #575757;
+    background-color: #6dcf47;
+}
+
+input[disabled],
+select[disabled],
+textarea[disabled],
+input[readonly],
+select[readonly],
+textarea[readonly]{
+    cursor: not-allowed !important;
+    background-color: #BEBEBE !important;
+}
+
+.span-24, div.span-24 {
+    width: 1200px;
+}
+
+.container{
+    padding: 0px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 1200px;
+}

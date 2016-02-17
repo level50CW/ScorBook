@@ -1,0 +1,60 @@
+table.ui-roster-table {
+    font-family: "Helvetica Neue Light", Helvetica;
+    font-size: 15px;
+    color: white;background: rgba(33, 33, 33, 0.7);
+}
+
+table.ui-roster-table th {
+    height: 38px;
+    background-color: #27804c;
+    text-align: left;
+    padding-left: 20px;
+    font-family: "Helvetica Neue Medium", Helvetica;
+    font-size: 14px;
+}
+
+table.ui-roster-table td {
+    height: 38px;
+    padding:3px;
+    text-align: left;
+    padding-left: 20px;
+}
+table.ui-roster-table td[type='B/T'] {
+    font-family: "Helvetica Neue Regular", Helvetica;
+    font-size: 15px;
+    width : 60px
+}
+table.ui-roster-table td[font='medium'] {
+    font-family: "Helvetica Neue Medium", Helvetica;
+    font-size: 14px;
+}
+table.ui-roster-table td[type='number'] {
+    width : 30px
+}
+table.ui-roster-table td[type='H-T'] {
+    width : 60px
+}
+table.ui-roster-table td[type='W-T'] {
+    width : 60px
+}
+table.ui-roster-table td[type='college'] {
+    width : 270px
+}
+table.ui-roster-table td[type='class'] {
+    width : 120px
+}
+table.ui-roster-table td[type='name'] {
+    width : 200px
+}
+table.ui-roster-table td a{
+    color: inherit;
+}
+table.ui-roster-table tr:nth-child(even) td, tbody tr.even td {background: rgba(255, 255, 255, 0.3)}
+
+.ui-group[type="pitchers"]{
+    margin-top : 0px;
+}
+.ui-group{
+    margin-top : 33px;
+    margin-bottom: 12px;
+}

@@ -1,0 +1,65 @@
+.ui-gray-player{
+    width: 500px;
+    background: rgba(255, 255, 255, 0.4);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";
+}
+
+.ui-gray-player-name{
+    width: 336px;
+    display: inline-block;
+}
+
+input.ui-small,
+select.ui-small{
+    width: 37px;
+}
+
+select.ui-medium{
+    width: 50px;
+}
+
+select.ui-large{
+     width: 60%;
+}
+
+.ui-gray-player input, .ui-gray-player select{
+    background-color: transparent;
+    border-top-color: #adadad;
+    border-right-color: #adadad;
+    border-bottom-color: #eeeeee;
+    border-left-color: #eeeeee;
+    color: #eeeeee;
+}
+
+option {
+    background: rgb(70,70,70);
+    color: white;
+}
+
+select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+}
+
+div.ui-remove-substitution{
+    display: inline-block;
+    color: #FFFFFF;
+    width: 0;
+    cursor: pointer;
+}
+
+table.ui-table-lineupheader{
+    width: 500px;
+    margin: auto;
+    background-color: rgba(255, 255, 255, 0.4);
+    color: #EEEEEE;
+}
+
+table.ui-table-lineupheader th{
+    padding: 10px 0;
+    border: 1px solid;
+    text-align: center;
+}

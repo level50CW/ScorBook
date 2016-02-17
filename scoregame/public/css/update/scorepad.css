@@ -1,0 +1,45 @@
+h1{
+    margin: 0 !important;
+}
+
+table.ui-score tr th{
+    background-color: #680102;
+    color: #ffffff;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#480102', endColorstr='#680102');
+    background: -moz-linear-gradient(top, #280001 0%, #670801 35%);
+    background: -webkit-linear-gradient(top, #280001 0%,#670801 35%);
+    background: linear-gradient(to bottom, #210001 0%,#670801 35%);
+    text-align: center;
+    font-weight: bold;
+    height: 20px;
+}
+
+table.ui-score tr td{
+    background-color: #000000;
+    border: 1px solid;
+    border-color: #395f26;
+    color: #fff;
+    text-align: center;
+}
+
+table.ui-score td div.ui-score-button{
+    width: 33px;
+    height: 64px;
+    margin: 0;
+    padding: 0;
+}
+
+table.ui-score td div.ui-score-button a{
+    letter-spacing: -2em;
+}
+
+table.ui-score td a button.ui-button{
+    position: relative;
+    width: 65px;
+    height: 65px;
+    border-color: #CCC;
+}
+
+table.ui-score td a button.ui-button:hover{
+    background-color: #055D31;
+}

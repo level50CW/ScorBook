@@ -1,0 +1,42 @@
+input[type="text"],
+select{
+    width: 200px;
+}
+
+.ui-label{
+    width: 125px;
+    height: 35px;
+    color: #eac495;
+    text-align: center;
+    font-weight: bold;
+    line-height: 35px;
+    vertical-align: middle;
+    /* float: left; */
+    display: inline-block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.ui-green{
+    background-color: #014d27;
+}
+
+.ui-brown{
+    background-color: #996535;
+}
+
+.ui-gray{
+    width: 375px;
+    height: 35px;
+    color: #eac495;
+    text-align: center;
+    font-weight: bold;
+    line-height: 35px;
+    vertical-align: middle;
+    display: inline-block;
+    margin-left: -4px;
+    margin-right: auto;
+    background: rgba(255, 255, 255, 0.4);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";
+}

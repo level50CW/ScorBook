@@ -1,0 +1,91 @@
+h1{
+    width: 100%;
+    height: 34px;
+    background-color: #e4e4e4;
+    font-family: "Helvetica Neue Regular", Helvetica;
+    font-size: 22px;
+}
+
+.ui-statistic-menu{
+    height: 38px;
+    width: 100%;
+    background-color: #545454;
+    text-transform: uppercase;
+}
+
+.ui-statistic-menu-title{
+    float:left;
+    color: #e4e4e4;
+    font-family: "Helvetica Neue Bold", Helvetica;
+    font-size: 15px;
+    padding-left: 15px;
+    padding-top: 9px;
+}
+.ui-buttons{
+    width:80px;
+    height: 28px;
+    float:right;
+    display: inline;
+    border: 3px solid #e4e4e4;
+    margin: 5px 0 5px 0;
+    background-color: transparent;
+    text-align: center;
+    box-sizing: border-box;
+}
+.ui-buttons a{
+    padding-top:5px;
+    font-family: "Helvetica Neue Regular", Helvetica;
+    width:80px;
+    height: 24px;
+    display: block;
+    font-size: 11px;
+    color: #e4e4e4;
+    text-decoration: none;
+    outline: none;
+
+}
+a:hover{
+    text-decoration: none;
+    outline: none;
+}
+.ui-buttons[radius=left]{
+    border-radius: 5px 0px 0px 5px;
+}
+.ui-buttons[radius=right]{
+    border-radius: 0px 5px 5px 0px;
+    margin-right: 15px;
+}
+
+.ui-buttons[selected="1"] {
+    background-color: #e4e4e4;
+}
+.ui-buttons[selected="1"] a {
+    color: black;
+}
+.ui-content{
+    width: 1100px;
+    padding: 0;
+}
+
+.ui-statistics-content{
+    margin-top: 20px;
+    padding: 16px 20px 32px 20px;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+@font-face {
+    font-family: "Helvetica Neue Medium";
+    src: url('../../fonts/HelveticaNeue-Medium.ttf') format('truetype');
+}
+@font-face {
+    font-family: "Helvetica Neue Regular";
+    src: url('../../fonts/HelveticaNeue.ttf') format('truetype');
+}
+@font-face {
+    font-family: "Helvetica Neue Bold";
+    src: url('../../fonts/HelveticaNeueBold.ttf') format('truetype');
+}
+@font-face {
+    font-family: "Helvetica Neue Light";
+    src: url('../../fonts/HelveticaNeueLight.ttf') format('truetype');
+}

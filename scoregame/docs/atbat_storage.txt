@@ -1,0 +1,1447 @@
+{
+    "currentInning": 4,
+    "currentState": 2,
+    "currentPitch": -1,
+    "innings": [{
+        "state": [{
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 70.09375,
+                    "y": 43
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 1
+                },
+                "type": "out",
+                "type2": "FO",
+                "coordinatesHit": {
+                    "x": 153.09375,
+                    "y": 43
+                }
+            }],
+            "playerScores": [{
+                "id": 3485,
+                "type": "batters",
+                "score": "AB"
+            }],
+            "inningScores": [],
+            "offence": "visitor",
+            "defence": "home",
+            "pitcher": 3505,
+            "outs": 1,
+            "batter": 1
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 82.09375,
+                    "y": 56
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 2
+                },
+                "type": "out",
+                "type2": "FO",
+                "coordinatesHit": {
+                    "x": 209.09375,
+                    "y": 32
+                }
+            }],
+            "playerScores": [{
+                "id": 3486,
+                "type": "batters",
+                "score": "AB"
+            }],
+            "inningScores": [],
+            "offence": "visitor",
+            "defence": "home",
+            "pitcher": 3505,
+            "outs": 2,
+            "batter": 2
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 79.09375,
+                    "y": 57
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 3
+                },
+                "type": "out",
+                "type2": "FO",
+                "coordinatesHit": {
+                    "x": 330.09375,
+                    "y": 45
+                }
+            }],
+            "playerScores": [{
+                "id": 3487,
+                "type": "batters",
+                "score": "AB"
+            }],
+            "inningScores": [],
+            "offence": "visitor",
+            "defence": "home",
+            "pitcher": 3505,
+            "outs": 3,
+            "batter": 3
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 87.09375,
+                    "y": 63
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 1
+                },
+                "type": "out",
+                "type2": "FO",
+                "coordinatesHit": {
+                    "x": 155.09375,
+                    "y": 64
+                }
+            }],
+            "playerScores": [{
+                "id": 3505,
+                "type": "pitchers",
+                "score": "IP"
+            }, {
+                "id": 3494,
+                "type": "batters",
+                "score": "AB"
+            }],
+            "inningScores": [],
+            "offence": "home",
+            "defence": "visitor",
+            "pitcher": 3506,
+            "outs": 1,
+            "batter": 1,
+            "lastBatterNumber": 4
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 65.09375,
+                    "y": 71
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 1
+                },
+                "type": "hit",
+                "type2": "HR",
+                "coordinatesHit": {
+                    "x": 171.09375,
+                    "y": 39
+                }
+            }],
+            "playerScores": [{
+                "id": 3495,
+                "type": "batters",
+                "score": "AB"
+            }, {
+                "id": 3495,
+                "type": "batters",
+                "score": "R"
+            }, {
+                "id": 3506,
+                "type": "pitchers",
+                "score": "R"
+            }, {
+                "id": 3495,
+                "type": "batters",
+                "score": "RBI"
+            }, {
+                "id": 3495,
+                "type": "batters",
+                "score": "H"
+            }, {
+                "id": 3506,
+                "type": "pitchers",
+                "score": "H"
+            }],
+            "inningScores": [{
+                "type": "home",
+                "score": "R"
+            }, {
+                "type": "home",
+                "score": "H"
+            }],
+            "offence": "home",
+            "defence": "visitor",
+            "pitcher": 3506,
+            "outs": 1,
+            "batter": 2
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 83.09375,
+                    "y": 56
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 2
+                },
+                "type": "out",
+                "type2": "FO",
+                "coordinatesHit": {
+                    "x": 152.09375,
+                    "y": 64
+                }
+            }],
+            "playerScores": [{
+                "id": 3496,
+                "type": "batters",
+                "score": "AB"
+            }],
+            "inningScores": [],
+            "offence": "home",
+            "defence": "visitor",
+            "pitcher": 3506,
+            "outs": 2,
+            "batter": 3
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 112.09375,
+                    "y": 63
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 3
+                },
+                "type": "out",
+                "type2": "FO",
+                "coordinatesHit": {
+                    "x": 149.09375,
+                    "y": 56
+                }
+            }],
+            "playerScores": [{
+                "id": 3497,
+                "type": "batters",
+                "score": "AB"
+            }],
+            "inningScores": [],
+            "offence": "home",
+            "defence": "visitor",
+            "pitcher": 3506,
+            "outs": 3,
+            "batter": 4
+        }, {
+            "pitches": [],
+            "playerScores": [{
+                "id": 3506,
+                "type": "pitchers",
+                "score": "IP"
+            }],
+            "inningScores": [],
+            "offence": "home",
+            "defence": "visitor",
+            "pitcher": 3506,
+            "outs": 0
+        }],
+        "bases": [{
+            "id": -1,
+            "bases": [],
+            "runs": []
+        }, {
+            "id": 0,
+            "bases": [null],
+            "runs": []
+        }, {
+            "id": 10,
+            "bases": [null],
+            "runs": []
+        }, {
+            "id": 20,
+            "bases": [null],
+            "runs": []
+        }, {
+            "id": 29,
+            "bases": [],
+            "runs": []
+        }, {
+            "id": 30,
+            "bases": [null],
+            "runs": []
+        }, {
+            "id": 40,
+            "bases": [null, null, null, null],
+            "runs": [0, 1, 2]
+        }, {
+            "id": 50,
+            "bases": [null, null, null, null],
+            "runs": []
+        }, {
+            "id": 60,
+            "bases": [null, null, null, null],
+            "runs": []
+        }]
+    }, {
+        "state": [{
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 83.09375,
+                    "y": 60
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 0
+                },
+                "type": "hit",
+                "type2": "HR",
+                "coordinatesHit": {
+                    "x": 162.09375,
+                    "y": 41
+                }
+            }],
+            "playerScores": [{
+                "id": 3488,
+                "type": "batters",
+                "score": "AB"
+            }, {
+                "id": 3488,
+                "type": "batters",
+                "score": "R"
+            }, {
+                "id": 3505,
+                "type": "pitchers",
+                "score": "R"
+            }, {
+                "id": 3488,
+                "type": "batters",
+                "score": "RBI"
+            }, {
+                "id": 3488,
+                "type": "batters",
+                "score": "H"
+            }, {
+                "id": 3505,
+                "type": "pitchers",
+                "score": "H"
+            }],
+            "inningScores": [{
+                "type": "visitor",
+                "score": "R"
+            }, {
+                "type": "visitor",
+                "score": "H"
+            }],
+            "offence": "visitor",
+            "defence": "home",
+            "pitcher": 3505,
+            "batter": 4,
+            "lastBatterNumber": 5
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 104.09375,
+                    "y": 56
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 0
+                },
+                "type": "hit",
+                "type2": "HR",
+                "coordinatesHit": {
+                    "x": 164.09375,
+                    "y": 38
+                }
+            }],
+            "playerScores": [{
+                "id": 3489,
+                "type": "batters",
+                "score": "AB"
+            }, {
+                "id": 3489,
+                "type": "batters",
+                "score": "R"
+            }, {
+                "id": 3505,
+                "type": "pitchers",
+                "score": "R"
+            }, {
+                "id": 3489,
+                "type": "batters",
+                "score": "RBI"
+            }, {
+                "id": 3489,
+                "type": "batters",
+                "score": "H"
+            }, {
+                "id": 3505,
+                "type": "pitchers",
+                "score": "H"
+            }],
+            "inningScores": [{
+                "type": "visitor",
+                "score": "R"
+            }, {
+                "type": "visitor",
+                "score": "H"
+            }],
+            "offence": "visitor",
+            "defence": "home",
+            "pitcher": 3505,
+            "outs": 0,
+            "batter": 5
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 89.09375,
+                    "y": 56
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 0
+                },
+                "type": "hit",
+                "type2": "HR",
+                "coordinatesHit": {
+                    "x": 159.09375,
+                    "y": 42
+                }
+            }],
+            "playerScores": [{
+                "id": 3490,
+                "type": "batters",
+                "score": "AB"
+            }, {
+                "id": 3490,
+                "type": "batters",
+                "score": "R"
+            }, {
+                "id": 3505,
+                "type": "pitchers",
+                "score": "R"
+            }, {
+                "id": 3490,
+                "type": "batters",
+                "score": "RBI"
+            }, {
+                "id": 3490,
+                "type": "batters",
+                "score": "H"
+            }, {
+                "id": 3505,
+                "type": "pitchers",
+                "score": "H"
+            }],
+            "inningScores": [{
+                "type": "visitor",
+                "score": "R"
+            }, {
+                "type": "visitor",
+                "score": "H"
+            }],
+            "offence": "visitor",
+            "defence": "home",
+            "pitcher": 3505,
+            "outs": 0,
+            "batter": 6
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 100.09375,
+                    "y": 62
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 0
+                },
+                "type": "hit",
+                "type2": "HR",
+                "coordinatesHit": {
+                    "x": 135.09375,
+                    "y": 42
+                }
+            }],
+            "playerScores": [{
+                "id": 3491,
+                "type": "batters",
+                "score": "AB"
+            }, {
+                "id": 3491,
+                "type": "batters",
+                "score": "R"
+            }, {
+                "id": 3505,
+                "type": "pitchers",
+                "score": "R"
+            }, {
+                "id": 3491,
+                "type": "batters",
+                "score": "RBI"
+            }, {
+                "id": 3491,
+                "type": "batters",
+                "score": "H"
+            }, {
+                "id": 3505,
+                "type": "pitchers",
+                "score": "H"
+            }],
+            "inningScores": [{
+                "type": "visitor",
+                "score": "R"
+            }, {
+                "type": "visitor",
+                "score": "H"
+            }],
+            "offence": "visitor",
+            "defence": "home",
+            "pitcher": 3505,
+            "outs": 0,
+            "batter": 7
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 64.09375,
+                    "y": 49
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 1
+                },
+                "type": "out",
+                "type2": "FO",
+                "coordinatesHit": {
+                    "x": 149.09375,
+                    "y": 59
+                }
+            }],
+            "playerScores": [{
+                "id": 3492,
+                "type": "batters",
+                "score": "AB"
+            }],
+            "inningScores": [],
+            "offence": "visitor",
+            "defence": "home",
+            "pitcher": 3505,
+            "outs": 1,
+            "batter": 8
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 100.09375,
+                    "y": 54
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 2
+                },
+                "type": "out",
+                "type2": "FO",
+                "coordinatesHit": {
+                    "x": 152.09375,
+                    "y": 61
+                }
+            }],
+            "playerScores": [{
+                "id": 3493,
+                "type": "batters",
+                "score": "AB"
+            }],
+            "inningScores": [],
+            "offence": "visitor",
+            "defence": "home",
+            "pitcher": 3505,
+            "outs": 2,
+            "batter": 9
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 49.09375,
+                    "y": 53
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 3
+                },
+                "type": "out",
+                "type2": "FO",
+                "coordinatesHit": {
+                    "x": 114.09375,
+                    "y": 74
+                }
+            }],
+            "playerScores": [{
+                "id": 3485,
+                "type": "batters",
+                "score": "AB"
+            }],
+            "inningScores": [],
+            "offence": "visitor",
+            "defence": "home",
+            "pitcher": 3505,
+            "outs": 3,
+            "batter": 1
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 88.09375,
+                    "y": 71
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 1
+                },
+                "type": "out",
+                "type2": "FO",
+                "coordinatesHit": {
+                    "x": 158.09375,
+                    "y": 61
+                }
+            }],
+            "playerScores": [{
+                "id": 3505,
+                "type": "pitchers",
+                "score": "IP"
+            }, {
+                "id": 3498,
+                "type": "batters",
+                "score": "AB"
+            }],
+            "inningScores": [],
+            "offence": "home",
+            "defence": "visitor",
+            "pitcher": 3506,
+            "outs": 1,
+            "batter": 5,
+            "lastBatterNumber": 2
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 103.09375,
+                    "y": 49
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 2
+                },
+                "type": "out",
+                "type2": "FO",
+                "coordinatesHit": {
+                    "x": 152.09375,
+                    "y": 59
+                }
+            }],
+            "playerScores": [{
+                "id": 3499,
+                "type": "batters",
+                "score": "AB"
+            }],
+            "inningScores": [],
+            "offence": "home",
+            "defence": "visitor",
+            "pitcher": 3506,
+            "outs": 2,
+            "batter": 6
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 66.09375,
+                    "y": 45
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 3
+                },
+                "type": "out",
+                "type2": "FO",
+                "coordinatesHit": {
+                    "x": 270.09375,
+                    "y": 62
+                }
+            }],
+            "playerScores": [{
+                "id": 3500,
+                "type": "batters",
+                "score": "AB"
+            }],
+            "inningScores": [],
+            "offence": "home",
+            "defence": "visitor",
+            "pitcher": 3506,
+            "outs": 3,
+            "batter": 7
+        }, {
+            "pitches": [],
+            "playerScores": [{
+                "id": 3506,
+                "type": "pitchers",
+                "score": "IP"
+            }],
+            "inningScores": [],
+            "offence": "home",
+            "defence": "visitor",
+            "pitcher": 3506,
+            "outs": 0
+        }],
+        "bases": [{
+            "id": -1,
+            "bases": [],
+            "runs": []
+        }, {
+            "id": 0,
+            "bases": [null, null, null, null],
+            "runs": [0, 1, 2]
+        }, {
+            "id": 10,
+            "bases": [null, null, null, null],
+            "runs": [0, 1, 2]
+        }, {
+            "id": 20,
+            "bases": [null, null, null, null],
+            "runs": [0, 1, 2]
+        }, {
+            "id": 30,
+            "bases": [null, null, null, null],
+            "runs": [0, 1, 2]
+        }, {
+            "id": 40,
+            "bases": [null, null, null, null],
+            "runs": []
+        }, {
+            "id": 50,
+            "bases": [null, null, null, null],
+            "runs": []
+        }, {
+            "id": 60,
+            "bases": [null],
+            "runs": []
+        }, {
+            "id": 69,
+            "bases": [],
+            "runs": []
+        }, {
+            "id": 70,
+            "bases": [null],
+            "runs": []
+        }, {
+            "id": 80,
+            "bases": [null],
+            "runs": []
+        }, {
+            "id": 90,
+            "bases": [null],
+            "runs": []
+        }]
+    }, {
+        "state": [{
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 76.09375,
+                    "y": 68
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": null
+                },
+                "type": "out",
+                "type2": "GO",
+                "coordinatesHit": {
+                    "x": 145.09375,
+                    "y": 84
+                }
+            }],
+            "playerScores": [{
+                "id": 3486,
+                "type": "batters",
+                "score": "AB"
+            }],
+            "inningScores": [],
+            "offence": "visitor",
+            "defence": "home",
+            "pitcher": 3505,
+            "batter": 2,
+            "lastBatterNumber": 8,
+            "outs": null
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 77.09375,
+                    "y": 54
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": null
+                },
+                "type": "out",
+                "type2": "GO",
+                "coordinatesHit": {
+                    "x": 152.09375,
+                    "y": 64
+                }
+            }],
+            "playerScores": [{
+                "id": 3487,
+                "type": "batters",
+                "score": "AB"
+            }],
+            "inningScores": [],
+            "offence": "visitor",
+            "defence": "home",
+            "pitcher": 3505,
+            "outs": null,
+            "batter": 3
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 82.09375,
+                    "y": 63
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 1
+                },
+                "type": "out",
+                "type2": "GO",
+                "coordinatesHit": {
+                    "x": 151.09375,
+                    "y": 59
+                }
+            }],
+            "playerScores": [{
+                "id": 3488,
+                "type": "batters",
+                "score": "AB"
+            }],
+            "inningScores": [],
+            "offence": "visitor",
+            "defence": "home",
+            "pitcher": 3505,
+            "outs": 1,
+            "batter": 4
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 77.09375,
+                    "y": 60
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 2
+                },
+                "type": "out",
+                "type2": "GO",
+                "coordinatesHit": {
+                    "x": 149.09375,
+                    "y": 62
+                }
+            }],
+            "playerScores": [{
+                "id": 3489,
+                "type": "batters",
+                "score": "AB"
+            }],
+            "inningScores": [],
+            "offence": "visitor",
+            "defence": "home",
+            "pitcher": 3505,
+            "outs": 2,
+            "batter": 5
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 86.09375,
+                    "y": 73
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 3
+                },
+                "type": "out",
+                "type2": "GO",
+                "coordinatesHit": {
+                    "x": 110.09375,
+                    "y": 74
+                }
+            }],
+            "playerScores": [{
+                "id": 3490,
+                "type": "batters",
+                "score": "AB"
+            }],
+            "inningScores": [],
+            "offence": "visitor",
+            "defence": "home",
+            "pitcher": 3505,
+            "outs": 3,
+            "batter": 6
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 69.09375,
+                    "y": 48
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 1
+                },
+                "type": "out",
+                "type2": "GO",
+                "coordinatesHit": {
+                    "x": 240.09375,
+                    "y": 49
+                }
+            }],
+            "playerScores": [{
+                "id": 3505,
+                "type": "pitchers",
+                "score": "IP"
+            }, {
+                "id": 3501,
+                "type": "batters",
+                "score": "AB"
+            }],
+            "inningScores": [],
+            "offence": "home",
+            "defence": "visitor",
+            "pitcher": 3506,
+            "outs": 1,
+            "batter": 8,
+            "lastBatterNumber": 7
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 67.09375,
+                    "y": 49
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 2
+                },
+                "type": "out",
+                "type2": "GO",
+                "coordinatesHit": {
+                    "x": 309.09375,
+                    "y": 73
+                }
+            }],
+            "playerScores": [{
+                "id": 3502,
+                "type": "batters",
+                "score": "AB"
+            }],
+            "inningScores": [],
+            "offence": "home",
+            "defence": "visitor",
+            "pitcher": 3506,
+            "outs": 2,
+            "batter": 9
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 97.09375,
+                    "y": 81
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 3
+                },
+                "type": "out",
+                "type2": "GO",
+                "coordinatesHit": {
+                    "x": 102.09375,
+                    "y": 47
+                }
+            }],
+            "playerScores": [{
+                "id": 3494,
+                "type": "batters",
+                "score": "AB"
+            }],
+            "inningScores": [],
+            "offence": "home",
+            "defence": "visitor",
+            "pitcher": 3506,
+            "outs": 3,
+            "batter": 1
+        }, {
+            "pitches": [],
+            "playerScores": [{
+                "id": 3506,
+                "type": "pitchers",
+                "score": "IP"
+            }],
+            "inningScores": [],
+            "offence": "home",
+            "defence": "visitor",
+            "pitcher": 3506,
+            "outs": 0
+        }],
+        "bases": [{
+            "id": -1,
+            "bases": [],
+            "runs": []
+        }, {
+            "id": 0,
+            "bases": [null],
+            "runs": []
+        }, {
+            "id": 10,
+            "bases": [null],
+            "runs": []
+        }, {
+            "id": 20,
+            "bases": [null],
+            "runs": []
+        }, {
+            "id": 30,
+            "bases": [null],
+            "runs": []
+        }, {
+            "id": 40,
+            "bases": [null],
+            "runs": []
+        }, {
+            "id": 49,
+            "bases": [],
+            "runs": []
+        }, {
+            "id": 50,
+            "bases": [null],
+            "runs": []
+        }, {
+            "id": 60,
+            "bases": [null],
+            "runs": []
+        }, {
+            "id": 70,
+            "bases": [null],
+            "runs": []
+        }]
+    }, {
+        "state": [{
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 77.09375,
+                    "y": 82
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 1
+                },
+                "type": "out",
+                "type2": "FO",
+                "coordinatesHit": {
+                    "x": 152.09375,
+                    "y": 63
+                }
+            }],
+            "playerScores": [{
+                "id": 3491,
+                "type": "batters",
+                "score": "AB"
+            }],
+            "inningScores": [],
+            "offence": "visitor",
+            "defence": "home",
+            "pitcher": 3505,
+            "batter": 7,
+            "lastBatterNumber": 2,
+            "outs": 1
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 84.09375,
+                    "y": 58
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 2
+                },
+                "type": "out",
+                "type2": "GO",
+                "coordinatesHit": {
+                    "x": 111.09375,
+                    "y": 74
+                }
+            }],
+            "playerScores": [{
+                "id": 3492,
+                "type": "batters",
+                "score": "AB"
+            }],
+            "inningScores": [],
+            "offence": "visitor",
+            "defence": "home",
+            "pitcher": 3505,
+            "outs": 2,
+            "batter": 8
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 63.09375,
+                    "y": 76
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 3
+                },
+                "type": "out",
+                "type2": "GO",
+                "coordinatesHit": {
+                    "x": 207.09375,
+                    "y": 37
+                }
+            }],
+            "playerScores": [{
+                "id": 3493,
+                "type": "batters",
+                "score": "AB"
+            }],
+            "inningScores": [],
+            "offence": "visitor",
+            "defence": "home",
+            "pitcher": 3505,
+            "outs": 3,
+            "batter": 9
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 80.09375,
+                    "y": 49
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 1
+                },
+                "type": "out",
+                "type2": "GO",
+                "coordinatesHit": {
+                    "x": 105.09375,
+                    "y": 70
+                }
+            }],
+            "playerScores": [{
+                "id": 3505,
+                "type": "pitchers",
+                "score": "IP"
+            }, {
+                "id": 3495,
+                "type": "batters",
+                "score": "AB"
+            }],
+            "inningScores": [],
+            "offence": "home",
+            "defence": "visitor",
+            "pitcher": 3506,
+            "outs": 1,
+            "batter": 2,
+            "lastBatterNumber": 1
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 51.09375,
+                    "y": 65
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 2
+                },
+                "type": "out",
+                "type2": "GO",
+                "coordinatesHit": {
+                    "x": 167.09375,
+                    "y": 49
+                }
+            }],
+            "playerScores": [{
+                "id": 3496,
+                "type": "batters",
+                "score": "AB"
+            }],
+            "inningScores": [],
+            "offence": "home",
+            "defence": "visitor",
+            "pitcher": 3506,
+            "outs": 2,
+            "batter": 3
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 105.09375,
+                    "y": 68
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 3
+                },
+                "type": "out",
+                "type2": "FO",
+                "coordinatesHit": {
+                    "x": 103.09375,
+                    "y": 48
+                }
+            }],
+            "playerScores": [{
+                "id": 3497,
+                "type": "batters",
+                "score": "AB"
+            }],
+            "inningScores": [],
+            "offence": "home",
+            "defence": "visitor",
+            "pitcher": 3506,
+            "outs": 3,
+            "batter": 4
+        }, {
+            "pitches": [],
+            "playerScores": [{
+                "id": 3506,
+                "type": "pitchers",
+                "score": "IP"
+            }],
+            "inningScores": [],
+            "offence": "home",
+            "defence": "visitor",
+            "pitcher": 3506,
+            "outs": 0
+        }],
+        "bases": [{
+            "id": -1,
+            "bases": [],
+            "runs": []
+        }, {
+            "id": 0,
+            "bases": [null],
+            "runs": []
+        }, {
+            "id": 10,
+            "bases": [null],
+            "runs": []
+        }, {
+            "id": 20,
+            "bases": [null],
+            "runs": []
+        }, {
+            "id": 29,
+            "bases": [],
+            "runs": []
+        }, {
+            "id": 30,
+            "bases": [null],
+            "runs": []
+        }, {
+            "id": 40,
+            "bases": [null],
+            "runs": []
+        }, {
+            "id": 50,
+            "bases": [null],
+            "runs": []
+        }]
+    }, {
+        "state": [{
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 89.09375,
+                    "y": 70
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 0
+                },
+                "type": "hit",
+                "type2": "3B",
+                "coordinatesHit": {
+                    "x": 148.09375,
+                    "y": 40
+                }
+            }],
+            "playerScores": [{
+                "id": 3485,
+                "type": "batters",
+                "score": "AB"
+            }, {
+                "id": 3485,
+                "type": "batters",
+                "score": "H"
+            }, {
+                "id": 3505,
+                "type": "pitchers",
+                "score": "H"
+            }],
+            "inningScores": [{
+                "type": "visitor",
+                "score": "H"
+            }],
+            "offence": "visitor",
+            "defence": "home",
+            "pitcher": 3505,
+            "batter": 1,
+            "lastBatterNumber": 5
+        }, {
+            "pitches": [{
+                "coordinatesCatch": {
+                    "x": 81.09375,
+                    "y": 66
+                },
+                "number": 1,
+                "counter": {
+                    "total": 0,
+                    "strike": 0,
+                    "ball": 0,
+                    "out": 0
+                },
+                "type": "hit",
+                "type2": "2B",
+                "coordinatesHit": {
+                    "x": 146.09375,
+                    "y": 37
+                }
+            }],
+            "playerScores": [{
+                "id": 3486,
+                "type": "batters",
+                "score": "AB"
+            }, {
+                "id": 3486,
+                "type": "batters",
+                "score": "H"
+            }, {
+                "id": 3505,
+                "type": "pitchers",
+                "score": "H"
+            }],
+            "inningScores": [{
+                "type": "visitor",
+                "score": "H"
+            }],
+            "offence": "visitor",
+            "defence": "home",
+            "pitcher": 3505,
+            "outs": 0,
+            "batter": 2
+        }, {
+            "pitches": [],
+            "playerScores": [{
+                "id": 3487,
+                "type": "batters",
+                "score": "AB"
+            }],
+            "inningScores": [],
+            "offence": "visitor",
+            "defence": "home",
+            "pitcher": 3505,
+            "outs": 0,
+            "batter": 3
+        }],
+        "bases": [{
+            "id": -1,
+            "bases": [],
+            "runs": []
+        }, {
+            "id": 0,
+            "bases": [null, null, null, 3485],
+            "runs": [0, 1, 2]
+        }, {
+            "id": 10,
+            "bases": [null, null, 3486, 3485],
+            "runs": [0, 1]
+        }]
+    }]
+}

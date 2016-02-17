@@ -1,0 +1,23 @@
+.ui-message{
+    margin: 10px auto;
+    width: 340px;
+    color: #fff;
+}
+
+.ui-forgot{
+    width: 340px;
+}
+
+.ui-forgot label{
+    color: #fff;
+    margin-top: 10px;
+}
+
+.ui-forgot input[type=text]{
+    width: 340px;
+    background-color: #FDDCB3;
+}
+
+label span{
+    color: #EAC495;
+}

@@ -1,0 +1,45 @@
+.ui-profile-green {
+    height: 38px;
+    width: 100%;
+    background-color:#27804c;
+    text-align: center;
+    color: white;
+    margin-top:12px;
+    font-family: "Helvetica Neue Medium", Helvetica;
+    font-size: 18px;
+    padding-top: 7px
+}
+
+.ui-profile{
+    width: 100%;
+    height: 215px;
+    background: rgba(33, 33, 33, 0.7);
+}
+
+.ui-profile-image {
+    width:119px;
+    height: 160px;
+    margin: 30px 46px auto 46px;
+    float: left;
+    display: inline-block;
+}
+
+.ui-profile-data{
+    height: 100%;
+    width:320px;
+    font-family: "Helvetica Neue Light", Helvetica;
+    font-size: 17px;
+    float: left;
+    display: inline-block;
+    margin-right: 76px;
+    color: white;
+    padding-top: 28px;
+}
+.ui-profile-data span{
+    display: block;
+    margin: 10px auto 10px auto;
+}
+.ui-profile-data span span{
+    display: inline;
+    font-family: "Helvetica Neue Bold", Helvetica;
+}

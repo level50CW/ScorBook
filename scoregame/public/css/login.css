@@ -1,0 +1,23 @@
+.ui-message{
+    margin: 10px auto;
+    width: 330px;
+    color: #fff;
+}
+.ui-login{
+    width: 235px;
+}
+
+.ui-login label{
+    color: #fff;
+    margin-top: 10px;
+}
+
+.ui-login input[type=text],
+.ui-login input[type=password]{
+    width: 235px;
+    background-color: #FDDCB3;
+}
+
+.ui-login a{
+    color: #FAFFBD;
+}
