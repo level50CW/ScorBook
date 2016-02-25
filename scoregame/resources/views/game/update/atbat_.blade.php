@@ -238,6 +238,8 @@ use \App\Models\Batter;
 {!! Html::script('/scripts/atbat/strike.js') !!}
 {!! Html::script('/scripts/atbat/out.js') !!}
 {!! Html::script('/scripts/atbat/misc.js') !!}
+{!! Html::script('/scripts/atbat/error.js') !!}
+{!! Html::script('/scripts/atbat/advance.js') !!}
 {!! Html::script('/scripts/atbat/graphics.js') !!}
 {!! Html::script('/scripts/atbat/request.js') !!}
 {!! Html::script('/scripts/atbat/storage.js') !!}

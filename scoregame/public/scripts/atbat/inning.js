@@ -361,6 +361,15 @@ function InningController(lineups){
         updateScoreUi(currentInning);
     };
 
+    self.addInningErrorScore = function(){
+        var lineupType = defenceLineup.type;
+        inningTotal[lineupType].E++;
+
+        self.storage.addInningScore(lineupType,'E');
+
+        updateScoreUi(currentInning);
+    };
+
     self.addBothScore = function(scoretype){
         self.addBatterScore(scoretype);
         self.addPitchScore(scoretype);

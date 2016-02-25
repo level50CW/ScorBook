@@ -570,6 +570,18 @@ div.ui-field-element[team=visitor]{
     background-color: rgba(255, 52, 52, 0.5);
 }
 
+div.ui-field-element[error]{
+    text-decoration: line-through;
+}
+
+div.ui-field-element[advanced]{
+    text-decoration: underline;
+}
+
+div.ui-field-element[advancedBy]{
+    font-weight: bold;
+}
+
 div.ui-field-label{
     position: relative;
     font: bold 40px sans-serif;

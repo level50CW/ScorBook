@@ -13,6 +13,8 @@ $('body').ready(function(){
     var strikeController = new StrikeController();
     var outController = new OutController();
     var miscController = new MiscController();
+    var errorController = new ErrorController();
+    var advanceController = new AdvanceController();
     var requestController = new RequestController();
     var storageController = new StorageController();
 
@@ -80,7 +82,9 @@ $('body').ready(function(){
     }
 
     function sleepNextBatter(){
+        fielderController.doAdvancedBatterBase();
         sleep(function(){
+            fielderController.clearMarks();
             inningController.nextBatter();
             // TODO: Fix this
             requestController.storeState(function(){});
@@ -131,6 +135,8 @@ $('body').ready(function(){
     pitcherController.onEnable = function(isEnable){
         hitController.enable(isEnable);
         outController.enable(isEnable);
+        errorController.enable(isEnable);
+        advanceController.enable(isEnable);
     };
 
     inningController.onBatterReady = function(batter){
@@ -156,6 +162,7 @@ $('body').ready(function(){
         graphicsController.clear();
         hitController.enable(false);
         outController.enable(false);
+        errorController.enable(false);
         miscController.enable(false);
 
         requestController.setGameStatus(status, function(data){
@@ -186,6 +193,8 @@ $('body').ready(function(){
     fielderController.onBatterFielderClick = function(obj){
         outController.doClick(obj);
         miscController.doClick(obj);
+        errorController.doClick(obj);
+        advanceController.doClick(obj);
     };
 
     hitController.onBatterHit = function(type){
@@ -264,6 +273,10 @@ $('body').ready(function(){
     miscController.onBatterBase = function(batter){
         fielderController.doBatterBaseForce(batter,batter);
         graphicsController.drawStateLabel('SB'+' '+(batter<3? (batter+1)+'B' : 'Home'));
+    };
+
+    errorController.onError = function(val){
+        inningController.addInningErrorScore();
     };
 
     G.onUpdateGameStatus = function(gamestatus){

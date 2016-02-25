@@ -8,6 +8,8 @@ function OutController(){
     var isEnabled;
     var selectedFielderPositions = [];
     var selectedBatterPositions = [];
+    var ignoredBatters = [];
+    var errorFielders = [];
     var selectionMode = null;
     var outTypePermission = {
         'FO':1,
@@ -100,6 +102,30 @@ function OutController(){
         return !!baseState.bases[3];
     }
 
+    function removeIgnored(){
+        if (errorFielders.indexOf(selectedFielderPositions[0]) != -1 &&
+            (outType == 'FO' ||
+            outType == 'GO' ||
+            outType == 'SacF' ||
+            outType == 'SacB')){
+            selectedBatterPositions = _.without(selectedBatterPositions,0);
+        }
+
+        if (errorFielders.indexOf(selectedFielderPositions[1]) != -1 && outType == 'GO')
+            selectedBatterPositions = _.without(selectedBatterPositions,0);
+
+        selectedBatterPositions = _.difference(selectedBatterPositions, ignoredBatters);
+    }
+
+
+    function endOut(){
+        removeIgnored();
+        isCoordinatesSet = false;
+        self.onOut(outType, selectedFielderPositions, selectedBatterPositions);
+        outType = null;
+        self.enable(false);
+    }
+
     $field.mousedown(function(e){
         if (isEnabled && outType && !isCoordinatesSet) {
             var fieldOffset = $field.offset();
@@ -116,6 +142,8 @@ function OutController(){
             selectionMode = 'fielders';
             selectedFielderPositions = [];
             selectedBatterPositions = [];
+            errorFielders = [];
+            ignoredBatters = [];
         }
     });
 
@@ -164,9 +192,17 @@ function OutController(){
 
                 selectedFielderPositions.push(obj.position);
 
+                if (!!obj.object.attr('error'))
+                    errorFielders.push(obj.position);
+
                 if (outType == 'GO' && selectedFielderPositions[0] !=3 ){
                     selectedFielderPositions.push(3);
+
+                    if (!!$('.ui-field-element[fielder][position="3"]').attr('error'))
+                        errorFielders.push(3);
                 }
+
+
 
                 if (outType == 'SacF' ||
                     outType == 'SacB'){
@@ -177,11 +213,12 @@ function OutController(){
                         outType == 'GO' ||
                         outType == 'SacF' ||
                         outType == 'SacB'){
-                    isCoordinatesSet = false;
                     selectedBatterPositions.push(0); // current batter
-                    self.onOut(outType, selectedFielderPositions, selectedBatterPositions);
-                    outType = null;
-                    self.enable(false);
+
+                    if (!!$('.ui-field-element[batter][position="0"]').attr('advanced'))
+                        ignoredBatters.push(0);
+
+                    endOut();
                 }
             }
 
@@ -202,11 +239,11 @@ function OutController(){
 
                 selectedBatterPositions.push(obj.position);
 
+                if (!!obj.object.attr('advanced'))
+                    ignoredBatters.push(obj.position);
+
                 if (selectedBatterPositions.length == outTypePermission[outType]){
-                    isCoordinatesSet = false;
-                    self.onOut(outType, selectedFielderPositions, selectedBatterPositions);
-                    outType = null;
-                    self.enable(false);
+                    endOut();
                 }
             }
         }

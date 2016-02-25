@@ -39,6 +39,7 @@ function FieldController(){
     var currentBatters = null; // state
     var currentGameSet = null; // state
     var lastMarkRotateBatters = [];
+    var advancedBatters = [];
 
     function updateBatters(){
         var $field = $('.js-field');
@@ -82,7 +83,8 @@ function FieldController(){
                 type: 'fielder',
                 number: +$this.attr('fielder'),
                 team: currentGameSet.defenceLineup.type,
-                position: +$this.attr('position')
+                position: +$this.attr('position'),
+                object: $this
             });
         });
 
@@ -95,8 +97,19 @@ function FieldController(){
                 type: 'batter',
                 number: +$this.attr('batter'),
                 team: currentGameSet.offenceLineup.type,
-                position: +$this.attr('position')
+                position: +$this.attr('position'),
+                object: $this
             });
+
+            if (!!$this.attr('advancedBy')) {
+                advancedBatters.push({
+                    batter: +$this.text(),
+                    advancedBy: +$this.attr('advancedBy')
+                });
+            }else{
+                advancedBatters = _.reject(advancedBatters, function(x){return x.batter == +$this.text()});
+            }
+
         });
     }
 
@@ -190,12 +203,21 @@ function FieldController(){
         //    number: +$this.attr('batter'),
         //    team: currentGameSet.offenceLineup.type,currentGameSet.defenceLineup.type
         //    position: +$this.attr('position')
+        //    object: $this
     };
 
     self.clear = function(){
         var $field = $('.js-field');
         $field.children('.ui-circle[batter]').remove();
         $field.children('.ui-circle[fielder]').remove();
+    };
+
+    self.clearMarks = function(){
+        $('.js-field').children('.ui-circle')
+            .removeAttr('error')
+            .removeAttr('advanced')
+            .removeAttr('advancedBy');
+        advancedBatters = [];
     };
 
     self.storeBaseState = function(runs){
@@ -253,6 +275,18 @@ function FieldController(){
     self.doBatterBaseForce = function(fromBaseEnd, fromBaseStart){
         rotateBattersForce(fromBaseEnd, fromBaseStart);
         self.updateBatters();
+    };
+
+    self.doAdvancedBatterBase = function(){
+        $('.js-field').children('.ui-circle[batter]').each(function(){
+            var $this = $(this);
+            var id = _.findIndex(advancedBatters, function(x){return x.batter == +$this.text()});
+            if (id > -1){
+                var position = +$this.attr('position');
+                var advancedBy = advancedBatters[id].advancedBy;
+                self.doAutoBatterBase(Math.min(position+advancedBy,4),position);
+            }
+        });
     };
 
     self.doBatterHit = function(type){
