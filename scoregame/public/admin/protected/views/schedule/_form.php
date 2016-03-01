@@ -164,7 +164,7 @@ function createSeasonPeriods($model){
                 ),
             ));
             echo CHtml::hiddenField('utcTime');
-            echo LocalDateTime::fromDateTimeValue(DateTime::createFromFormat('m-d-Y H:i', $model->date),'#yw0');
+            echo LocalDateTime::fromDateTimeValue(new DateTime(),'#yw0');
         }
         ?>
 

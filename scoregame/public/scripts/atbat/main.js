@@ -108,6 +108,13 @@ $('body').ready(function(){
         }
     }
 
+    function enableButtons(isEnable){
+        hitController.enable(isEnable);
+        outController.enable(isEnable);
+        errorController.enable(isEnable);
+        advanceController.enable(isEnable);
+    }
+
     pitcherController.on3Strikes = function(){
         strikeController.enable(true);
     };
@@ -133,16 +140,12 @@ $('body').ready(function(){
     };
 
     pitcherController.onEnable = function(isEnable){
-        hitController.enable(isEnable);
-        outController.enable(isEnable);
-        errorController.enable(isEnable);
-        advanceController.enable(isEnable);
+        enableButtons(isEnable);
     };
 
     inningController.onBatterReady = function(batter){
         pitcherController.resetPitching();
         fielderController.setCurrentBatter(batter);
-        inningController.addBatterScore(batter, 'AB');
         graphicsController.clear();
     };
 
@@ -160,10 +163,8 @@ $('body').ready(function(){
         pitcherController.enable(false);
         fielderController.clear();
         graphicsController.clear();
-        hitController.enable(false);
-        outController.enable(false);
-        errorController.enable(false);
-        miscController.enable(false);
+
+        enableButtons(false);
 
         requestController.setGameStatus(status, function(data){
             if (data.success){
@@ -199,12 +200,13 @@ $('body').ready(function(){
 
     hitController.onBatterHit = function(type){
         fielderController.doBatterHit(type);
+        inningController.addBatterScore('AB');
         inningController.addBatterScore('H');
         inningController.addPitchScore('H');
         inningController.addInningHitScore();
         pitcherController.addHitPitch(type);
         pitcherController.enable(false);
-        outController.enable(false);
+        enableButtons(false);
         sleepNextBatter();
     };
 
@@ -213,7 +215,7 @@ $('body').ready(function(){
         fielderController.doAutoBatterBase();
         pitcherController.addHitPitch('HBP');
         pitcherController.enable(false);
-        outController.enable(false);
+        enableButtons(false);
         graphicsController.drawLabel('HBP');
         sleepNextBatter();
     };
@@ -229,6 +231,7 @@ $('body').ready(function(){
 
     strikeController.onStrikeOut = function(){
         inningController.addBothScore('SO');
+        inningController.addBatterScore('AB');
         graphicsController.drawStateLabel('K');
         fielderController.doBatterOut();
         pitcherController.addOut();
@@ -239,13 +242,20 @@ $('body').ready(function(){
     outController.onOut = function(type, fielders, batters){
         pitcherController.addOutPitch(type);
         hitController.enable(false);
-        graphicsController.drawStateLabel(type+' '+fielders.join('-'));
+
+        if (type != 'SacF' && type != 'SacB')
+            inningController.addBatterScore('AB');
+
+        if (batters.length > 0) {
+            graphicsController.drawStateLabel(type + ' ' + fielders.join('-'));
+        }
         fielderController.markBatterBase();
         fielderController.doBattersOut(batters);
         fielderController.doBatterBase();
-        for(var k in batters)
+        for (var k in batters)
             pitcherController.addOut();
         pitcherController.enable(false);
+        enableButtons(false);
         sleepNextBatter();
     };
 
@@ -254,8 +264,9 @@ $('body').ready(function(){
         graphicsController.drawHit(point);
     };
 
-    outController.onBatterBase = function(){
-        fielderController.doBatterBaseForce(3,1);
+    outController.onBatterBase = function(toBase){
+        toBase = toBase || 1
+        fielderController.doBatterBaseForce(3,toBase);
     };
 
     miscController.onOut = function(batter){

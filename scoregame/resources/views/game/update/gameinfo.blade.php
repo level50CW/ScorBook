@@ -1,5 +1,7 @@
 <?php
 use App\Helpers\LocalDateTime;
+
+$umpires = ['1B', '2B', '3B', 'LF line', 'RF line'];
 ?>
 
 @extends('game.update')
@@ -77,12 +79,12 @@ use App\Helpers\LocalDateTime;
 
     <h2>OFFICIALS</h2>
     <div class="ui-row">
-        <div class="ui-label ui-brown">{!!Form::label('Plateump','Plate Ump:')!!} <span class="ui-required">*</span></div>
+        <div class="ui-label ui-brown">{!!Form::label('Plateump','Plate:')!!} <span class="ui-required">*</span></div>
         <div class="ui-gray">{!!Form::text('Plateump',null)!!}</div>
     </div>
     @for($i=1;$i<=5;$i++)
         <div class="ui-row">
-            <div class="ui-label ui-brown">{!!Form::label('Fieldump'.$i,"Field Ump $i:")!!} @if ($i<=$numberUmps)<span class="ui-required">*</span> @endif </div>
+            <div class="ui-label ui-brown">{!!Form::label('Fieldump'.$i,$umpires[$i-1])!!} @if ($i<=$numberUmps)<span class="ui-required">*</span> @else <span class="ui-required">&nbsp;</span> @endif </div>
             <div class="ui-gray">{!!Form::text('Fieldump'.$i,null)!!}</div>
         </div>
     @endfor

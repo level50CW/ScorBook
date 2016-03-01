@@ -11,11 +11,14 @@ function OutController(){
     var ignoredBatters = [];
     var errorFielders = [];
     var selectionMode = null;
+    var userShouldSelectType = false;
     var outTypePermission = {
-        'FO':1,
+        'F':1,
         'GO':1,
         'SacF':1,
         'SacB':1,
+        'FO':1,
+        'TO':1,
         'DP':2,
         'TP':3
     };
@@ -25,7 +28,7 @@ function OutController(){
             selector: '.js-button-outs',
             trigger: 'left',
             items:{
-                'FO':{
+                'F':{
                     name: 'Fly Out',
                     callback: menuHandle
                 },
@@ -39,6 +42,14 @@ function OutController(){
                 },
                 'SacB':{
                     name: 'Sac Bunt',
+                    callback: menuHandle
+                },
+                'FO':{
+                    name: 'Force Out',
+                    callback: menuHandle
+                },
+                'TO':{
+                    name: 'Tag Out',
                     callback: menuHandle
                 },
                 'DP':{
@@ -64,6 +75,19 @@ function OutController(){
     }
 
     function menuHandle(item){
+        if (userShouldSelectType){
+
+            if (outTypePermission[item] != 1){
+                alert('Please, select OUT type of 1 runner.');
+                return;
+            }
+
+            userShouldSelectType = false;
+            outType = item;
+            endOutFinished();
+            return;
+        }
+
         if (outTypePermission[item]>getAllowedOutType()){
             alert('You can not do this action. The action limited by number of saved bases or outs.');
             return;
@@ -79,39 +103,55 @@ function OutController(){
             return;
         }
 
+        if (item == 'FO' && !isForceOutAllowed()){
+            alert('You can not do this action. There is no forced runner.');
+            return;
+        }
+
         outType = item;
         $('.js-field').css('background-color','#222');
     }
 
-    function getAllowedOutType(){
+    function getBases(){
         var baseState = self.storage.getBaseState();
+        return baseState.bases;
+    }
+
+    function getAllowedOutType(){
         var state = self.storage.getState();
-        var filled = baseState.bases.filter(function(x){return x;}).length;
+        var filled = getBases().filter(function(x){return x;}).length;
         return Math.min(filled + 1, 3 - (state.outs || 0));
     }
 
     function isSacrificeAllowed(){
-        var baseState = self.storage.getBaseState();
         var state = self.storage.getState();
-        var filled = baseState.bases.filter(function(x){return x;}).length;
+        var filled = getBases().filter(function(x){return x;}).length;
         return filled > 0 && (state.outs || 0) < 2;
     }
 
     function isSacrificeFlyAllowed(){
-        var baseState = self.storage.getBaseState();
-        return !!baseState.bases[3];
+        return !!getBases()[3];
+    }
+
+    function isForceOutAllowed(position){
+        if (position == null)
+            for(var i in getBases()){
+                if (!!getBases()[i] && isForceOutAllowed(i))
+                    return true;
+            }
+
+        return position>1 && !!getBases()[position-1] || position == 1;
     }
 
     function removeIgnored(){
         if (errorFielders.indexOf(selectedFielderPositions[0]) != -1 &&
-            (outType == 'FO' ||
-            outType == 'GO' ||
+            (outType == 'F' ||
             outType == 'SacF' ||
             outType == 'SacB')){
             selectedBatterPositions = _.without(selectedBatterPositions,0);
         }
 
-        if (errorFielders.indexOf(selectedFielderPositions[1]) != -1 && outType == 'GO')
+        if (errorFielders.indexOf(selectedFielderPositions[1]) != -1 && outType == 'SacB')
             selectedBatterPositions = _.without(selectedBatterPositions,0);
 
         selectedBatterPositions = _.difference(selectedBatterPositions, ignoredBatters);
@@ -119,7 +159,30 @@ function OutController(){
 
 
     function endOut(){
+        var outed = selectedBatterPositions.length;
+
         removeIgnored();
+
+        if (outed != selectedBatterPositions.length){
+
+            if (selectedBatterPositions.length == 2){
+                outType='DP';
+                endOutFinished();
+                return;
+            }
+
+            if (selectedBatterPositions.length == 1){
+                alert("There was error of the fielder. Please, select a new OUT type.");
+                userShouldSelectType = true;
+                return;
+            }
+        }
+
+        endOutFinished();
+    }
+
+    function endOutFinished(){
+        userShouldSelectType = false;
         isCoordinatesSet = false;
         self.onOut(outType, selectedFielderPositions, selectedBatterPositions);
         outType = null;
@@ -195,22 +258,22 @@ function OutController(){
                 if (!!obj.object.attr('error'))
                     errorFielders.push(obj.position);
 
-                if (outType == 'GO' && selectedFielderPositions[0] !=3 ){
+                if ((outType == 'SacB') && selectedFielderPositions[0] !=3 ){
                     selectedFielderPositions.push(3);
 
                     if (!!$('.ui-field-element[fielder][position="3"]').attr('error'))
                         errorFielders.push(3);
                 }
 
-
-
-                if (outType == 'SacF' ||
-                    outType == 'SacB'){
+                if (outType == 'SacB'){
                     self.onBatterBase();
                 }
 
-                if (    outType == 'FO' ||
-                        outType == 'GO' ||
+                if (outType == 'SacF'){
+                    self.onBatterBase(3);
+                }
+
+                if (    outType == 'F' ||
                         outType == 'SacF' ||
                         outType == 'SacB'){
                     selectedBatterPositions.push(0); // current batter
@@ -228,12 +291,16 @@ function OutController(){
                     return;
                 }
 
+                if (outType == 'FO' && !isForceOutAllowed(obj.position)){
+                    alert('Runner is not forced');
+                    return;
+                }
+
                 if (selectionMode == 'fielders') {
                     selectionMode = 'batters';
                     selectedBatterPositions = [];
                 }
 
-                //if (selectionMode == 'batters')  // always true
                 if (selectedBatterPositions.indexOf(obj.position) != -1)
                     return;
 
