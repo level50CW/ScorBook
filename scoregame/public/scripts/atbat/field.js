@@ -2,20 +2,20 @@ function FieldController(){
     var self = this;
 
     var positions = {
-        'P': {top: 98, left: 196},
-        'C': {top: 163, left: 196},
-        '1B': {top: 82, left: 298},
-        '2B': {top: 71, left: 256},
-        '3B': {top: 82, left: 100},
-        'SS': {top: 71, left: 140},
-        'LF': {top: 56, left: 89},
-        'CF': {top: 45, left: 196},
-        'RF': {top: 56, left: 322},
+        'P': {top: 138, left: 338},
+        'C': {top: 232, left: 338},
+        '1B': {top: 122, left: 528},
+        '2B': {top: 106, left: 432},
+        '3B': {top: 122, left: 152},
+        'SS': {top: 106, left: 246},
+        'LF': {top: 78, left: 164},
+        'CF': {top: 62, left: 338},
+        'RF': {top: 78, left: 520},
         'B': [
-            {top: 142, left: 196},
-            {top: 96, left: 298},
-            {top: 67, left: 196},
-            {top: 96, left: 100}
+            {top: 212, left: 338},
+            {top: 130, left: 494},
+            {top: 90, left: 338},
+            {top: 130, left: 184}
         ],
 
 

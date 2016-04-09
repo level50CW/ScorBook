@@ -2,8 +2,11 @@ G = {};
 
 $('body').ready(function(){
     var $lineups = $('.js-lineup');
+    var $scorepads = $('.js-scorepad');
     $lineups['visitor'] = $lineups.eq(0);
     $lineups['home'] = $lineups.eq(1);
+    $scorepads['visitor'] = $scorepads.eq(0);
+    $scorepads['home'] = $scorepads.eq(1);
 
     var pitcherController = new PitchingController();
     var inningController = new InningController(G.lineups,1);
@@ -17,6 +20,8 @@ $('body').ready(function(){
     var advanceController = new AdvanceController();
     var requestController = new RequestController();
     var storageController = new StorageController();
+    var ballInPlayController = new BallInPlayController();
+    var gameLogController = new GameLogController();
 
     storageController.register(pitcherController);
     storageController.register(inningController);
@@ -27,6 +32,7 @@ $('body').ready(function(){
     storageController.register(strikeController);
     storageController.register(outController);
     storageController.register(miscController);
+    storageController.register(gameLogController);
 
     var sleepData = {
         callbackSequence: [],
@@ -52,12 +58,27 @@ $('body').ready(function(){
         $('.js-button-lineup').click(function () {
             $('.js-button-lineup').removeAttr('selected');
             $lineups.hide();
+            $scorepads.hide();
 
             $(this).attr('selected',1);
             $lineups[$(this).attr('team')].show();
+            $scorepads[$(this).attr('team')].show();
         });
 
         $('.js-button-lineup[team=visitor]').click();
+    }
+
+    function initContainerSwitching(){
+        $('.js-button-container').click(function () {
+            $('.js-button-container').removeAttr('selected');
+            $('.js-container-lineup').hide();
+            $('.js-container-scorepad').hide();
+
+            $(this).attr('selected',1);
+            $('.js-container-' + $(this).attr('type')).show();
+        });
+
+        $('.js-button-container[type=lineup]').click();
     }
 
     function selectLineup(type){
@@ -83,6 +104,7 @@ $('body').ready(function(){
 
     function sleepNextBatter(){
         fielderController.doAdvancedBatterBase();
+        pitcherController.disableMenu();
         sleep(function(){
             fielderController.clearMarks();
             inningController.nextBatter();
@@ -102,6 +124,7 @@ $('body').ready(function(){
                 pitcherController.restore();
                 fielderController.setGameSet(gameSet);
                 fielderController.restore();
+                gameLogController.restore();
 
                 selectLineup(gameSet.offenceLineup.type);
             });
@@ -141,6 +164,11 @@ $('body').ready(function(){
 
     pitcherController.onEnable = function(isEnable){
         enableButtons(isEnable);
+    };
+
+    pitcherController.onAddLog = function(type, text){
+        gameLogController.addItem(type,text);
+        gameLogController.update();
     };
 
     inningController.onBatterReady = function(batter){
@@ -229,12 +257,13 @@ $('body').ready(function(){
         graphicsController.drawLabel(type);
     };
 
-    strikeController.onStrikeOut = function(){
+    strikeController.onStrikeOut = function(type){
         inningController.addBothScore('SO');
         inningController.addBatterScore('AB');
         graphicsController.drawStateLabel('K');
         fielderController.doBatterOut();
         pitcherController.addOut();
+        pitcherController.addOutPitch(type);
         pitcherController.enable(false);
         sleepNextBatter();
     };
@@ -265,7 +294,7 @@ $('body').ready(function(){
     };
 
     outController.onBatterBase = function(toBase){
-        toBase = toBase || 1
+        toBase = toBase || 1;
         fielderController.doBatterBaseForce(3,toBase);
     };
 
@@ -288,6 +317,28 @@ $('body').ready(function(){
 
     errorController.onError = function(val){
         inningController.addInningErrorScore();
+    };
+
+    ballInPlayController.onMenu = function(type, item){
+        switch(type){
+            case 'hit': return hitController.menuHandle(item);
+            case 'out': return outController.menuHandle(item);
+            case 'strike': return strikeController.menuHandle(item);
+            case 'error': return errorController.menuHandle(item);
+            case 'misc': return miscController.menuHandle(item);
+            case 'advance': return advanceController.menuHandle(item);
+        }
+        return false;
+    };
+
+    gameLogController.onGetCurrentTeamBatter = function(){
+        var gameSet = inningController.getGameSet();
+        var batter = inningController.getCurrentBatter();
+
+        return {
+            lineup: gameSet.offenceLineup.name,
+            batter: batter.name
+        };
     };
 
     G.onUpdateGameStatus = function(gamestatus){
@@ -371,6 +422,7 @@ $('body').ready(function(){
         }
     };
 
+    initContainerSwitching();
     initLineupSwitching();
 
     restore();

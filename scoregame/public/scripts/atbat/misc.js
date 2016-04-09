@@ -34,7 +34,7 @@ function MiscController(){
         }
 
         stealType = item;
-        $('.js-field').css('background-color','#222');
+        $('.js-field').attr('active',1);
     }
 
     function isStealAllowed(){
@@ -57,6 +57,10 @@ function MiscController(){
             button.attr('disabled', 1);
             stealType = null;
         }
+    };
+
+    self.menuHandle = function(type){
+        return isEnabled && (menuHandle(type) || true);
     };
 
     self.doClick = function(obj){
@@ -88,7 +92,7 @@ function MiscController(){
                 }
 
                 stealType = null;
-                $('.js-field').css('background-color','#000');
+                $('.js-field').removeAttr('active');
             }
         }
     };

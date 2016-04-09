@@ -4,23 +4,23 @@ function GraphicsController(){
     var context = field.getContext('2d');
 
     var positions = {
-        'H': {x:208, y:130},
-        '1B': {x:299, y:88},
-        '2B': {x:208, y:57},
-        '3B': {x:117, y:87},
-        label1B: {x:260, y:126},
-        labelHBP: {x:260, y:126},
-        labelBB: {x:260, y:126},
-        label2B: {x:230, y:56},
-        label3B: {x:168, y:56},
-        labelHR: {x:134, y:126},
+        'H': {x:350, y:194},
+        '1B': {x:505, y:127},
+        '2B': {x:350, y:85},
+        '3B': {x:195, y:127},
+        label1B: {x:451, y:179},
+        labelHBP: {x:451, y:179},
+        labelBB: {x:451, y:179},
+        label2B: {x:389, y:94},
+        label3B: {x:280, y:94},
+        labelHR: {x:224, y:182},
         labelState: {x:30, y:200}
     };
 
     var corner = {
-        'H': {x:208, y:143},
-        '1B': {x:308, y:95},
-        '3B': {x:108, y:95}
+        'H': {x:350, y:212},
+        '1B': {x:451, y:169},
+        '3B': {x:258, y:173}
     };
 
     var lines = {
@@ -53,8 +53,8 @@ function GraphicsController(){
         context.save();
         context.translate(0, 0);
         //context.textAlign = 'center';
-        context.shadowColor = '#444';
-        context.shadowBlur = 4;
+        context.shadowColor = '#222';
+        context.shadowBlur = 3;
         context.shadowOffsetX = 0;
         context.shadowOffsetY = 0;
         context.fillStyle = '#ADBEFF';

@@ -29,7 +29,7 @@ function AdvanceController(){
 
     function menuHandle(item){
         advancedBy = {'AR1':1, 'AR2': 2, 'AR3': 3}[item];
-        $('.js-field').css('background-color','#222');
+        $('.js-field').attr('active',1);
     }
 
     self.onError = function(val){};
@@ -43,6 +43,10 @@ function AdvanceController(){
         else {
             button.attr('disabled', 1);
         }
+    };
+
+    self.menuHandle = function(type){
+        return isEnabled && (menuHandle(type) || true);
     };
 
     self.doClick = function(obj){
@@ -59,7 +63,7 @@ function AdvanceController(){
                 return;
             }
             advancedBy = null;
-            $('.js-field').css('background-color','#000');
+            $('.js-field').removeAttr('active');
         }
     };
 

@@ -1,16 +1,18 @@
 function StrikeController(){
     var self = this;
 
+    var isEnabled;
+
     function initMenu(){
         $.contextMenu({
             selector: '.js-button-k',
             trigger: 'left',
             items:{
-                'looking':{
+                'KL':{
                     name: 'Strikeout Looking',
                     callback: menuHandle
                 },
-                'swinging':{
+                'KSW':{
                     name: 'Strikeout Swinging',
                     callback: menuHandle
                 }
@@ -23,12 +25,16 @@ function StrikeController(){
     function menuHandle(item){
         self.enable(false);
 
-        self.storage.updatePitch({type2: item});
+        self.storage.updatePitch({type:'out', type2: item});
 
-        self.onStrikeOut();
+        self.onStrikeOut(item);
     }
 
-    self.onStrikeOut = function(){};
+    self.onStrikeOut = function(type){};
+
+    self.menuHandle = function(type){
+        return isEnabled && (menuHandle(type) || true);
+    };
 
     self.enable = function(isEnable){
         var button = $('.js-button-k');
@@ -38,6 +44,8 @@ function StrikeController(){
             button.removeAttr('disabled');
         else
             button.attr('disabled',1);
+
+        isEnabled = isEnable;
     };
 
     initMenu();

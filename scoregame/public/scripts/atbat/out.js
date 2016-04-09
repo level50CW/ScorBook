@@ -109,7 +109,7 @@ function OutController(){
         }
 
         outType = item;
-        $('.js-field').css('background-color','#222');
+        $('.js-field').attr('active',1);
     }
 
     function getBases(){
@@ -220,6 +220,10 @@ function OutController(){
     self.onOut = function(type, fielders, batters){};
     self.onDrawHit = function(point){};
     self.onBatterBase = function(){};
+
+    self.menuHandle = function(type){
+        return isEnabled && (menuHandle(type) || true);
+    };
 
     self.enable = function(isEnable){
         isEnabled = isEnable;

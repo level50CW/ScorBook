@@ -5,9 +5,9 @@ function ErrorController(){
     var isEnabled;
 
     $('.js-button-err').click(function(){
-        if (!$(this).attr('disabled')){
+        if (isEnabled){
             playerSelected = false;
-            $('.js-field').css('background-color','#222');
+            $('.js-field').attr('active',1);
         }
     });
 
@@ -22,6 +22,14 @@ function ErrorController(){
         else {
             button.attr('disabled', 1);
         }
+    };
+
+    self.menuHandle = function(){
+        if (isEnabled){
+            playerSelected = false;
+            $('.js-field').attr('active',1);
+        }
+        return isEnabled;
     };
 
     self.doClick = function(obj){
@@ -44,7 +52,7 @@ function ErrorController(){
                 //}
             }
             playerSelected = true;
-            $('.js-field').css('background-color','#000');
+            $('.js-field').removeAttr('active');
         }
     };
 }

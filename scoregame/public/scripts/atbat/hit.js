@@ -44,7 +44,7 @@ function HitController(){
             hitType = null;
             return;
         }
-        $('.js-field').css('background-color','#222');
+        $('.js-field').attr('active',1);
     }
 
     $field.mousedown(function(e){
@@ -78,6 +78,10 @@ function HitController(){
     self.onDrawHit = function(point){};
     self.onDrawLabel = function(type){};
 
+    self.menuHandle = function(type){
+        return isEnabled && (menuHandle(type) || true);
+    };
+
     self.enable = function(isEnable){
         var button = $('.js-button-hit');
         button.contextMenu(isEnable);
@@ -90,9 +94,9 @@ function HitController(){
             hitType = null;
         }
 
-        $field.css('background-color','#000');
+        $field.removeAttr('active');
         isEnabled = isEnable;
-    }
+    };
 
     initMenu();
 

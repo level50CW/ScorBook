@@ -1,32 +1,33 @@
-
-body{
+body {
     background-image: url('../../images/atbat/main_background.png');
-    margin:0;
+    margin: 0;
     padding: 0;
     font-family: "Helvetica Neue Regular", Helvetica;
 }
 
-.title{
-    color:black;
+.title {
+    color: black;
 }
-.ui-header{
+
+.ui-header {
     margin: 0% 20% 32px 20%;
     margin: 0 auto;
-    width:60%;
+    width: 60%;
     height: 142px;
     overflow: hidden;
     font-size: 15px;
     color: #FFFFFF;
-    position:relative;
+    position: relative;
     min-width: 1138px;
 }
+
 .ui-image-logo {
-    max-height:100px ;
-    position:absolute;
+    max-height: 100px;
+    position: absolute;
     bottom: 0;
-    left:0;
+    left: 0;
     right: 0;
-    padding-bottom:32px;
+    padding-bottom: 32px;
     margin-left: 0%;
 }
 
@@ -40,9 +41,10 @@ body{
     margin-right: 0%;
     position: absolute;
     font-family: "Helvetica Neue Medium", Helvetica;
-    padding-bottom:32px;
+    padding-bottom: 32px;
 }
-.ui-logout{
+
+.ui-logout {
     border: none;
     text-decoration: none;
     background-color: transparent;
@@ -65,35 +67,36 @@ input:focus {
     outline: none;
 }
 
-.ui-sub-header{
+.ui-sub-header {
     background-color: #e4e4e4;
     height: 34px;
-    width:100%;
+    width: 100%;
     padding: 0;
     margin: 0;
-    display:table;
+    display: table;
     width: 900px;
     margin: auto;
 }
 
-.ui-sub-header span{
-    display:table-cell;
+.ui-sub-header span {
+    display: table-cell;
     vertical-align: middle;
     text-align: center;
-    width:100px;
+    width: 100px;
     height: 100%;
     margin: 0 auto;
     font-size: 24px;
     font-family: "Helvetica Neue Regular", Helvetica;
 }
-.ui-sub-header-second{
+
+.ui-sub-header-second {
     background-color: #670801;
     color: white;
     height: 28px;
     padding: 0;
     margin: auto;
     margin-top: 20px;
-    display:table;
+    display: table;
     width: 900px;
     font-size: 18px;
     font-family: "Helvetica Neue Medium", Helvetica;
@@ -102,172 +105,254 @@ input:focus {
     padding-top: 5px;
 
 }
-.ui-container{
+
+.ui-container {
     margin: 0 auto 30px;
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(0, 0, 0, 0.7);
     padding: 16px 20px 32px 20px;
-    height:auto;
+    height: auto;
     overflow: hidden;
     width: 860px;
 }
 
+.ui-tables-bottom-div {
+    margin-top: 20px;
+}
+
 .ui-tables-left-div {
-    float:left;
-    width:48.5%;
+    float: left;
+    width: 582px;
     height: auto;
-    margin: 0px 22px 22px 0px;
     display: inline-block;
 }
 
-.ui-statistic-div{
-    float:left;
-    width:70%;
+.ui-statistic-div {
+    width: 70%;
     height: 118px;
-    margin: 0px 22px 20px 0px;
-    background-color: black;
+    background-color: #2d2f35;
     display: inline-block;
     padding: 10px 10px 0px 10px;
+    vertical-align: top;
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
 }
-.ui-statistic-title{
+
+.ui-statistic-title {
     font-size: 14px;
     color: white;
     font-family: "Helvetica Neue Medium", Helvetica;
 }
+
 .ui-table-statistic {
     padding-top: 10px;
-    width:100%;
+    width: 100%;
     color: white;
-    border:none;
+    border: none;
     text-align: center;
 }
+
 .ui-table-statistic-head-color {
-    background-color: #000000;
+    background-color: #111;
     font-family: "Helvetica Neue Bold", Helvetica;
     font-size: 14px;
     color: #FFFFFF;
     text-transform: uppercase;
 }
 
-.ui-table-statistic-head-color[selected]{
-    background-color: #005c9a;
+.ui-table-statistic-head-color[selected] {
+    background-color: #176ff4;
 }
 
 .ui-table-statistic-head {
-    background-color: #3b3b3b;
+    background-color: #3e4049;
     font-family: "Helvetica Neue Regular", Helvetica;
     font-size: 15px;
     color: #afafaf;
 }
 
 .ui-table-statistic-body-color {
-    background-color: black;
     font-family: "Helvetica Neue Regular", Helvetica;
     font-size: 14px;
     color: #afafaf;
 }
 
 .ui-table-statistic-body {
-    background-color: black;
     font-family: "Helvetica Neue Regular", Helvetica;
     font-size: 14px;
     color: #FFFFFF;
 }
 
 .ui-command-div {
-    width:100%;
+    width: 100%;
     height: auto;
     margin-bottom: 22px;
 }
-.ui-command-div-title {
-    width:96%;
-    height: 52px;
-    background-color: #212121;
-    border-bottom: 2px solid #434343;
-    border-top: 2px solid #434343;
-    font-family: "Helvetica Neue Medium", Helvetica;
-    font-size: 17px;
-    color:white;
-    text-align: left;
-    padding-left: 4%;
+
+.ui-container-div-title {
+
+    font-family: arial;
+
+    text-transform: uppercase;
+
+    font-weight: bold;
+
+    font-size: 16px;
+
+    padding: 4px;
 }
 
+.ui-lineup-div-title {
+    background-color: #3e4049;
+    font-family: arial;
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+}
 
-
-.ui-button-command{
-    color:#afafaf;
+.ui-button-container {
+    color: #777777;
     border: none;
     display: inline-block;
-    margin-top: 15px;
     cursor: pointer;
 }
 
-.ui-button-command[selected]{
-    color:white;
-    border-bottom: 3px solid #afafaf;
+.ui-button-container[selected] {
+    color: white;
+    border-bottom: 5px solid #176ff4;
 }
 
-.ui-table-command{
-    width:100%;
+.ui-button-lineup {
+    color: #5e5e5e;
+    background-color: #b7b7b7;
+    display: inline-block;
+    cursor: pointer;
+    width: 100px;
+    height: 26px;
+    text-align: center;
+    padding-top: 6px;
+}
+
+.ui-button-lineup[selected] {
+    color: white;
+    background-color: #176ff4;
+}
+
+.ui-button-start{
+    margin: auto;
+    width: 148px;
+    cursor: pointer;
+}
+
+.ui-button-start .icon{
+
+    width: 44px;
+
+    height: 44px;
+
+    display: inline-block;
+
+    border-radius: 24px;
+
+    background-image: url(../../images/atbat/btn_start_game.png);
+
+    background-repeat: no-repeat;
+
+    background-position: center;
+}
+
+.ui-button-start .text{
+
+    display: inline-block;
+
+    vertical-align: top;
+
+    font-weight: bold;
+
+    padding-top: 14px;
+
+    margin-left: 10px;
+}
+
+.ui-table-command {
+    width: 100%;
     color: white;
     border-collapse: collapse;
     text-align: left;
     font-size: 16px;
     margin-bottom: 15px;
 }
-.ui-table-command td{
-    border-top:2px solid #434343;
-    background-color: #212121;
+
+.ui-table-command td {
     color: #C5C5C5;
     text-align: center;
     height: 34px;
 }
 
-.ui-table-command tr[selected] td{
+.ui-table-command tr:nth-child(even) {
+    background-color: #313131;
+}
+
+.ui-table-command tr:nth-child(odd) {
+    background-color: #414141;
+}
+
+.ui-table-command tr[selected] td {
     background-color: #FFAE00;
     color: #404040;
 }
 
-.ui-table-command th{
-    color: white;
+.ui-table-command th {
+    color: #e6e6e6;
     text-align: center;
-    background-color: black;
-    font-size: 18px;
+    background-color: #202020;
+    font-size: 16px;
     height: 35px;
 }
 
-th.ui-table-command-header{
+th.ui-table-command-header {
     text-align: left;
     padding-left: 15px;
 }
 
-td.ui-table-command-player{
+td.ui-table-command-player {
     text-align: left;
 }
 
-.ui-table-command th:not(.ui-table-command-header){
-     width: 30px;
+.ui-table-command th:not(.ui-table-command-header) {
+    width: 30px;
 }
 
-.ui-table-command td:not(.ui-table-command-player){
+.ui-table-command td:not(.ui-table-command-player) {
     width: 30px;
 }
 
 .ui-caption-command {
-    padding: 15px 0 20px 15px;
+    padding: 12px 0 12px 15px;
     color: white;
     font-size: 15px;
-    background-color: black;
+    background-color: #202020;
 }
 
 .ui-pitcher-div {
-    width:100%;
+    width: 100%;
     height: auto;
     background-color: black;
     margin-bottom: 22px;
 }
 
-.ui-table-pitcher{
-    width:100%;
+.ui-pitch-region {
+
+    position: absolute;
+
+    width: 144px;
+
+    right: 14px;
+
+    top: 142px;
+}
+
+.ui-table-pitcher {
+    width: 100%;
     color: white;
     border-collapse: collapse;
     text-align: left;
@@ -275,87 +360,173 @@ td.ui-table-command-player{
     font-family: "Helvetica Neue Regular", Helvetica;
 }
 
-.ui-table-pitcher thead{
+.ui-table-pitcher thead {
     color: white;
     text-align: center;
 }
-.ui-table-pitcher tbody{
+
+.ui-table-pitcher tbody {
     color: #f4f4f4;
     text-align: center;
 }
 
-
 .ui-weather-div {
-    float:left;
-    width:25%;
+    width: 236px;
+    margin-left: -4px;
+    border-left: 1px dashed #565656;
     height: 128px;
-    margin: 0px 0px 22px 0px;
-    background-color: black;
+    background-color: #2d2f35;
     display: inline-block;
-    font-size: 15px;
+    font-size: 14px;
     font-family: "Helvetica Neue Regular", Helvetica;
     color: white;
+    border-bottom-right-radius: 8px;
+    border-top-right-radius: 8px;
 }
-.ui-stadium-name{
-    padding: 10px 15px 15px 30px;
+
+.ui-stadium-name {
+    padding: 10px 15px 0px 30px;
     text-align: right;
 }
 
 .ui-weather {
     text-align: right;
     padding: 0px 15px 10px 30px;
-    height:40px;
+    height: 40px;
 }
+
 .ui-weather-text {
     display: inline-block;
-    vertical-align: middle;
-    height: 40px;
+    vertical-align: top;
+    height: 20px;
+    position: relative;
     color: #a2a18c;
+    top: 18px;
 }
-.ui-weather-icon{
+
+.ui-weather-icon {
     height: 50px;
     width: auto;
     display: inline;
 }
 
 .ui-tables-right-div {
-    float:right;
-    width:48.5%;
-    height:auto;
-    margin: 0px 0px 22px 0px;
+    float: right;
+    width: 256px;
+    height: auto;
     display: inline-block;
 }
 
-.ui-field-div {
-    width:100%;
-    height:230px;
-    background-color: black;
-    float: right;
-    margin-bottom: 22px;
+.ui-field-container {
+    position: relative;
+    height: 340px;
+    background-color: #2d2f35;
+    border-radius: 8px;
+    margin-top: 10px;
 }
 
-.ui-field-div canvas{
-    position: relative;
-    top: -233px;
+.ui-field-div {
+    width: 685px;
+    height: 340px;
+    position: absolute;
+    left: 86px;
+    border-radius: inherit;
+}
+
+.ui-field-div[active]{
+    background: #2d2f35;
+    background: -moz-linear-gradient(left,  #2d2f35 0%, #3d3e48 50%, #2d2f35 100%);
+    background: -webkit-linear-gradient(left,  #2d2f35 0%,#3d3e48 50%,#2d2f35 100%);
+    background: linear-gradient(to right,  #2d2f35 0%,#3d3e48 50%,#2d2f35 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2d2f35', endColorstr='#2d2f35',GradientType=1 );
+}
+
+.ui-field-div canvas {
+    position: absolute;
+    width: 700px;
+    height: 340px;
+}
+
+.ui-buttons-container {
+
+    font-size: 12px;
+
+    font-weight: bold;
+
+    font-family: arial;
+
+    text-align: center;
+
+    text-transform: uppercase;
+
+    padding: 10px;
+
+    background-color: #2d2f35;
+
+    border-radius: 8px;
+
+    margin-top: 10px;
+
+    margin-bottom: 10px;
+}
+
+.ui-buttons-container table {
+
+    width: 100%;
+}
+
+.ui-field-button {
+    width: 140px;
+    background-color: #e9a003;
+    border-radius: 5px;
+    margin: auto;
+    padding: 7px 0px;
+    cursor: pointer;
+}
+
+.ui-field-button[disabled]{
+
+}
+
+.ui-field-ballinplay {
+    width: 114px;
+    height: 80px;
+    margin: auto;
+    color: white;
+    padding: 4px 0px;
+    border-left: 1px dashed #565656;
+    border-right: 1px dashed #565656;
+    cursor: pointer;
+}
+
+.ui-field-ballinplay-circle {
+    width: 64px;
+    height: 64px;
+    border-radius: 31px;
+    margin: auto;
+    margin-bottom: 4px;
+    background-repeat: no-repeat;
+    background-position: 0px 0px;
+    background-image: url(../../images/atbat/btn_ball_in_play.png);
 }
 
 .ui-baseball-field {
-    width: 100%;
-    height: 100%;
+    width: 700px;
+    height: 340px;
 }
 
-.ui-batting-batside{
+.ui-batting-batside {
     width: 120px;
     height: 20px;
-    background-color: black;
-    margin: auto;
     font-size: 13px;
     color: #FFFFFF;
-    overflow: hidden;
     padding: 5px 0 0 5px;
+    position: absolute;
+    left: 372px;
+    bottom: 35px;
 }
 
-.ui-batting-batside .ui-triangle{
+.ui-batting-batside .ui-triangle {
     width: 0;
     height: 0;
     border-style: solid;
@@ -364,91 +535,95 @@ td.ui-table-command-player{
     top: -4px;
 }
 
-.ui-batting-batside .ui-triangle[type=left]{
+.ui-batting-batside .ui-triangle[type=left] {
     border-width: 10px 14px 10px 0;
     border-color: transparent #cc9900 transparent transparent;
     margin-right: 4px;
 }
 
-.ui-batting-batside .ui-triangle[type=right]{
+.ui-batting-batside .ui-triangle[type=right] {
     border-width: 10px 0 10px 14px;
     border-color: transparent transparent transparent #cc9900;
     margin-left: 4px;
 }
 
-.ui-deck-div{
-    width:100%;
-    height:68px;
-    background-color: black;
-    float: right;
-    margin-bottom: 26px;
-    margin-top: 26px;
+.ui-deck-div {
     font-size: 15px;
     font-family: "Helvetica Neue Medium", Helvetica;
     color: #FFFFFF;
-    display: table;
+    position: absolute;
+    left: 20px;
+    bottom: 10px;
 }
 
 .ui-deck-text {
-    display:table-cell;
-    vertical-align:middle;
-    padding-left: 10px;
+    display: table-cell;
+    vertical-align: middle;
 }
 
-.ui-buttons-div{
-    width:100%;
-    height: auto;
-    float: right;
-    font-size: 13px;
-    font-family: "Helvetica Neue Bold", Helvetica;
+.ui-buttons-div {
+    width: 100%;
+    font-size: 12px;
+    font-weight: bold;
+    font-family: arial;
+    text-transform: uppercase;
     color: #000000;
+    text-align: center;
 }
 
-.ui-buttons-div td{
+.ui-buttons-div td {
     cursor: pointer;
 }
 
-.ui-buttons-div td[disabled]{
+.ui-buttons-div td[disabled] {
     cursor: default;
     background-color: #8A5E00;
     color: #3E3E3E;
 }
 
-.ui-bso-div{
-    width:100%;
-    height:40px;
-    float: right;
-    margin-bottom: 40px;
-    margin-top: 30px;
+.ui-button-rare {
+
+    width: 138px;
+
+    height: 20px;
+
+    background-color: #E4E4E4;
+
+    padding-top: 5px;
+
+    margin: auto;
+}
+
+.ui-bso-div {
     font-size: 17px;
     font-family: "Helvetica Neue Bold", Helvetica;
     color: #FFFFFF;
-    display: table;
+    position: absolute;
+    left: 20px;
+    bottom: 70px;
 }
 
-.ui-bso-part{
-    height: 26px;
-    display:inline-table;
+.ui-bso-part {
     margin-right: 15px;
     cursor: pointer;
 }
 
 .ui-bso-part span {
-    display:table-cell;
-    vertical-align:middle;
     height: 26px;
-    padding-right: 10px;
+    width: 16px;
+    vertical-align: top;
+    display: inline-block;
 }
 
-.ui-pitch-div{
-    width:100%;
-    height:auto;
+.ui-pitch-div {
+    width: 100%;
+    height: auto;
     float: right;
     margin-bottom: 60px;
 }
 
-.ui-pitch-part{
-    display:inline-table;
+.ui-pitch-part {
+    display: inline-table;
     width: 45%;
     height: auto;
     overflow: hidden;
@@ -456,8 +631,8 @@ td.ui-table-command-player{
     margin-left: 10px;
 }
 
-.ui-pitch-button{
-    height:50px;
+.ui-pitch-button {
+    height: 50px;
     width: 115px;
     background-color: #ffae00;
     font-family: "Helvetica Neue Medium", Helvetica;
@@ -467,24 +642,24 @@ td.ui-table-command-player{
     cursor: pointer;
 }
 
-.ui-pitch-button[disabled]{
+.ui-pitch-button[disabled] {
     background-color: #8A5E00;
     cursor: default;
 }
 
 .ui-pitch-ball {
     margin: 10px;
-    display:inline;
-    vertical-align:middle;
+    display: inline;
+    vertical-align: middle;
 
 }
 
 .ui-pitch-text {
     margin: auto;
-    vertical-align:middle;
+    vertical-align: middle;
 }
 
-.ui-disable-pitch{
+.ui-disable-pitch {
     display: table;
     color: white;
     font-size: 11px;
@@ -494,117 +669,152 @@ td.ui-table-command-player{
     text-align: center;
 }
 
-.ui-pitch-status{
-    background-color: black;
-    width: 178px;
-    margin: 20px 0 0 15px;
-    padding: 10px 0 0 10px;
-    color: #afafaf;
+.ui-gamelog {
+
 }
 
-.ui-pitch-status-part{
+.ui-gamelog .button {
+    color: #17A2F4;
+    font-size: 20px;
+    cursor: pointer;
+
+}
+
+.ui-gamelog .pages {
+    color: white;
+}
+
+.ui-pitch-status {
+    background-color: #202020;
+    color: #E0E0E0;
+}
+
+.ui-pitch-status-part {
     height: 26px;
-    display:inline-table;
-    width: 95%;
+    padding: 5px 20px 0px 20px;
+}
+
+.ui-pitch-status-part[type=team] {
+    padding: 8px;
+    background-color: #176ff4;
+    color: white;
+    font-weight: bold;
+    font-family: Arial;
+    height: 14px;
+}
+
+.ui-pitch-status-part[type=player] {
+    background-color: #313131;
+    text-align: center;
 }
 
 .ui-pitch-status-part span {
-    font-size: 15px;
-    float: left;
 }
+
 .ui-pitch-status-part .ui-circle {
     float: right;
     top: -4px;
     position: relative;
 }
+
 .ui-points {
-    font-size:52px;
+    font-size: 52px;
     font-family: 'Aero-Matics-Display-Bold', Helvetica;
 }
+
 @font-face {
     font-family: "Aero-Matics-Display-Bold";
     src: url('../../fonts/Aero Matics Bold.ttf') format('truetype');
 }
 
-.ui-circle{
+.ui-circle {
     display: inline-block;
     width: 20px;
     height: 20px;
     background-color: rgba(148, 148, 148, 0.5);
     border-radius: 10px;
-    margin: 0 1px;
-    -moz-margin-start:0px;
+    margin: 0px -1px;
+    -moz-margin-start: 0px;
     -moz-margin-end: 0px;
-    margin-top:2px;
+    margin-top: 2px;
 }
 
-.ui-circle[color=red]{
+.ui-circle[color=red] {
     background-color: #F83326;
 }
 
-.ui-circle[color=green]{
+.ui-circle[color=green] {
     background-color: #4EC554;
 }
 
-.ui-circle[color=blue]{
+.ui-circle[color=blue] {
     background-color: #4EA4C5;
 }
 
-.ui-circle[color=yellow]{
-     background-color: #CC8B00;
- }
+.ui-circle[color=yellow] {
+    background-color: #CC8B00;
+}
 
-.ui-circle[hastext]{
+.ui-circle[hastext] {
     color: rgba(255, 255, 255, 0.8);
     padding: 1px;
     text-align: center;
     position: relative;
     cursor: default;
+    box-shadow: 4px 4px 6px 0 rgba(0, 0, 0, 0.5);
 }
 
-div.ui-field-element[team=home]{
+div.ui-field-element[team=home] {
     background-color: rgba(52, 77, 255, 0.5);
 }
 
-div.ui-field-element[team=visitor]{
+div.ui-field-element[team=visitor] {
     background-color: rgba(255, 52, 52, 0.5);
 }
 
-div.ui-field-element[error]{
+div.ui-field-element[error] {
     text-decoration: line-through;
 }
 
-div.ui-field-element[advanced]{
+div.ui-field-element[advanced] {
     text-decoration: underline;
 }
 
-div.ui-field-element[advancedBy]{
+div.ui-field-element[advancedBy] {
     font-weight: bold;
 }
 
-div.ui-field-label{
-    position: relative;
+div.ui-field-label {
+    position: absolute;
     font: bold 40px sans-serif;
     color: #ADBEFF;
-    height: 50px;
-    top: -300px;
-    left: 22px;
+    bottom: 86px;
+    left: 144px;
 }
 
 @font-face {
     font-family: "Helvetica Neue Medium";
     src: url('../../fonts/HelveticaNeue-Medium.ttf') format('truetype');
 }
+
 @font-face {
     font-family: "Helvetica Neue Regular";
     src: url('../../fonts/HelveticaNeue.ttf') format('truetype');
 }
+
 @font-face {
     font-family: "Helvetica Neue Bold";
     src: url('../../fonts/HelveticaNeueBold.ttf') format('truetype');
 }
 
-div.ui-errors{
+div.ui-errors {
     margin: 20px auto 10px auto;
     width: 856px;
+}
+
+.ui-table-scorepad button {
+    width: 65px;
+    height: 65px;
+    background: #074B24;
+    border: 1px solid #DB881F;
 }

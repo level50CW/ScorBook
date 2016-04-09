@@ -416,6 +416,10 @@ function InningController(lineups){
         };
     };
 
+    self.getCurrentBatter = function(){
+        return currentBatter;
+    };
+
     self.do3Outs = function(){
         outs3 = true;
     };

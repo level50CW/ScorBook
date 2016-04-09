@@ -69,10 +69,9 @@ ul.context-menu-list{
     border: 2px solid #212121;
 }
 li.context-menu-item{
-    background-color: #212121;
-    border-top: 2px solid #434343;
-    color: #C5C5C5;
-    font-size: 13px;
+    background-color: #2D2F35;
+    color: #E4E4E4;
+    font-size: 14px;
 }
 li.context-menu-item:not(.disabled):hover{
     background-color: #FFAE00;

@@ -16,6 +16,7 @@ function PitchingController(){
         hit: 'yellow'
     };
 
+    var pitchingState = 'none'; // none, pitch, menu
     var isPitchingEvent = false;
     var pitchingType = null;
     var pitchCounter = {
@@ -26,6 +27,7 @@ function PitchingController(){
     }; // state
     var isEnabled = false;
     var $lastPoint = null;
+    var isTrackerEnabled = G.isPitchTrackingEnabled;
 
     function updateEvents(){
         if (pitchCounter.strike == 3){
@@ -58,12 +60,11 @@ function PitchingController(){
     }
 
     function addPitch(type){
-        var $list = $('.js-pitch-list');
-        var $container = $('<div class="ui-pitch-status-part">');
-        $container.append(pitchPaterns[type]);
-        $list.append($container);
         pitchCounter[type]++;
         pitchCounter.total++;
+
+        if (pitchCounter.strike<3)
+            self.onAddLog(type);
 
         self.storage.updatePitch({
             type: type,
@@ -74,11 +75,17 @@ function PitchingController(){
         updateEvents();
     }
 
+    function setPitch(type, val){
+        pitchCounter.total -= pitchCounter[type];
+        pitchCounter[type] = val;
+        pitchCounter.total += pitchCounter[type];
+
+        updatePitchUi();
+    }
+
     function addHitPitch(type){
-        var $list = $('.js-pitch-list');
-        var $container = $('<div class="ui-pitch-status-part">');
-        $container.append(pitchPaterns['hit']).children('span').text('HIT-'+type);
-        $list.append($container);
+        self.onAddLog('hit',type);
+
         $lastPoint.attr('color',pitchColors['hit']);
 
         isPitchingEvent = false;
@@ -87,11 +94,10 @@ function PitchingController(){
     }
 
     function addOutPitch(type){
-        var $list = $('.js-pitch-list');
-        var $container = $('<div class="ui-pitch-status-part">');
-        $container.append(pitchPaterns['out']).children('span').text('OUT-'+type);
-        $list.append($container);
-        $lastPoint.attr('color',pitchColors['out']);
+        self.onAddLog('out',type);
+
+        if ($lastPoint) //if strikeout $lastPoint == null
+            $lastPoint.attr('color',pitchColors['out']);
 
         isPitchingEvent = false;
         pitchingType = null;
@@ -112,51 +118,85 @@ function PitchingController(){
         var state = self.storage.getState();
 
         var $region = $('.js-pitch-region');
-        var $list = $('.js-pitch-list');
         var regionOffset = $region.offset();
 
         for(var p in state.pitches){
             var pitch = state.pitches[p];
 
-            $lastPoint = $('<div class="ui-circle" hastext="1">')
-                .text(pitch.number)
-                .appendTo($region)
-                .offset({
-                    top: pitch.coordinatesCatch.y + regionOffset.top,
-                    left: pitch.coordinatesCatch.x + regionOffset.left
-                });
+            if (pitch.coordinatesCatch) {
+                $lastPoint = $('<div class="ui-circle" hastext="1">')
+                    .text(pitch.number)
+                    .appendTo($region)
+                    .offset({
+                        top: pitch.coordinatesCatch.y + regionOffset.top,
+                        left: pitch.coordinatesCatch.x + regionOffset.left
+                    });
+            } else{
+                $lastPoint = $('<div>');
+            }
 
             if (pitch.type){
-                var $container = $('<div class="ui-pitch-status-part">');
-
-                if (pitch.type == 'hit')
-                    $container.append(pitchPaterns['hit']).children('span').text('HIT-'+pitch.type2);
-                else
-                    $container.append(pitchPaterns[pitch.type]);
-
-                $list.append($container);
-
-
                 $lastPoint.attr('color',pitchColors[pitch.type]);
                 $lastPoint = null;
             } else {
                 isPitchingEvent = true;
-                self.onEnable(true);
+
+                if (isTrackerEnabled){
+                    self.onEnable(true);
+                } else {
+                    self.onBeforePitch();
+                }
             }
         }
-
-
     }
 
     $('.js-button-pitch').click(function(){
-        isPitchingEvent = isEnabled;
-        if (isPitchingEvent && !$lastPoint)
+        if (isEnabled && !$lastPoint && pitchingState == 'none') {
+            isPitchingEvent = true;
+            pitchingState = 'pitch';
             self.onBeforePitch();
+
+            if (!isTrackerEnabled){
+                $lastPoint = $('<div>');
+            }
+            return;
+        }
+
+        if (isPitchingEvent && !isTrackerEnabled && $lastPoint && pitchingState == 'pitch'){
+
+            self.storage.newPitch();
+            self.storage.updatePitch({
+                number: pitchCounter.total,
+                counter: pitchCounter
+            });
+
+            var pitches = pitchCounter.total;
+            while(pitches-- >= 0)
+                self.onPitch();
+            self.onEnable(true);
+
+            isPitchingEvent = false;
+            pitchingType = null;
+
+            if (pitchCounter.ball == 4 || pitchCounter.strike == 3) {
+                self.onEnable(false);
+                updateEvents();
+            }
+
+            if (pitchCounter.ball != 4)
+                pitchingState = 'menu';
+        }
+
+        if (pitchingState == 'menu'){
+            $('.js-button-pitch-menu').click();
+        }
     });
 
     $('.js-pitch-type').click(function(){
-        if (!$lastPoint || !isPitchingEvent || $(this).attr('type') == 'out')
+        if (!isPitchingEvent || $(this).attr('type') == 'out' ||
+            !isTrackerEnabled || !$lastPoint){
             return;
+        }
 
         pitchingType = $(this).attr('type');
         $lastPoint.attr('color',pitchColors[pitchingType]);
@@ -166,11 +206,22 @@ function PitchingController(){
         isPitchingEvent = false;
         pitchingType = null;
         $lastPoint = null;
+        pitchingState = pitchCounter.strike == 3? 'menu': 'none';
         self.onEnable(false);
     });
 
+    $('.js-pitch-type .ui-circle[value]').click(function(){
+        if (isTrackerEnabled || !isPitchingEvent)
+            return;
+
+        var $current = $(this);
+        var $parent = $current.parent();
+
+        setPitch($parent.attr('type'), +$current.attr('value'));
+    });
+
     $('.js-pitch-region').mousedown(function(e){
-        if (isPitchingEvent && !$lastPoint){
+        if (isPitchingEvent && !$lastPoint && isTrackerEnabled){
             var regionOffset = $(this).offset();
             var x = e.pageX - regionOffset.left - 10;
             var y = e.pageY - regionOffset.top - 10;
@@ -194,6 +245,8 @@ function PitchingController(){
             });
 
             self.onPitch();
+
+            pitchingState = 'menu';
             self.onEnable(true);
         }
     });
@@ -210,6 +263,7 @@ function PitchingController(){
     };
     self.onEnable = function(isEnabled){
     };
+    self.onAddLog = function(type, text){};
 
 
     self.reset = function(){
@@ -223,12 +277,12 @@ function PitchingController(){
         pitchCounter.total = 0;
         updatePitchUi();
 
-        $('.js-pitch-list').children().remove();
         $('.js-pitch-region').children('div').remove();
 
         isPitchingEvent = false;
         pitchingType = null;
         $lastPoint = null;
+        pitchingState = 'none';
 
         self.enable(true);
         self.onEnable(false);
@@ -260,12 +314,18 @@ function PitchingController(){
         return isPitchingEvent;
     };
 
+    self.disableMenu = function(){
+        pitchingState = 'none';
+    };
+
     self.enable = function(isEnable){
         var button = $('.js-button-pitch');
-        if(isEnable)
+        if(isEnable) {
             button.removeAttr('disabled');
-        else
-            button.attr('disabled',1);
+        } else {
+            button.attr('disabled', 1);
+            button.contextMenu(false);
+        }
 
 
         isEnabled = isEnable;
