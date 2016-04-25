@@ -45,17 +45,14 @@ function RequestController(){
 
     self.storeState = function(callback){
         post('storage', {
-            storage: JSON.stringify(self.storage)
+            storage: JSON.stringify(self.storage.getData())
         },callback);
     };
 
     self.restoreState = function(callback){
         get('storage',function(obj){
             obj = JSON.parse(obj.storage);
-            self.storage.innings = obj.innings;
-            self.storage.currentInning = obj.currentInning;
-            self.storage.currentPitch = obj.currentPitch;
-            self.storage.currentState = obj.currentState;
+            self.storage.setData(obj);
             callback();
         });
     };

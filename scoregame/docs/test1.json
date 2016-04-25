@@ -1,0 +1,87 @@
+{
+  "currentInning": 0,
+  "currentState": 2,
+  "currentPitch": -1,
+  "innings": [
+    {
+      "state": [
+        {
+          "pitches": [
+            {
+              "type": "hit",
+              "type2": "HBP"
+            }
+          ],
+          "playerScores": [
+            {
+              "id": 3505,
+              "type": "pitchers",
+              "score": "ER",
+              "pitch": 0
+            }
+          ],
+          "inningScores": [],
+          "offence": "visitor",
+          "defence": "home",
+          "pitcher": 3505,
+          "outs": 0,
+          "batter": 1
+        },
+        {
+          "pitches": [
+            {
+              "type": "hit",
+              "type2": "HBP"
+            }
+          ],
+          "playerScores": [
+            {
+              "id": 3505,
+              "type": "pitchers",
+              "score": "ER",
+              "pitch": 0
+            }
+          ],
+          "inningScores": [],
+          "offence": "visitor",
+          "defence": "home",
+          "pitcher": 3505,
+          "outs": 0,
+          "batter": 2
+        },
+        {
+          "pitches": [],
+          "playerScores": [],
+          "inningScores": [],
+          "offence": "visitor",
+          "defence": "home",
+          "pitcher": 3505,
+          "outs": 0,
+          "batter": 3
+        }
+      ],
+      "bases": [
+        {
+          "id": 0,
+          "bases": [
+            null,
+            3485
+          ],
+          "runs": [0]
+        },
+        {
+          "id": 100,
+          "bases": [
+            null,
+            3486,
+            3485
+          ],
+          "runs": [
+            1,
+            0
+          ]
+        }
+      ]
+    }
+  ]
+}

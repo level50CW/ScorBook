@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Game;
 use App\Models\Lineup;
+use App\Models\Settings;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -62,6 +63,8 @@ class AtBatController extends Controller
         $lineupPlayers[0]['oppositePitchers'] = $lineupPlayers[1]['pitchers'];
         $lineupPlayers[1]['oppositePitchers'] = $lineupPlayers[0]['pitchers'];
 
-        return view('game.update.atbat_',compact(['game','lineupPlayers']));
+        $usePitchTracker = Settings::get()->usePitchTracker == 1;
+
+        return view('game.update.atbat_',compact(['game','lineupPlayers','usePitchTracker']));
     }
 }

@@ -1,5 +1,6 @@
 function GameLogController(){
     var self = this;
+
     var $container = $('.js-container-pitch-list');
     var $list = $('.js-pitch-list');
     var $controls = $('.js-pitch-list-controls');
@@ -7,23 +8,35 @@ function GameLogController(){
     var $pageNext = $controls.find('.js-right');
     var $counter = $controls.find('.js-counter');
 
-    var log = {
-        page:{}
-    };
-    var logLastPage = -1;
-    var logCurrentPage = 0;
-    var lastTeam = '';
-    var lastBatter = -1;
-
     var pitchPaterns = {
         strike: '<span>STRIKE</span><div class="ui-circle" color="blue">',
         ball: '<span>BALL</span><div class="ui-circle" color="green">',
+        foul: '<span>FOUL</span><div class="ui-circle" color="gray">',
         hit: '<span></span><div class="ui-circle" color="yellow">',
         out: '<span></span><div class="ui-circle" color="red">',
         empty: '<span></span>',
         player: '<span></span>',
         team: '<span></span>'
     };
+
+    var log,
+        logLastPage,
+        logCurrentPage,
+        lastTeam,
+        lastBatter;
+
+    resetGlobals();
+    function resetGlobals(){
+        log = {
+            page:{}
+        };
+        logLastPage = -1;
+        logCurrentPage = 0;
+        lastTeam = '';
+        lastBatter = -1;
+
+        $container.hide();
+    }
 
     function createItem(type, text){
         var $item = $('<div class="ui-pitch-status-part" type="'+type+'">');
@@ -34,36 +47,38 @@ function GameLogController(){
     }
 
     function restore(){
-        for (var i in self.storage.innings) {
-            for (var s in self.storage.innings[i].state) {
-                var state = self.storage.innings[i].state[s];
+        resetGlobals();
+
+        self.storage.forEach(['inning', 'state', 'pitch'],{
+            state: function(o){
+                var state = o.state;
 
                 if (!state.offence || !state.batter || state.pitches.length == 0)
-                    continue;
+                    o.abort = true;
+            },
+            pitch: function(o){
+                var pitch = o.pitch;
+                var state = o.state;
 
-                for (var p in state.pitches) {
-                    var pitch = state.pitches[p];
+                if (!pitch.type)
+                    return;
 
-                    if (!pitch.type)
-                        continue;
-
-                    if (G.lineups[state.offence].name != lastTeam) {
-                        lastTeam = G.lineups[state.offence].name;
-                        self.createTeam(lastTeam);
-                    }
-
-                    if (G.lineups[state.offence].batters[state.batter-1].name != lastBatter) {
-                        lastBatter = G.lineups[state.offence].batters[state.batter-1].name;
-                        self.createPlayer(lastBatter);
-                    }
-
-                    if (pitch.type == 'strike' || pitch.type == 'ball')
-                        addItem(pitch.type);
-                    else
-                        addItem(pitch.type, pitch.type.toUpperCase()+'-'+pitch.type2);
+                if (G.lineups[state.offence].name != lastTeam) {
+                    lastTeam = G.lineups[state.offence].name;
+                    self.createTeam(lastTeam);
                 }
+
+                if (G.lineups[state.offence].batters[state.batter-1].name != lastBatter) {
+                    lastBatter = G.lineups[state.offence].batters[state.batter-1].name;
+                    self.createPlayer(lastBatter);
+                }
+
+                if (pitch.type == 'strike' || pitch.type == 'ball' || pitch.type == 'foul')
+                    addItem(pitch.type);
+                else
+                    addItem(pitch.type, pitch.type.toUpperCase()+'-'+pitch.type2);
             }
-        }
+        });
     }
 
     function setPage(page){
@@ -100,6 +115,7 @@ function GameLogController(){
     self.onGetCurrentTeamBatter = function(){};
 
     self.restore = function(){
+        resetGlobals();
         restore();
         setPage(logLastPage);
     };
@@ -116,7 +132,7 @@ function GameLogController(){
             self.createPlayer(lastBatter);
         }
 
-        if (type == 'strike' || type == 'ball')
+        if (type == 'strike' || type == 'ball' || type == 'foul')
             addItem(type);
         else
             addItem(type, type.toUpperCase()+'-'+text);

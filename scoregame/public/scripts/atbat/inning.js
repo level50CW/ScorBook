@@ -7,28 +7,53 @@ function InningController(lineups){
         $defenceLineup,
         $offenceLineup;
 
-    var gameStarted = false;
+    var gameStarted,
 
-    var currentPitcher = null; // state
-    var currentBatter = null; // state
-    var nextBatter = null; // state
-    var currentInning = 0; // 1-9 // state
-    var winner = null; // state
-    var outs3 = false;
-    var lastBatterNumber = 1;
+        currentPitcher,
+        currentBatter,
+        nextBatter,
+        currentInning,
+        winner,
+        outs3,
+        lastBatterNumber,
 
-    var inningCounter = {
-        visitor: 0,
-        home: 0
-    }; // state
+        inningCounter,
 
-    var inningTotal = {
-        visitor: {R: 0, H: 0, E: 0},
-        home: {R: 0, H: 0, E: 0}
-    }; // state
+        inningTotal,
 
-    var scoring = null; // state
-    var $scoring = null;
+        scoring,
+        $scoring,
+
+        createNextState;
+
+    resetGlobals();
+
+    function resetGlobals(){
+        gameStarted = false;
+
+        currentPitcher = null; // state
+        currentBatter = null; // state
+        nextBatter = null; // state
+        currentInning = 0; // 1-9 // state
+        winner = null; // state
+        outs3 = false;
+        lastBatterNumber = 1;
+
+        inningCounter = {
+            visitor: 0,
+            home: 0
+        }; // state
+
+        inningTotal = {
+            visitor: {R: 0, H: 0, E: 0},
+            home: {R: 0, H: 0, E: 0}
+        }; // state
+
+        scoring = null; // state
+        $scoring = null;
+
+        createNextState = false;
+    }
 
     function initScoring(){
         scoring = {
@@ -45,6 +70,7 @@ function InningController(lineups){
             for(var pi in lineups[team].batters){
                 var player = lineups[team].batters[pi];
                 $scoring.batters[player.id] = $lineups[team].find('.js-lineup-batter[batter='+player.batter+']');
+                $scoring.batters[player.id].children('td[type]').text(0);
                 scoring.batters[player.id] = {
                     player: player,
                     AB: 0,
@@ -62,6 +88,7 @@ function InningController(lineups){
             for(var pi in lineups[team].pitchers){
                 var player = lineups[team].pitchers[pi];
                 $scoring.pitchers[player.id] = $lineups[teamOpponent].find('.js-lineup-pitcher[batter='+player.batter+']');
+                $scoring.pitchers[player.id].children('td[type]').text(0);
                 scoring.pitchers[player.id] = {
                     player: player,
                     IP: 0,
@@ -82,15 +109,17 @@ function InningController(lineups){
     }
 
     function restoreScoring(){
-        for(var i in self.storage.innings)
-            for(var s in self.storage.innings[i].state)
-                for(var sc in self.storage.innings[i].state[s].playerScores){
-                    var score = self.storage.innings[i].state[s].playerScores[sc];
+        self.storage.forEach(['inning', 'state'], {
+            state: function(o){
+                for(var sc in o.state.playerScores){
+                    var score = o.state.playerScores[sc];
                     var val = ++scoring[score.type][score.id][score.score];
                     $scoring[score.type][score.id]
                         .children('td[type='+score.score+']')
                         .text(val);
                 }
+            }
+        });
     }
 
 
@@ -145,22 +174,27 @@ function InningController(lineups){
     }
 
     function restoreInningCounters(){
-        for(var i in self.storage.innings) {
-            inningCounter.visitor = 0;
-            inningCounter.home = 0;
+        self.storage.forEach(['inning', 'state'], {
+            inning: function(o){
+                inningCounter.visitor = 0;
+                inningCounter.home = 0;
+            },
 
-            for (var s in self.storage.innings[i].state)
-                for (var sc in self.storage.innings[i].state[s].inningScores) {
-                    var score = self.storage.innings[i].state[s].inningScores[sc];
+            state: function(o){
+                for (var sc in o.state.inningScores) {
+                    var score = o.state.inningScores[sc];
 
                     if (score.score == 'R'){
                         inningCounter[score.type]++;
                     }
                     inningTotal[score.type][score.score]++;
                 }
+            },
 
-            updateScoreUi(+i+1);
-        }
+            inningAfter: function(o){
+                updateScoreUi(o.i+1);
+            }
+        });
     }
 
     function setCurrentBatter(number){
@@ -182,13 +216,14 @@ function InningController(lineups){
 
     function restoreLastBatter(){
         lastBatterNumber = 1;
-        var inning = self.storage.getInning();
-        for(var s in inning.state){
-            var state = inning.state[s];
-            if (state.lastBatterNumber){
-                lastBatterNumber = state.lastBatterNumber;
+
+        self.storage.forEach(['state'], {
+            state: function(o){
+                if (o.state.lastBatterNumber){
+                    lastBatterNumber = o.state.lastBatterNumber;
+                }
             }
-        }
+        });
     }
 
     function switchLineups(){
@@ -312,6 +347,7 @@ function InningController(lineups){
 
         if (offenceLineup.type == 'home'){
             self.storage.nextInning();
+            createNextState = false;
 
             nextInning();
         }
@@ -390,7 +426,7 @@ function InningController(lineups){
     self.tryDoNextGameSet = function(){
         if (outs3) {
             outs3 = false;
-            self.storage.nextState();
+            //self.storage.nextState();
             nextGameSet();
             return true;
         }
@@ -401,8 +437,9 @@ function InningController(lineups){
         if (winner)
             return;
 
+        createNextState = true;
         if (!self.tryDoNextGameSet()){
-            self.storage.nextState();
+            //self.storage.nextState();
             setCurrentBatter(nextBatter.batter);
             self.onBatterReady(currentBatter);
         }
@@ -455,6 +492,8 @@ function InningController(lineups){
     };
 
     self.restore = function(){
+        resetGlobals();
+
         currentInning = self.storage.currentInning + 1;
 
         initLineups();
@@ -468,6 +507,13 @@ function InningController(lineups){
         restoreLastBatter();
 
         gameStarted = true;
+    };
+
+    self.tryCreateState = function(){
+        if (createNextState){
+            createNextState = false;
+            self.storage.nextState();
+        }
     };
 
     return self;

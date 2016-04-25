@@ -107,6 +107,10 @@ use \App\Models\Batter;
                 {{--<span class="ui-triangle" type="left"></span>BATTING LEFT--}}
             </div>
 
+            <div class="ui-button-game-undo ui-field-button js-button-game-undo">
+                <span>&#8630;</span>
+            </div>
+
             <div class="ui-deck-div">
                 <span class="ui-deck-text">
                    <span><span style="color: #afafaf;">AT BAT: </span><span class="js-label-atbat"></span></span>
@@ -138,9 +142,16 @@ use \App\Models\Batter;
                 </div>
             </div>
 
-            <div class="js-pitch-region ui-pitch-region">
-                <img src="{{url('/images/atbat/img_pitch_trecking.png')}}" style="width: 100%"/>
+            @if ($usePitchTracker)
+            <div class="ui-pitch-region">
+                <div class="js-pitch-region" style="height: 175px;">
+                    <img src="{{url('/images/atbat/img_pitch_trecking.png')}}" style="width: 100%"/>
+                </div>
+                <div class="ui-button-pitch js-button-pitch">
+                    Pitch
+                </div>
             </div>
+            @endif
         </div>
         <div class="ui-buttons-container">
             <table>
@@ -148,18 +159,17 @@ use \App\Models\Batter;
                     <td><div class="ui-field-button js-button-field-strike-looking">Strike Looking</div></td>
                     <td><div class="ui-field-button js-button-field-ball">Ball</div></td>
                     <td rowspan="2">
-                        <div class="ui-field-ballinplay js-button-pitch">
+                        <div class="ui-field-ballinplay js-button-pitch-menu">
                             <div class="ui-field-ballinplay-circle"></div>
                             <div>Ball In Play</div>
                         </div>
-                        <div class="js-button-pitch-menu"></div>
                     </td>
                     <td><div class="ui-field-button js-button-field-hitbypitch">Hit by Pitch</div></td>
                     <td><div class="ui-field-button js-button-field-balk">Balk</div></td>
                 </tr>
                 <tr>
                     <td><div class="ui-field-button js-button-field-strike-swinging">Strike Swinging</div></td>
-                    <td><div class="ui-field-button js-button-field-ball-faul">Faul Ball</div></td>
+                    <td><div class="ui-field-button js-button-field-ball-foul">Foul Ball</div></td>
                     <td><div class="ui-field-button js-button-field-out-wildpitch">Wild Pitch</div></td>
                     <td><div class="ui-field-button js-button-field-out-catcherobs">Catcher Obs</div></td>
                 </tr>
@@ -428,7 +438,7 @@ use \App\Models\Batter;
     G.token = '{{csrf_token()}}';
     G.baseUrl = '{{URL::to('/')}}';
     G.gameStatus = {{$game->status}};
-    G.isPitchTrackingEnabled = true;
+    G.isPitchTrackingEnabled = {{$usePitchTracker? 'true': 'false'}};
 
     $.contextMenu( 'destroy', '.js-button-misc-context' );
     $.contextMenu({
@@ -499,7 +509,7 @@ use \App\Models\Batter;
                 callback: function(){
                     G.onRedirect('{{action('GameController@index')}}');
                 }
-            }//,
+            },
 
 //            debug:{
 //                name: 'Debug',
@@ -512,6 +522,12 @@ use \App\Models\Batter;
 //                    },
 //                    restore: {
 //                        name: 'Restore',
+//                        callback: function(item){
+//                            G.onDebug(item);
+//                        }
+//                    },
+//                    undo: {
+//                        name: 'Undo',
 //                        callback: function(item){
 //                            G.onDebug(item);
 //                        }

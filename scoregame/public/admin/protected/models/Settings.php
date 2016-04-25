@@ -24,8 +24,8 @@ class Settings extends CActiveRecord
         // NOTE: you should only define rules for those attributes that
         // will receive user inputs.
         return array(
-            array('iduser, idleague, listSize, idseason, leagueName, numberUmps', 'required'),
-            array('iduser, idleague, idseason, listSize, numberUmps', 'numerical', 'integerOnly'=>true),
+            array('iduser, idleague, listSize, idseason, leagueName, numberUmps, usePitchTracker', 'required'),
+            array('iduser, idleague, idseason, listSize, numberUmps, usePitchTracker', 'numerical', 'integerOnly'=>true),
 			array('iduser,', 'safe', 'on'=>'search'),
         );
     }
@@ -84,6 +84,7 @@ class Settings extends CActiveRecord
 			$model->idseason = Season::model()->find('status=1')->idseason;
 			$model->listSize = 25;
             $model->numberUmps = 3;
+            $model->usePitchTracker = 0;
 			$model->save();
 			
 		}

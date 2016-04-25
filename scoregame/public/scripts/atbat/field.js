@@ -36,10 +36,22 @@ function FieldController(){
         }
     };
 
-    var currentBatters = null; // state
-    var currentGameSet = null; // state
-    var lastMarkRotateBatters = [];
-    var advancedBatters = [];
+    var currentBatters,
+        currentGameSet,
+        lastMarkRotateBatters,
+        advancedBatters;
+
+    resetGlobals();
+    function resetGlobals(){
+        currentBatters = null; // state
+        currentGameSet = null; // state
+        lastMarkRotateBatters = [];
+        advancedBatters = [];
+
+        var $field = $('.js-field');
+        $field.children('.ui-circle[batter]').remove();
+        $field.children('.ui-circle[fielder]').remove();
+    }
 
     function updateBatters(){
         var $field = $('.js-field');
@@ -311,7 +323,9 @@ function FieldController(){
         self.updateBatters();
     };
 
-    self.restore = function(){
+    self.restore = function(gameSet){
+        resetGlobals();
+        currentGameSet = gameSet;
         restoreBatters();
     };
 

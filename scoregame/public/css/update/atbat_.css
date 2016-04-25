@@ -341,14 +341,10 @@ td.ui-table-command-player {
 }
 
 .ui-pitch-region {
-
     position: absolute;
-
-    width: 144px;
-
+    width: 136px;
     right: 14px;
-
-    top: 142px;
+    top: 111px;
 }
 
 .ui-table-pitcher {
@@ -429,7 +425,7 @@ td.ui-table-command-player {
     width: 685px;
     height: 340px;
     position: absolute;
-    left: 86px;
+    left: 80px;
     border-radius: inherit;
 }
 
@@ -523,7 +519,7 @@ td.ui-table-command-player {
     padding: 5px 0 0 5px;
     position: absolute;
     left: 372px;
-    bottom: 35px;
+    bottom: 45px;
 }
 
 .ui-batting-batside .ui-triangle {
@@ -582,16 +578,54 @@ td.ui-table-command-player {
 }
 
 .ui-button-rare {
-
     width: 138px;
-
     height: 20px;
-
     background-color: #E4E4E4;
-
     padding-top: 5px;
-
     margin: auto;
+}
+
+.ui-button-pitch {
+    width: 136px;
+    margin-top: 10px;
+    padding: 7px 0px;
+    background-color: #E9A003;
+    border-radius: 5px;
+    font-family: arial;
+    font-size: 12px;
+    vertical-align: top;
+    cursor: pointer;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.ui-button-pitch[disabled] {
+    background-color: #8A5E00;
+    cursor: default;
+}
+
+.ui-button-game-undo{
+    position: absolute;
+    left: 397px;
+    bottom: 10px;
+    text-transform: uppercase;
+    font-size: 34px;
+    font-family: arial;
+    font-weight: bold;
+    text-align: center;
+    width: 56px;
+    height: 8px;
+    padding-left: 8px;
+}
+
+.ui-button-game-undo span{
+
+    position: absolute;
+
+    top: -6px;
+
+    left: 16px;
 }
 
 .ui-bso-div {
@@ -629,22 +663,6 @@ td.ui-table-command-player {
     overflow: hidden;
     vertical-align: top;
     margin-left: 10px;
-}
-
-.ui-pitch-button {
-    height: 50px;
-    width: 115px;
-    background-color: #ffae00;
-    font-family: "Helvetica Neue Medium", Helvetica;
-    font-size: 13px;
-    vertical-align: top;
-    margin-left: 15px;
-    cursor: pointer;
-}
-
-.ui-pitch-button[disabled] {
-    background-color: #8A5E00;
-    cursor: default;
 }
 
 .ui-pitch-ball {
@@ -753,6 +771,10 @@ td.ui-table-command-player {
 
 .ui-circle[color=yellow] {
     background-color: #CC8B00;
+}
+
+.ui-circle[color=gray] {
+    background-color: #3D3C3C;
 }
 
 .ui-circle[hastext] {

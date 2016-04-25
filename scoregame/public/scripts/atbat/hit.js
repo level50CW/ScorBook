@@ -73,6 +73,11 @@ function HitController(){
         }
     });
 
+    $('.js-button-field-hitbypitch').click(function(){
+        if (!self.menuHandle('HBP'))
+            alert('This option is disabled');
+    });
+
     self.onBatterHit = function(type){};
     self.onHitByPitch = function(){};
     self.onDrawHit = function(point){};

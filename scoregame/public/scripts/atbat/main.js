@@ -34,6 +34,11 @@ $('body').ready(function(){
     storageController.register(miscController);
     storageController.register(gameLogController);
 
+    //G._debug = {
+    //    storageController: storageController
+    //};
+
+
     var sleepData = {
         callbackSequence: [],
         lastHandle: -1,
@@ -114,19 +119,21 @@ $('body').ready(function(){
     }
 
     function restore(){
+        inningController.restore();
+
+        var gameSet = inningController.getGameSet();
+
+        pitcherController.restore();
+        fielderController.restore(gameSet);
+        gameLogController.restore();
+
+        selectLineup(gameSet.offenceLineup.type);
+    }
+
+    function tryRestoreFromServer(){
         if (G.gameStatus == 1) {
             requestController.restoreState(function () {
-                inningController.restore();
-
-                var gameSet = inningController.getGameSet();
-
-                pitcherController.reset();
-                pitcherController.restore();
-                fielderController.setGameSet(gameSet);
-                fielderController.restore();
-                gameLogController.restore();
-
-                selectLineup(gameSet.offenceLineup.type);
+                restore();
             });
         }
     }
@@ -138,8 +145,9 @@ $('body').ready(function(){
         advanceController.enable(isEnable);
     }
 
-    pitcherController.on3Strikes = function(){
+    pitcherController.on3Strikes = function(type){
         strikeController.enable(true);
+        strikeController.menuHandle(type);
     };
 
     pitcherController.on4Balls = function(){
@@ -319,6 +327,15 @@ $('body').ready(function(){
         inningController.addInningErrorScore();
     };
 
+    storageController.onUpdatePitch = function(){
+        storageController.onUpdateState();
+        pitcherController.tryCreatePitch();
+    };
+
+    storageController.onUpdateState = function() {
+        inningController.tryCreateState();
+    };
+
     ballInPlayController.onMenu = function(type, item){
         switch(type){
             case 'hit': return hitController.menuHandle(item);
@@ -393,10 +410,7 @@ $('body').ready(function(){
 
         if (item == 'restore'){
             var obj = JSON.parse('{"currentInning":0,"currentState":3,"currentPitch":0,"innings":[{"state":[{"pitches":[{"coordinatesCatch":{"x":98.09375,"y":33},"number":1,"type":"hit","type2":"2B","coordinatesHit":{"x":246.09375,"y":40}}],"playerScores":[{"id":3485,"type":"batters","score":"AB"},{"id":3505,"type":"pitchers","score":"IP"},{"id":3485,"type":"batters","score":"H"},{"id":3505,"type":"pitchers","score":"H"}],"inningScores":[{"type":"visitor","score":"H"}],"offence":"visitor","defence":"home","pitcher":3505,"outs":0,"batter":1},{"pitches":[{"coordinatesCatch":{"x":82.09375,"y":79},"number":1,"type":"ball","counter":{"total":1,"strike":0,"ball":1,"out":0}},{"coordinatesCatch":{"x":106.09375,"y":51},"number":2,"type":"ball","counter":{"total":2,"strike":0,"ball":2,"out":0}},{"coordinatesCatch":{"x":46.09375,"y":44},"number":3,"type":"ball","counter":{"total":3,"strike":0,"ball":3,"out":0}},{"coordinatesCatch":{"x":89.09375,"y":98},"number":4,"type":"ball","counter":{"total":4,"strike":0,"ball":4,"out":0}}],"playerScores":[{"id":3486,"type":"batters","score":"AB"},{"id":3505,"type":"pitchers","score":"IP"},{"id":3505,"type":"pitchers","score":"IP"},{"id":3505,"type":"pitchers","score":"IP"},{"id":3505,"type":"pitchers","score":"IP"},{"id":3486,"type":"batters","score":"BB"},{"id":3505,"type":"pitchers","score":"BB"}],"inningScores":[],"offence":"visitor","defence":"home","pitcher":3505,"outs":0,"batter":2},{"pitches":[{"coordinatesCatch":{"x":103.09375,"y":53},"number":1,"type":"strike","counter":{"total":1,"strike":1,"ball":0,"out":1},"type2":"swinging"}],"playerScores":[{"id":3487,"type":"batters","score":"AB"},{"id":3505,"type":"pitchers","score":"IP"},{"id":3487,"type":"batters","score":"SO"},{"id":3505,"type":"pitchers","score":"SO"}],"inningScores":[],"offence":"visitor","defence":"home","pitcher":3505,"outs":1,"batter":3},{"pitches":[{"coordinatesCatch":{"x":87.09375,"y":63},"number":1,"type":"ball","counter":{"total":1,"strike":0,"ball":1,"out":1}}],"playerScores":[{"id":3488,"type":"batters","score":"AB"},{"id":3505,"type":"pitchers","score":"IP"}],"inningScores":[],"offence":"visitor","defence":"home","pitcher":3505,"outs":1,"batter":4}],"bases":[{"id":-1,"bases":[],"runs":[]},{"id":0,"bases":[null,null,3485],"runs":[0,1]},{"id":13,"bases":[null,3486,3485],"runs":[0]},{"id":20,"bases":[null,3486,3485],"runs":[]}]}]}');
-            storageController.innings = obj.innings;
-            storageController.currentInning = obj.currentInning;
-            storageController.currentPitch = obj.currentPitch;
-            storageController.currentState = obj.currentState;
+            storageController.setData(obj);
 
             inningController.restore();
 
@@ -408,6 +422,9 @@ $('body').ready(function(){
             fielderController.restore();
 
             selectLineup(gameSet.offenceLineup.type);
+        }
+
+        if (item == 'undo'){
         }
     };
 
@@ -425,5 +442,10 @@ $('body').ready(function(){
     initContainerSwitching();
     initLineupSwitching();
 
-    restore();
+    tryRestoreFromServer();
+
+    $('.js-button-game-undo').click(function(){
+        storageController.undoBy('pitch');
+        restore();
+    });
 });

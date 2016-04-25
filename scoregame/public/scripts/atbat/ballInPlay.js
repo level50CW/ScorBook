@@ -2,7 +2,7 @@ function BallInPlayController(){
     var self = this;
 
     var types = {
-        'HBP': 'hit',
+        //'HBP': 'hit',
         '1B': 'hit',
         '2B': 'hit',
         '3B': 'hit',
@@ -18,8 +18,8 @@ function BallInPlayController(){
         'TP': 'out',
         'PO': 'out',
 
-        'KL': 'strike',
-        'KSW': 'strike',
+        //'KL': 'strike',
+        //'KSW': 'strike',
 
         'ERR': 'error',
 
@@ -37,10 +37,10 @@ function BallInPlayController(){
             selector: '.js-button-pitch-menu',
             trigger: 'left',
             items:{
-                'HBP':{
-                    name: 'HBP',
-                    callback: menuHandle
-                },
+                //'HBP':{
+                //    name: 'HBP',
+                //    callback: menuHandle
+                //},
                 '1B':{
                     name: '1B',
                     callback: menuHandle
@@ -95,14 +95,14 @@ function BallInPlayController(){
                     disabled: true
                 },
 
-                'KL':{
-                    name: 'Strikeout Looking',
-                    callback: menuHandle
-                },
-                'KSW':{
-                    name: 'Strikeout Swinging',
-                    callback: menuHandle
-                },
+                //'KL':{
+                //    name: 'Strikeout Looking',
+                //    callback: menuHandle
+                //},
+                //'KSW':{
+                //    name: 'Strikeout Swinging',
+                //    callback: menuHandle
+                //},
 
                 'ERR':{
                     name: 'Error',

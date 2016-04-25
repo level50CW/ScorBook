@@ -15,6 +15,7 @@ $months = cal_info(0);
 $months = $months['months'];
 $listSize = array('100'=>100,'75'=>75,'50'=>50,'25'=>25,'10'=>10);
 $numberUmps = array('1'=>1,'2'=>2,'3'=>3,'4'=>4,'5'=>5);
+$usePitchTracker = array('0'=>'Off','1'=>'On');
 ?>
 
 <h1>Settings</h1>
@@ -66,10 +67,18 @@ $numberUmps = array('1'=>1,'2'=>2,'3'=>3,'4'=>4,'5'=>5);
 			</div>
 
 			<div class="rowdiv">
-				<div class="green" style="padding-bottom:30px;">Number of Umps</div>
-				<div class="gray" style="padding-bottom:30px;">
+				<div class="green">Number of Umps</div>
+				<div class="gray">
 					<?php echo $form->dropDownList($model,'numberUmps',$numberUmps,array('style' => 'width:216px !important; text-align:center'));?>
 					<?php echo $form->error($model,'numberUmps'); ?>
+				</div>
+			</div>
+
+			<div class="rowdiv">
+				<div class="green" style="padding-bottom:30px;">Pitcher Tracker</div>
+				<div class="gray" style="padding-bottom:30px;">
+					<?php echo $form->dropDownList($model,'usePitchTracker',$usePitchTracker,array('style' => 'width:216px !important; text-align:center'));?>
+					<?php echo $form->error($model,'usePitchTracker'); ?>
 				</div>
 			</div>
 
