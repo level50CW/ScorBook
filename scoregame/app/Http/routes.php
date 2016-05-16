@@ -57,7 +57,7 @@ Route::group(['middleware' => ['web', 'auth', 'ajax']], function () {
     Route::post('/ajax/atbat/gamestatus', 'AtBatApiController@postGameStatus');
     Route::get('/ajax/atbat/storage', 'AtBatApiController@getStorage');
     Route::post('/ajax/atbat/storage', 'AtBatApiController@postStorage');
-    //Route::controller('ajax/atbat', 'AtBatApiController');
+    Route::post('/ajax/atbat/lastinning', 'AtBatApiController@postLastInning');
 });
 
 

@@ -1,4 +1,12 @@
 function GameLogController(){
+    /* Page item id:
+    0 - team
+    0-100 - pitchers
+    (p+1)*100 - player
+     (p+1)*100+i - item
+     (p+1)*100+50+pt - pitcher
+     */
+
     var self = this;
 
     var $container = $('.js-container-pitch-list');
@@ -7,6 +15,8 @@ function GameLogController(){
     var $pagePrevious = $controls.find('.js-left');
     var $pageNext = $controls.find('.js-right');
     var $counter = $controls.find('.js-counter');
+    var scrollBar = $('.js-container-scrollbar').jScrollPane().data('jsp');
+
 
     var pitchPaterns = {
         strike: '<span>STRIKE</span><div class="ui-circle" color="blue">',
@@ -16,6 +26,7 @@ function GameLogController(){
         out: '<span></span><div class="ui-circle" color="red">',
         empty: '<span></span>',
         player: '<span></span>',
+        pitcher: '<span></span>',
         team: '<span></span>'
     };
 
@@ -23,7 +34,9 @@ function GameLogController(){
         logLastPage,
         logCurrentPage,
         lastTeam,
-        lastBatter;
+        lastBatter,
+        counter,
+        pitcherItems;
 
     resetGlobals();
     function resetGlobals(){
@@ -34,6 +47,12 @@ function GameLogController(){
         logCurrentPage = 0;
         lastTeam = '';
         lastBatter = -1;
+        counter = {
+            player: 0,
+            item: 0,
+            pitcher:0
+        };
+        pitcherItems = {};
 
         $container.hide();
     }
@@ -63,22 +82,32 @@ function GameLogController(){
                 if (!pitch.type)
                     return;
 
-                if (G.lineups[state.offence].name != lastTeam) {
-                    lastTeam = G.lineups[state.offence].name;
+                var lineup = self.players.getInningLineup(state.offence, o.i+1);
+                var batter = self.players.getPlayer(pitch.batter,'batters');
+                var pitcher = self.players.getPlayer(pitch.pitcher,'pitchers');
+
+                if (lineup.name != lastTeam) {
+                    lastTeam = lineup.name;
                     self.createTeam(lastTeam);
                 }
 
-                if (G.lineups[state.offence].batters[state.batter-1].name != lastBatter) {
-                    lastBatter = G.lineups[state.offence].batters[state.batter-1].name;
+                if (batter.name != lastBatter) {
+                    lastBatter = batter.name;
                     self.createPlayer(lastBatter);
                 }
 
+                counter.item++;
+                var itemPos = counter.player * 100 + counter.item;
+
                 if (pitch.type == 'strike' || pitch.type == 'ball' || pitch.type == 'foul')
-                    addItem(pitch.type);
+                    addItem(pitch.type, null, itemPos);
                 else
-                    addItem(pitch.type, pitch.type.toUpperCase()+'-'+pitch.type2);
+                    addItem(pitch.type, pitch.type.toUpperCase()+'-'+pitch.type2, itemPos);
+
+                addPitchCount(pitcher);
             }
         });
+
     }
 
     function setPage(page){
@@ -91,17 +120,58 @@ function GameLogController(){
         $container.show();
         $list.children().remove();
         log.page[page] = log.page[page] || [];
+        var sorted = [];
+
         for(var i in log.page[page]){
-            $list.append(log.page[page][i]);
+            sorted.push(log.page[page][i]);
+        }
+
+        sorted = sorted.sort(function (a,b){
+            return a.attr("position")-b.attr("position");
+        });
+
+        for(var i=0; i<sorted.length; i++){
+            $list.append(sorted[i]);
         }
 
         logCurrentPage = page;
         $counter.text((logCurrentPage+1)+'/'+(logLastPage+1));
+        scrollBar.reinitialise();
     }
 
-    function addItem(type, text){
+    function addItem(type, text, position){
         log.page[logLastPage] = log.page[logLastPage] || [];
-        log.page[logLastPage].push(createItem(type, text));
+        var item = createItem(type, text);
+        item.attr("position",position);
+        log.page[logLastPage].push(item);
+        return item;
+    }
+
+    function addPitchCount(pitcher){
+        var itemPos;
+        var name = pitcher.number+' '+pitcher.lineupName;
+        if (!pitcherItems[name]){
+            counter.pitcher++;
+            itemPos = counter.pitcher;
+            pitcherItems[name] = {
+                count: 0,
+                $item: addItem('pitcher','', itemPos),
+                player: {}
+            };
+        }
+
+        if (!pitcherItems[name].player[counter.player]){
+            itemPos = counter.player*100+50+counter.pitcher;
+            pitcherItems[name].player[counter.player] = {
+                count: 0,
+                $item: addItem('pitcher','', itemPos)
+            };
+        }
+
+        var val = ++pitcherItems[name].count;
+        pitcherItems[name].$item.children('span').text("PC - "+name+" - "+val);
+        val = ++pitcherItems[name].player[counter.player].count;
+        pitcherItems[name].player[counter.player].$item.children('span').text("PC - "+name+" - "+val);
     }
 
     $pagePrevious.click(function(){
@@ -112,6 +182,12 @@ function GameLogController(){
         setPage(logCurrentPage+1);
     });
 
+    /** @type PlayerController */
+    self.players = null;
+    /** @type StorageController */
+    self.storage = null;
+
+    // TODO: Replace with PlayerController
     self.onGetCurrentTeamBatter = function(){};
 
     self.restore = function(){
@@ -132,19 +208,37 @@ function GameLogController(){
             self.createPlayer(lastBatter);
         }
 
-        if (type == 'strike' || type == 'ball' || type == 'foul')
-            addItem(type);
-        else
-            addItem(type, type.toUpperCase()+'-'+text);
+        counter.item++;
+        var itemPos = counter.player * 100 + counter.item;
+
+        if (type == 'strike' || type == 'ball' || type == 'foul') {
+            addItem(type, null, itemPos);
+        } else {
+            addItem(type, type.toUpperCase() + '-' + text, itemPos);
+        }
+    };
+
+    self.addPitchCount = function(){
+        var pitch = self.storage.getPitch();
+        var pitcher = self.players.getPlayer(pitch.pitcher,'pitchers');
+        addPitchCount(pitcher);
     };
 
     self.createPlayer = function(name){
-        addItem('player', name);
+        counter.player++;
+        counter.item = 0;
+        addItem('player', name, counter.player*100);
     };
 
     self.createTeam = function(name){
         logLastPage++;
-        addItem('team', name);
+
+        counter.player = 0;
+        counter.item = 0;
+        counter.pitcher = 0;
+        pitcherItems = {};
+
+        addItem('team', name,0);
 
         if (logLastPage-1 == logCurrentPage)
             setPage(logLastPage)

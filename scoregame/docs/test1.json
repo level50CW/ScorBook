@@ -1,6 +1,6 @@
 {
   "currentInning": 0,
-  "currentState": 2,
+  "currentState": 3,
   "currentPitch": -1,
   "innings": [
     {
@@ -9,7 +9,9 @@
           "pitches": [
             {
               "type": "hit",
-              "type2": "HBP"
+              "type2": "PB",
+              "pitcher": 3505,
+              "batter": 3485
             }
           ],
           "playerScores": [
@@ -17,6 +19,12 @@
               "id": 3505,
               "type": "pitchers",
               "score": "ER",
+              "pitch": 0
+            },
+            {
+              "id": 3505,
+              "type": "pitchers",
+              "score": "PC",
               "pitch": 0
             }
           ],
@@ -31,7 +39,9 @@
           "pitches": [
             {
               "type": "hit",
-              "type2": "HBP"
+              "type2": "WP",
+              "pitcher": 3505,
+              "batter": 3487
             }
           ],
           "playerScores": [
@@ -39,6 +49,12 @@
               "id": 3505,
               "type": "pitchers",
               "score": "ER",
+              "pitch": 0
+            },
+            {
+              "id": 3505,
+              "type": "pitchers",
+              "score": "PC",
               "pitch": 0
             }
           ],
@@ -50,6 +66,30 @@
           "batter": 2
         },
         {
+          "pitches": [
+            {
+              "type": "hit",
+              "type2": "CI",
+              "pitcher": 3505,
+              "batter": 3488
+            }
+          ],
+          "playerScores": [
+            {
+              "id": 3505,
+              "type": "pitchers",
+              "score": "PC",
+              "pitch": 0
+            }
+          ],
+          "inningScores": [],
+          "offence": "visitor",
+          "defence": "home",
+          "pitcher": 3505,
+          "outs": 0,
+          "batter": 3
+        },
+        {
           "pitches": [],
           "playerScores": [],
           "inningScores": [],
@@ -57,15 +97,20 @@
           "defence": "home",
           "pitcher": 3505,
           "outs": 0,
-          "batter": 3
+          "batter": 4
         }
       ],
       "bases": [
         {
+          "id": -1,
+          "bases": [],
+          "runs": []
+        },
+        {
           "id": 0,
           "bases": [
             null,
-            3485
+            1
           ],
           "runs": [0]
         },
@@ -73,15 +118,30 @@
           "id": 100,
           "bases": [
             null,
-            3486,
-            3485
+            2,
+            1
           ],
           "runs": [
+            1,
+            0
+          ]
+        },
+        {
+          "id": 199,
+          "bases": [
+            null,
+            3,
+            2,
+            1
+          ],
+          "runs": [
+            2,
             1,
             0
           ]
         }
       ]
     }
-  ]
+  ],
+  "request": {}
 }

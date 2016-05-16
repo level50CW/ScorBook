@@ -9,6 +9,10 @@ $(window).ready(function(){
 
     function removePlayer() {
         $(this).parent().remove();
+
+        updateSelectedPlayerMarks();
+        updateSelectedPositionMarks();
+        updatePlayerNumbers();
     }
 
     function addPlayer(){
@@ -22,7 +26,16 @@ $(window).ready(function(){
         $new.children('.js-batter-position').val($parent.attr('batter'));
         $new.children('.ui-remove-substitution').click(removePlayer);
         $new.children('.js-defense-position').change(changeDefensePosition);
+        $new.find('.js-select-player').change(function(){
+            updateSelectedPlayerMarks();
+            updatePlayerNumbers();
+        });
         $new.insertAfter($last);
+
+        updateSelectedPlayerMarks();
+        updateSelectedPositionMarks();
+        updatePlayerNumbers();
+
         return false;
     }
 
@@ -32,17 +45,21 @@ $(window).ready(function(){
                 createPitcherContainer();
             }
         } else {
-            $pitcherContainer.remove();
-            $pitcherContainer = null;
+            if ($pitcherContainer) {
+                $pitcherContainer.remove();
+                $pitcherContainer = null;
+            }
         }
+
+        updateSelectedPositionMarks();
     }
 
     function addPitcherPlayer(){
         addPlayer.apply(this);
-        $(this).parent().find('.js-defense-position').last().children().each(function(){
-            if ($(this).text() != 'P')
-                $(this).remove();
-        });
+        //$(this).parent().find('.js-defense-position').last().children().each(function(){
+        //    if ($(this).text() != 'P')
+        //        $(this).remove();
+        //});
         return false;
     }
 
@@ -61,6 +78,41 @@ $(window).ready(function(){
         $pitcherContainer = $new;
     }
 
+    function updateSelectedPlayerMarks(){
+        var selectedValues = {};
+        $('.js-player-container .js-select-player').each(function(i){
+            $this = $(this);
+            selectedValues[$this.val()] = true;
+        });
+
+        $('.js-player-container .js-select-player option').removeAttr("occupied");
+        for(var v in selectedValues){
+            $('.js-player-container .js-select-player option[value="'+v+'"]').attr("occupied",1);
+        }
+    }
+
+    function updateSelectedPositionMarks(){
+        var selectedValues = {};
+        $('.js-player-container .js-defense-position').each(function(i){
+            $this = $(this);
+            selectedValues[$this.val()] = true;
+        });
+
+        $('.js-player-container .js-defense-position option').removeAttr("occupied");
+        for(var v in selectedValues){
+            $('.js-player-container .js-defense-position option[value="'+v+'"]').attr("occupied",1);
+        }
+    }
+
+    function updatePlayerNumbers(){
+        var $playerNumber = $('.js-player-container .js-input-player-number');
+        $('.js-player-container .js-select-player').each(function(i){
+            $this = $(this);
+            var id = $this.val();
+            $playerNumber.eq(i).val(G.playerNumbers[id]);
+        });
+    }
+
     var $pitcherContainer = $('.js-player-container[batter="10"]');
     if ($pitcherContainer.size() == 0)
         $pitcherContainer = null;
@@ -73,7 +125,12 @@ $(window).ready(function(){
             $(this).click(addPlayer);
         }
     });
+
     $('.js-defense-position').change(changeDefensePosition);
+    $('.js-select-player').change(function(){
+        updateSelectedPlayerMarks();
+        updatePlayerNumbers();
+    });
     $('.ui-remove-substitution').click(removePlayer);
 
     $('.ui-menu').find('a').click(function(){
@@ -84,4 +141,8 @@ $(window).ready(function(){
             .submit();
         return false;
     });
+
+    updateSelectedPlayerMarks();
+    updateSelectedPositionMarks();
+    updatePlayerNumbers();
 });

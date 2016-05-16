@@ -16,7 +16,7 @@ class AtBatController extends Controller
         $game = Game::findOrFail($id);
 
         if (empty($game->temperature) || empty($game->weather)){
-            return view('game.update.atbat_',compact(['game', 'lineupPlayers'=>null]))
+            return view('game.update.atbat_',compact(['game', 'lineupPlayers'=>null,'usePitchTracker'=>false]))
                 ->withErrors(['Game info is not set']);
         }
 
@@ -29,34 +29,31 @@ class AtBatController extends Controller
             $messages[] = 'Home Lineup is not saved';
 
         if (count($messages)>0)
-            return view('game.update.atbat_',compact(['game', 'lineupPlayers'=>null]))
+            return view('game.update.atbat_',compact(['game', 'lineupPlayers'=>null,'usePitchTracker'=>false]))
                 ->withErrors($messages);
 
         if (Lineup::hasDH($lineups[0]->batters) != Lineup::hasDH($lineups[1]->batters)){
-            return view('game.update.atbat_',compact(['game', 'lineupPlayers'=>null]))
+            return view('game.update.atbat_',compact(['game', 'lineupPlayers'=>null,'usePitchTracker'=>false]))
                 ->withErrors(['Only one lineup has DH player']);
         }
 
         $lineupPlayers = [];
         foreach($lineups as $lineup){
             if ($lineup == null)
-                return view('game.update.atbat_',compact(['game', 'lineupPlayers'=>null]))
+                return view('game.update.atbat_',compact(['game', 'lineupPlayers'=>null,'usePitchTracker'=>false]))
                     ->withErrors(['Lineup is not created']);
 
-            $batters = $lineup->batters()->where('Inning',1)->get();
-            $substitutions = $lineup->batters()->where('Inning','>',1)->get();
+            $batters = $lineup->batters()->get()->sortBy(function($batter){
+                return $batter->BatterPosition*100+$batter->SubOrder;
+            });
             $dh = Lineup::hasDH($batters);
             $players =[
                 'name'=>$lineup->team->Name,
                 'lineup'=>Lineup::takeHitters($batters,$dh),
                 'fielders'=>Lineup::takeFielders($batters,$dh),
-                'pitchers'=> collect([Lineup::takePitcher($batters)]),
-                'substitutions' => [
-                    'lineup' => Lineup::takeHitters($substitutions,$dh),
-                    'fielders' => Lineup::takeFielders($substitutions,$dh),
-                    'pitchers' => collect([Lineup::takePitcher($substitutions)]),
-                ]
+                'pitchers'=> Lineup::takePitchers($batters)
             ];
+
             $lineupPlayers[]=$players;
         }
 

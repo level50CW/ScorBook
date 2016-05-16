@@ -56,9 +56,9 @@ class Lineup extends Model
         return $batters;
     }
 
-    public static function takePitcher($batters)
+    public static function takePitchers($batters)
     {
         $defensePositions = array_flip(Batter::$defensePositions);
-        return $batters->where('DefensePosition', $defensePositions['P'].'')->first();
+        return $batters->where('DefensePosition', $defensePositions['P'].'');
     }
 }

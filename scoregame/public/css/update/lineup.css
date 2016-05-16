@@ -15,16 +15,18 @@ select.ui-small{
     width: 37px;
 }
 
+input.ui-medium,
 select.ui-medium{
     width: 50px;
 }
 
+input.ui-large,
 select.ui-large{
      width: 60%;
 }
 
 .ui-gray-player input, .ui-gray-player select{
-    background-color: transparent;
+    background-color: transparent !important;
     border-top-color: #adadad;
     border-right-color: #adadad;
     border-bottom-color: #eeeeee;
@@ -35,6 +37,10 @@ select.ui-large{
 option {
     background: rgb(70,70,70);
     color: white;
+}
+
+option[occupied] {
+    color: darkgrey;
 }
 
 select {

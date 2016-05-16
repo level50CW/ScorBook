@@ -118,10 +118,9 @@ class StatisticController extends Controller
             foreach(Lineup::takeFielders($batters,$hasHD) as $batter){
                 DB::table('statsfielding')->insert(['Players_idplayer'=>$batter->Players_idplayer, 'Games_idgame'=>$game->idgame]);
             }
-
-            $pitcher = Lineup::takePitcher($batters);
-            if (isset($pitcher))
-                DB::table('statspitching')->insert(['Players_idplayer'=>$pitcher->Players_idplayer, 'Games_idgame'=>$game->idgame]);
+            foreach(Lineup::takePitchers($batters) as $batter){
+                DB::table('statspitching')->insert(['Players_idplayer'=>$batter->Players_idplayer, 'Games_idgame'=>$game->idgame]);
+            }
         }
     }
 

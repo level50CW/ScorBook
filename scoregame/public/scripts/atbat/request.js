@@ -2,6 +2,7 @@ function RequestController(){
     var self = this;
 
     function post(method, data, callback){
+        callback = callback || function(){};
         $.ajax({
             type: "POST",
             url : G.baseUrl+"/ajax/atbat/"+method,
@@ -19,6 +20,7 @@ function RequestController(){
     }
 
     function get(method, callback){
+        callback = callback || function(){};
         $.ajax({
             type: "GET",
             url : G.baseUrl+"/ajax/atbat/"+method,
@@ -34,6 +36,9 @@ function RequestController(){
         });
     }
 
+    self.register = function(controller){
+        controller.request = self;
+    };
 
     self.setGameStatus = function(status, callback){
         post('gamestatus', {status:status},callback);
@@ -43,17 +48,22 @@ function RequestController(){
         get('gamestatus', callback);
     };
 
-    self.storeState = function(callback){
+
+    self.setGameInning = function(inning, callback){
+        post('lastinning', {inning:inning},callback);
+    };
+
+
+    self.setStorage = function(data,callback){
         post('storage', {
-            storage: JSON.stringify(self.storage.getData())
+            storage: JSON.stringify(data)
         },callback);
     };
 
-    self.restoreState = function(callback){
+    self.getStorage = function(callback){
         get('storage',function(obj){
             obj = JSON.parse(obj.storage);
-            self.storage.setData(obj);
-            callback();
+            callback(obj);
         });
     };
 }

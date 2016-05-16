@@ -1,5 +1,9 @@
 <?php
 use \App\Models\Batter;
+
+
+$teamType = ['visitor','home'];
+//dd($game,$lineupPlayers,$usePitchTracker);
 ?>
 
 <!DOCTYPE html>
@@ -7,8 +11,10 @@ use \App\Models\Batter;
 <head>
     <meta charset="UTF-8">
     <title></title>
+    {!! Html::style('/libs/jquery-scrollbar/jquery.jscrollpane.css') !!}
     {!! Html::style('/css/ui.css') !!}
     {!! Html::style('/css/update/atbat_.css') !!}
+    {!! Html::style('/css/update/scorepad_cell.css') !!}
 </head>
 <body>
 {!! Html::script('/libs/jquery/js/jquery-2.1.4.min.js') !!}
@@ -16,6 +22,8 @@ use \App\Models\Batter;
 {!! Html::script('/libs/underscore/underscore.js') !!}
 {!! Html::script('/libs/moment/moment.js') !!}
 {!! Html::script('/scripts/atbat/crossbrowser.js') !!}
+{!! Html::script('/libs/jquery-scrollbar/jquery.jscrollpane.min.js') !!}
+{!! Html::script('/libs/jquery-scrollbar/jquery.mousewheel.js') !!}
 <div class="ui-header">
     <img src="{{url('/images/atbat/Northwoods-League-Logo.jpg')}}" class="ui-image-logo">
     <div style="margin-top: 130px;">
@@ -171,7 +179,7 @@ use \App\Models\Batter;
                     <td><div class="ui-field-button js-button-field-strike-swinging">Strike Swinging</div></td>
                     <td><div class="ui-field-button js-button-field-ball-foul">Foul Ball</div></td>
                     <td><div class="ui-field-button js-button-field-out-wildpitch">Wild Pitch</div></td>
-                    <td><div class="ui-field-button js-button-field-out-catcherobs">Catcher Obs</div></td>
+                    <td><div class="ui-field-button js-button-field-out-passedball">Passed Ball</div></td>
                 </tr>
             </table>
         </div>
@@ -179,7 +187,7 @@ use \App\Models\Batter;
         <div>
             <table class="ui-buttons-div">
                 <tr>
-                    <td><div class="ui-button-rare">Rare 1</div></td>
+                    <td><div class="ui-button-rare js-button-field-out-catcherinf">Catcher Inf</div></td>
                     <td><div class="ui-button-rare">Rare 2</div></td>
                     <td><div class="ui-button-rare">Rare 3</div></td>
                     <td><div class="ui-button-rare">Rare 4</div></td>
@@ -205,7 +213,7 @@ use \App\Models\Batter;
     </div>
 
     <div class="ui-tables-bottom-div">
-        <div class="ui-tables-left-div">
+        <div class="ui-tables-left-div js-table-left-div">
             <div class="ui-container-div-title">
                 <div class="js-button-container ui-button-container" style="margin-left: 15px"selected="selected" type="lineup">Lineup</div>
                 <div class="js-button-container ui-button-container" style="margin-left: 30px" type="scorepad">Score Pad</div>
@@ -230,9 +238,9 @@ use \App\Models\Batter;
                             </tr>
                             @foreach ($lineupTeam['lineup'] as $batter)
 
-                                <tr class="js-lineup-batter" batter="{{$batter->BatterPosition}}">
+                                <tr class="js-lineup-batter" batter="{{$batter->BatterPosition}}" player="{{$batter->idbatter}}">
                                     <td>{{$batter->Number}}</td>
-                                    <td class="ui-table-command-player">{{$batter->player->getCutName().' '.Batter::$defensePositions[$batter->DefensePosition]}}</td>
+                                    <td class="ui-table-command-player" {{$batter->SubOrder>0? 'substitution="true"':''}}>{{$batter->player->getCutName().' '.Batter::$defensePositions[$batter->DefensePosition]}}</td>
                                     <td type="AB">0</td>
                                     <td type="R">0</td>
                                     <td type="H">0</td>
@@ -255,7 +263,7 @@ use \App\Models\Batter;
                                 <th>SO</th>
                             </tr>
                             @foreach ($lineupTeam['oppositePitchers'] as $batter)
-                                <tr class="js-lineup-pitcher" batter="{{$batter->BatterPosition}}">
+                                <tr class="js-lineup-pitcher" batter="{{$batter->BatterPosition}}" player="{{$batter->idbatter}}">
                                     <td>{{$batter->Number}}</td>
                                     <td class="ui-table-command-player">{{$batter->player->getCutName().' '.Batter::$defensePositions[$batter->DefensePosition]}}</td>
                                     <td type="IP">0</td>
@@ -272,32 +280,26 @@ use \App\Models\Batter;
                 @endforeach
             </div>
             <div class="js-container-scorepad" style="display: none">
-                @foreach($lineupPlayers as $lineupTeam)
-                    <div class="js-scorepad" style="display: none">
+                @foreach($lineupPlayers as $k=>$lineupTeam)
+                    <div class="js-scorepad" team="{{$teamType[$k]}}" style="display: none">
                         <div class="ui-caption-command">{{$lineupTeam['name']}}</div>
+                        <div class="ui-scorepad-controls">
+                            <div class="js-scorepad-button-prev" style="display: none;">&blacktriangleleft;</div>
+                            <div class="js-scorepad-button-next" style="left: 330px; display: none;">&blacktriangleright;</div>
+                        </div>
                         <table class="ui-table-scorepad ui-table-command">
-                            <tr>
+                            <tr class="js-scorepad-innings">
                                 <th class="ui-table-command-header"></th>
                                 <th style="width: 200px; text-align: left;">Player</th>
                                 <th>P</th>
                                 <th>I</th>
-                                @for($i=1; $i<=5; $i++)
-                                    <th>{{$i}}</th>
-                                @endfor
                             </tr>
                             @foreach($lineupTeam['lineup'] as $batter)
-                                <tr>
-                                    <td>{{$batter->BatterPosition}}</td>
+                                <tr class="js-scorepad-batter" batter="{{$batter->BatterPosition}}" player="{{$batter->idbatter}}">
+                                    <td>{{$batter->Number}}</td>
                                     <td style="text-align: left">{{$batter->player->getFullName()}}</td>
                                     <td>{{$batter->getDefensePosition()}}</td>
-                                    <td>{{$batter->Inning}}</td>
-                                    @for($i=1; $i<=5; $i++)
-                                        <td>
-                                            <div class="ui-score-button">
-                                                <a href="{{action('AtBatController@index',$game->idgame)}}">{!! Form::button('',['class'=>'ui-button']) !!}</a>
-                                            </div>
-                                        </td>
-                                    @endfor
+                                    <td>{{$batter->Inning>>3}}</td>
                                 </tr>
                             @endforeach
                         </table>
@@ -313,7 +315,9 @@ use \App\Models\Batter;
                     <div class="js-counter pages" style="display: inline-block"></div>
                     <div class="js-right button" style="display: inline-block">&blacktriangleright;</div>
                 </div>
-                <div class="js-pitch-list ui-pitch-status"></div>
+                <div class="js-container-scrollbar" style="height: 600px; width: 256px;">
+                    <div class="js-pitch-list ui-pitch-status"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -341,12 +345,14 @@ use \App\Models\Batter;
 {!! Html::script('/scripts/atbat/storage.js') !!}
 {!! Html::script('/scripts/atbat/ballInPlay.js') !!}
 {!! Html::script('/scripts/atbat/gameLog.js') !!}
+{!! Html::script('/scripts/atbat/player.js') !!}
+{!! Html::script('/scripts/atbat/scorepad.js') !!}
 {!! Html::script('/scripts/atbat/main.js') !!}
 
 <script>
     G.lineups = {
         visitor:{
-            type: 'visitor',
+            type: '{{$teamType[0]}}',
             name: '{{$lineupPlayers[0]['name']}}',
             batters: [
                 @foreach ($lineupPlayers[0]['lineup'] as $batter)
@@ -356,7 +362,11 @@ use \App\Models\Batter;
                         number: {{$batter->Number}},
                         batter: {{$batter->BatterPosition}},
                         name: '{{$batter->player->getFullName()}}',
-                        position: '{{Batter::$defensePositions[$batter->DefensePosition]}}'
+                        position: '{{Batter::$defensePositions[$batter->DefensePosition]}}',
+                        lineupName: '{{$batter->player->getCutName().' '.Batter::$defensePositions[$batter->DefensePosition]}}',
+                        inning: {{$batter->Inning>>3}},
+                        inningOuts: {{$batter->Inning & 7}},
+                        subOrder: {{$batter->SubOrder}}
                     },
                 @endforeach
                 ],
@@ -367,28 +377,33 @@ use \App\Models\Batter;
                         number: {{$batter->Number}},
                         name: '{{$batter->player->getFullName()}}',
                         position: '{{Batter::$defensePositions[$batter->DefensePosition]}}',
-                        positionId: {{$batter->DefensePosition}}
+                        positionId: {{$batter->DefensePosition}},
+                        inning: {{$batter->Inning>>3}},
+                        inningOuts: {{$batter->Inning & 7}},
+                        subOrder: {{$batter->SubOrder}}
                     },
                 @endforeach
                 ],
             pitchers: [
                 @foreach ($lineupPlayers[0]['pitchers'] as $batter)
-                {
-                    id: {{$batter->idbatter}},
-                    throws: '{{$batter->player->Throws}}',
-                    number: {{$batter->Number}},
-                    batter: {{$batter->BatterPosition}},
-                    name: '{{$batter->player->getFullName()}}',
-                    position: '{{Batter::$defensePositions[$batter->DefensePosition]}}'
-                },
+                    {
+                        id: {{$batter->idbatter}},
+                        throws: '{{$batter->player->Throws}}',
+                        number: {{$batter->Number}},
+                        batter: {{$batter->BatterPosition}},
+                        name: '{{$batter->player->getFullName()}}',
+                        position: '{{Batter::$defensePositions[$batter->DefensePosition]}}',
+                        lineupName: '{{$batter->player->getCutName().' '.Batter::$defensePositions[$batter->DefensePosition]}}',
+                        inning: {{$batter->Inning>>3}},
+                        inningOuts: {{$batter->Inning & 7}},
+                        subOrder: {{$batter->SubOrder}}
+                    },
                 @endforeach
-            ],
-            getPlayer: function(id, type){
-                return _.find(this[type], function(b) {return b.id==id});
-            }
+            ]
+
             },
         home:{
-            type: 'home',
+            type: '{{$teamType[1]}}',
             name: '{{$lineupPlayers[1]['name']}}',
             batters: [
                 @foreach ($lineupPlayers[1]['lineup'] as $batter)
@@ -398,7 +413,11 @@ use \App\Models\Batter;
                     number: {{$batter->Number}},
                     batter: {{$batter->BatterPosition}},
                     name: '{{$batter->player->getFullName()}}',
-                    position: '{{Batter::$defensePositions[$batter->DefensePosition]}}'
+                    position: '{{Batter::$defensePositions[$batter->DefensePosition]}}',
+                    lineupName: '{{$batter->player->getCutName().' '.Batter::$defensePositions[$batter->DefensePosition]}}',
+                    inning: {{$batter->Inning>>3}},
+                    inningOuts: {{$batter->Inning & 7}},
+                    subOrder: {{$batter->SubOrder}}
                 },
                 @endforeach
                 ],
@@ -409,36 +428,41 @@ use \App\Models\Batter;
                         number: {{$batter->Number}},
                         name: '{{$batter->player->getFullName()}}',
                         position: '{{Batter::$defensePositions[$batter->DefensePosition]}}',
-                        positionId: {{$batter->DefensePosition}}
+                        positionId: {{$batter->DefensePosition}},
+                        inning: {{$batter->Inning>>3}},
+                        inningOuts: {{$batter->Inning & 7}},
+                        subOrder: {{$batter->SubOrder}}
                     },
                 @endforeach
                 ],
             pitchers: [
                 @foreach ($lineupPlayers[1]['pitchers'] as $batter)
-                {
-                    id: {{$batter->idbatter}},
-                    throws: '{{$batter->player->Throws}}',
-                    number: {{$batter->Number}},
-                    batter: {{$batter->BatterPosition}},
-                    name: '{{$batter->player->getFullName()}}',
-                    position: '{{Batter::$defensePositions[$batter->DefensePosition]}}'
-                },
+                    {
+                        id: {{$batter->idbatter}},
+                        throws: '{{$batter->player->Throws}}',
+                        number: {{$batter->Number}},
+                        batter: {{$batter->BatterPosition}},
+                        name: '{{$batter->player->getFullName()}}',
+                        position: '{{Batter::$defensePositions[$batter->DefensePosition]}}',
+                        lineupName: '{{$batter->player->getCutName()}}',
+                        inning: {{$batter->Inning>>3}},
+                        inningOuts: {{$batter->Inning & 7}},
+                        subOrder: {{$batter->SubOrder}}
+                    },
                 @endforeach
-            ],
-
-            getPlayer: function(id, type){
-                return _.find(this[type], function(b) {return b.id==id});
-            }
+            ]
         }
     };
+
+    G.isPitchTrackingEnabled = {{$usePitchTracker? 'true': 'false'}};
 </script>
 @endif
 <script>
+    G = window.G || {};
     G.gameId = {{$game->idgame}};
     G.token = '{{csrf_token()}}';
     G.baseUrl = '{{URL::to('/')}}';
     G.gameStatus = {{$game->status}};
-    G.isPitchTrackingEnabled = {{$usePitchTracker? 'true': 'false'}};
 
     $.contextMenu( 'destroy', '.js-button-misc-context' );
     $.contextMenu({
@@ -537,10 +561,14 @@ use \App\Models\Batter;
         }
     });
 
+    // If At Bat has errors
+    G.onRedirect = G.onRedirect || function(url){location = url;};
+
     $('.ui-menu-element a').click(function(){
         G.onRedirect($(this).attr('href'));
         return false;
     });
+
 </script>
 </body>
 </html>

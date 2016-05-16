@@ -1,0 +1,372 @@
+
+{
+  "currentInning": 0,
+  "currentState": 2,
+  "currentPitch": -1,
+  "innings": [
+    {
+      "state": [
+        {
+          "pitches": [
+            {
+              "type": "ball",
+              "counter": {
+                "total": 1,
+                "strike": 0,
+                "ball": 1,
+                "out": 0
+              },
+              "number": 1,
+              "pitcher": 3536,
+              "batter": 3519
+            },
+            {
+              "type": "ball",
+              "counter": {
+                "total": 2,
+                "strike": 0,
+                "ball": 2,
+                "out": 0
+              },
+              "number": 2,
+              "pitcher": 3536,
+              "batter": 3519
+            },
+            {
+              "type": "strike",
+              "counter": {
+                "total": 3,
+                "strike": 1,
+                "ball": 2,
+                "out": 0
+              },
+              "number": 3,
+              "pitcher": 3536,
+              "batter": 3519
+            },
+            {
+              "type": "strike",
+              "counter": {
+                "total": 4,
+                "strike": 2,
+                "ball": 2,
+                "out": 0
+              },
+              "number": 4,
+              "pitcher": 3536,
+              "batter": 3519
+            },
+            {
+              "type": "foul",
+              "counter": {
+                "total": 5,
+                "strike": 2,
+                "ball": 2,
+                "out": 0,
+                "foul": null
+              },
+              "number": 5,
+              "pitcher": 3536,
+              "batter": 3519
+            },
+            {
+              "type": "foul",
+              "counter": {
+                "total": 6,
+                "strike": 2,
+                "ball": 2,
+                "out": 0,
+                "foul": null
+              },
+              "number": 6,
+              "pitcher": 3536,
+              "batter": 3519
+            },
+            {
+              "type": "foul",
+              "counter": {
+                "total": 7,
+                "strike": 2,
+                "ball": 2,
+                "out": 0,
+                "foul": null
+              },
+              "number": 7,
+              "pitcher": 3536,
+              "batter": 3519
+            },
+            {
+              "type": "out",
+              "counter": {
+                "total": 8,
+                "strike": 3,
+                "ball": 2,
+                "out": 1,
+                "foul": null
+              },
+              "type2": "KC",
+              "number": 8,
+              "pitcher": 3536,
+              "batter": 3519
+            }
+          ],
+          "playerScores": [
+            {
+              "id": 3536,
+              "type": "pitchers",
+              "score": "PC",
+              "pitch": 0
+            },
+            {
+              "id": 3536,
+              "type": "pitchers",
+              "score": "PC",
+              "pitch": 1
+            },
+            {
+              "id": 3536,
+              "type": "pitchers",
+              "score": "PC",
+              "pitch": 2
+            },
+            {
+              "id": 3536,
+              "type": "pitchers",
+              "score": "PC",
+              "pitch": 3
+            },
+            {
+              "id": 3536,
+              "type": "pitchers",
+              "score": "PC",
+              "pitch": 4
+            },
+            {
+              "id": 3536,
+              "type": "pitchers",
+              "score": "PC",
+              "pitch": 5
+            },
+            {
+              "id": 3536,
+              "type": "pitchers",
+              "score": "PC",
+              "pitch": 6
+            },
+            {
+              "id": 3519,
+              "type": "batters",
+              "score": "SO",
+              "pitch": 7
+            },
+            {
+              "id": 3536,
+              "type": "pitchers",
+              "score": "SO",
+              "pitch": 7
+            },
+            {
+              "id": 3519,
+              "type": "batters",
+              "score": "AB",
+              "pitch": 7
+            },
+            {
+              "id": 3536,
+              "type": "pitchers",
+              "score": "PC",
+              "pitch": 7
+            }
+          ],
+          "inningScores": [],
+          "offence": "visitor",
+          "defence": "home",
+          "pitcher": 3536,
+          "outs": 0,
+          "batter": 1
+        },
+        {
+          "pitches": [
+            {
+              "type": "strike",
+              "counter": {
+                "total": 1,
+                "strike": 1,
+                "ball": 0,
+                "out": 1
+              },
+              "number": 1,
+              "pitcher": 3536,
+              "batter": 3520
+            },
+            {
+              "type": "foul",
+              "counter": {
+                "total": 2,
+                "strike": 2,
+                "ball": 0,
+                "out": 1
+              },
+              "number": 2,
+              "pitcher": 3536,
+              "batter": 3520
+            },
+            {
+              "type": "foul",
+              "counter": {
+                "total": 3,
+                "strike": 2,
+                "ball": 0,
+                "out": 1,
+                "foul": null
+              },
+              "number": 3,
+              "pitcher": 3536,
+              "batter": 3520
+            },
+            {
+              "type": "ball",
+              "counter": {
+                "total": 4,
+                "strike": 2,
+                "ball": 1,
+                "out": 1,
+                "foul": null
+              },
+              "number": 4,
+              "pitcher": 3536,
+              "batter": 3520
+            },
+            {
+              "type": "ball",
+              "counter": {
+                "total": 5,
+                "strike": 2,
+                "ball": 2,
+                "out": 1,
+                "foul": null
+              },
+              "number": 5,
+              "pitcher": 3536,
+              "batter": 3520
+            },
+            {
+              "type": "ball",
+              "counter": {
+                "total": 6,
+                "strike": 2,
+                "ball": 3,
+                "out": 1,
+                "foul": null
+              },
+              "number": 6,
+              "pitcher": 3536,
+              "batter": 3520
+            },
+            {
+              "type": "ball",
+              "counter": {
+                "total": 7,
+                "strike": 2,
+                "ball": 4,
+                "out": 1,
+                "foul": null
+              },
+              "number": 7,
+              "pitcher": 3536,
+              "batter": 3520
+            }
+          ],
+          "playerScores": [
+            {
+              "id": 3536,
+              "type": "pitchers",
+              "score": "PC",
+              "pitch": 0
+            },
+            {
+              "id": 3536,
+              "type": "pitchers",
+              "score": "PC",
+              "pitch": 1
+            },
+            {
+              "id": 3536,
+              "type": "pitchers",
+              "score": "PC",
+              "pitch": 2
+            },
+            {
+              "id": 3536,
+              "type": "pitchers",
+              "score": "PC",
+              "pitch": 3
+            },
+            {
+              "id": 3536,
+              "type": "pitchers",
+              "score": "PC",
+              "pitch": 4
+            },
+            {
+              "id": 3536,
+              "type": "pitchers",
+              "score": "PC",
+              "pitch": 5
+            },
+            {
+              "id": 3520,
+              "type": "batters",
+              "score": "BB",
+              "pitch": 6
+            },
+            {
+              "id": 3536,
+              "type": "pitchers",
+              "score": "BB",
+              "pitch": 6
+            },
+            {
+              "id": 3536,
+              "type": "pitchers",
+              "score": "PC",
+              "pitch": 6
+            }
+          ],
+          "inningScores": [],
+          "offence": "visitor",
+          "defence": "home",
+          "pitcher": 3536,
+          "outs": 1,
+          "batter": 2
+        },
+        {
+          "pitches": [],
+          "playerScores": [],
+          "inningScores": [],
+          "offence": "visitor",
+          "defence": "home",
+          "pitcher": 3536,
+          "outs": 1,
+          "batter": 3
+        }
+      ],
+      "bases": [
+        {
+          "id": -1,
+          "bases": [],
+          "runs": []
+        },
+        {
+          "id": 106,
+          "bases": [
+            null,
+            2
+          ],
+          "runs": [0]
+        }
+      ]
+    }
+  ],
+  "request": {}
+}

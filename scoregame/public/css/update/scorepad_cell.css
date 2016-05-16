@@ -1,0 +1,70 @@
+.ui-scorepad-cell{
+    display: block;
+    width: 67px;
+    height: 65px;
+    overflow: hidden;
+    border: solid 1px #E9A003;
+    background-image: url(../../images/scorepad/ic_empty.png);
+    background-repeat: no-repeat;
+    background-position: center;
+    box-sizing: initial;
+    position: relative;
+}
+
+.ui-scorepad-cell[base="1"]{
+    background-image: url(../../images/scorepad/ic_1b.png);
+}
+.ui-scorepad-cell[base="2"]{
+    background-image: url(../../images/scorepad/ic_2b.png);
+}
+.ui-scorepad-cell[base="3"]{
+    background-image: url(../../images/scorepad/ic_3b.png);
+}
+.ui-scorepad-cell[base="4"]{
+    background-image: url(../../images/scorepad/ic_home.png);
+}
+
+.ui-scorepad-cell div{
+    font-weight: bolder;
+    color: #E4E4E4;
+    text-shadow: 0px 0px 10px rgba(0, 0, 0, 1);
+    position: absolute;
+}
+
+.ui-scorepad-cell div[type="result"]{
+    width: 200px;
+    left: -67px;
+}
+
+.ui-scorepad-cell div[type="out"]{
+    width: 15px;
+    height: 15px;
+    border: solid 2px;
+    border-radius: 10px;
+    font-size: 12px;
+    box-sizing: initial;
+    top: 42px;
+    left: 1px;
+    color: #B7B7B7;
+}
+
+.ui-scorepad-cell div[type="strike"]{
+    font-size: 10px;
+    top: 37px;
+    left: 45px;
+    text-align: left;
+}
+
+.ui-scorepad-cell div[type="ball"]{
+    font-size: 10px;
+    top: 51px;
+    left: 34px;
+    text-align: left;
+}
+
+.ui-scorepad-cell div span{
+    display: inline-block;
+    position: static;
+    width: 11px;
+    text-align: center;
+}

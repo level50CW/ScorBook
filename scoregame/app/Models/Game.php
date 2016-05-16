@@ -30,7 +30,7 @@ class Game extends Model
         'regulation',
         'last_inning',
         'half_inning',
-        'game_type',
+        'game_type'
     ];
 
 

@@ -3,6 +3,7 @@ function HitController(){
 
     var $field = $('.js-field');
     var isEnabled = false;
+    var isEnabledParticular = false;
     var hitType = null;
 
     function initMenu(){
@@ -38,13 +39,25 @@ function HitController(){
 
     function menuHandle(type){
         hitType = type;
-        if (hitType == 'HBP') {
-            self.onHitByPitch();
+        if (   hitType == 'HBP' ||
+                hitType == 'BK' ||
+                hitType == 'WP' ||
+                hitType == 'PB' ||
+                hitType == 'CI') {
+            self.onPitchError(hitType);
             self.enable(false);
             hitType = null;
             return;
         }
         $('.js-field').attr('active',1);
+    }
+
+    function menuHandleParticular(type){
+        if (!isEnabledParticular) {
+            alert('This option is disabled');
+            return;
+        }
+        menuHandle(type);
     }
 
     $field.mousedown(function(e){
@@ -73,13 +86,30 @@ function HitController(){
         }
     });
 
+
+
     $('.js-button-field-hitbypitch').click(function(){
-        if (!self.menuHandle('HBP'))
-            alert('This option is disabled');
+        menuHandleParticular('HBP');
+    });
+
+    $('.js-button-field-balk').click(function(){
+        menuHandleParticular('BK');
+    });
+
+    $('.js-button-field-out-wildpitch').click(function(){
+        menuHandleParticular('WP');
+    });
+
+    $('.js-button-field-out-passedball').click(function(){
+        menuHandleParticular('PB');
+    });
+
+    $('.js-button-field-out-catcherinf').click(function(){
+        menuHandleParticular('CI');
     });
 
     self.onBatterHit = function(type){};
-    self.onHitByPitch = function(){};
+    self.onPitchError = function(type){};
     self.onDrawHit = function(point){};
     self.onDrawLabel = function(type){};
 
@@ -101,6 +131,11 @@ function HitController(){
 
         $field.removeAttr('active');
         isEnabled = isEnable;
+        isEnabledParticular = isEnable;
+    };
+
+    self.enableParticular = function(isEnable){
+        isEnabledParticular = isEnable;
     };
 
     initMenu();

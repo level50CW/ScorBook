@@ -36,14 +36,14 @@ function FieldController(){
         }
     };
 
-    var currentBatters,
+    var currentRunners,
         currentGameSet,
         lastMarkRotateBatters,
         advancedBatters;
 
     resetGlobals();
     function resetGlobals(){
-        currentBatters = null; // state
+        currentRunners = null; // state
         currentGameSet = null; // state
         lastMarkRotateBatters = [];
         advancedBatters = [];
@@ -53,12 +53,16 @@ function FieldController(){
         $field.children('.ui-circle[fielder]').remove();
     }
 
+    function getBatterByPosition(pos){
+        return currentGameSet.offenceLineup.batters[pos-1];
+    }
+
     function updateBatters(){
         var $field = $('.js-field');
         $field.children('.ui-circle[batter]').remove();
         var offset = $field.offset();
-        for(var bi in currentBatters){
-            var batter = currentBatters[bi];
+        for(var bi in currentRunners){
+            var batter = getBatterByPosition(currentRunners[bi]);
             if (batter)
                 $('<div class="ui-field-element ui-circle" hastext="1">')
                     .attr('batter',batter.number)
@@ -128,7 +132,7 @@ function FieldController(){
     function markRotateBatters(toBase, fromBase){
         toBase = toBase || 1;
         fromBase = fromBase || 0;
-        var bases = currentBatters.map(function(x){return x? true: false});
+        var bases = currentRunners.map(function(x){return x? true: false});
         var moves = [];
 
         function _rec(base){
@@ -152,14 +156,14 @@ function FieldController(){
 
         for(var i in moves){
             var base = moves[i];
-            if (currentBatters[base]) {
+            if (currentRunners[base]) {
                 if (base < 3)
-                    currentBatters[base + 1] = currentBatters[base];
+                    currentRunners[base + 1] = currentRunners[base];
                 else
-                    self.onAddInningScore(currentBatters[3]);
+                    self.onAddInningScore(getBatterByPosition(currentRunners[3]));
                 runs.push(base);
                 self.onBatterRun(base);
-                currentBatters[base] = null;
+                currentRunners[base] = null;
             }
         }
 
@@ -172,14 +176,14 @@ function FieldController(){
         fromBaseStart = fromBaseStart || 0;
 
         for(var base=fromBaseEnd; base>=fromBaseStart; base--) {
-            if (currentBatters[base]) {
+            if (currentRunners[base]) {
                 if (base<3)
-                    currentBatters[base + 1] = currentBatters[base];
+                    currentRunners[base + 1] = currentRunners[base];
                 else
-                    self.onAddInningScore(currentBatters[3]);
+                    self.onAddInningScore(getBatterByPosition(currentRunners[3]));
                 runs.push(base);
                 self.onBatterRun(base);
-                currentBatters[base] = null;
+                currentRunners[base] = null;
             }
         }
 
@@ -189,20 +193,23 @@ function FieldController(){
     function restoreBatters(){
         var state = self.storage.getState();
         var base = self.storage.getBaseState();
-        currentBatters = [];
+        currentRunners = [];
         if (base){
             for(var b in base.bases){
-                var batterId = base.bases[b];
-                if (batterId){
-                    currentBatters[b] = currentGameSet.offenceLineup.getPlayer(batterId, 'batters');
+                var batterPosition = base.bases[b];
+                if (batterPosition){
+                    currentRunners[b] = batterPosition;
                 }
             }
         }
-        currentBatters[0] = currentGameSet.offenceLineup.batters[state.batter-1];
+        currentRunners[0] = state.batter;
         updateFielders(currentGameSet.defenceLineup);
         updateFieldersClick();
         self.updateBatters();
     }
+
+    self.storage = null;
+    self.players = null;
 
     self.onAddInningScore = function(batter){
     };
@@ -234,7 +241,7 @@ function FieldController(){
 
     self.storeBaseState = function(runs){
         self.storage.addBaseState({
-            bases: currentBatters.map(function(batter){ return (batter)? batter.id: null;}),
+            bases: currentRunners.map(function(batter){ return (batter)? batter: null;}),
             runs: runs
         });
     };
@@ -245,28 +252,38 @@ function FieldController(){
 
     self.resetFielders = function(){
         $('.js-field').children('.ui-circle').remove();
-        updateFielders(currentGameSet.defenceLineup);
-        updateFieldersClick();
+        self.updateFielders();
 
-        currentBatters = [];
+        currentRunners = [];
         self.updateBatters();
 
         self.storeBaseState([]);
     };
 
     self.doBatterOut = function(){
-        currentBatters[0] = null;
+        currentRunners[0] = null;
     };
 
     self.doBattersOut = function(batters){
         for(var b in batters){
-            currentBatters[batters[b]] = null;
+            currentRunners[batters[b]] = null;
         }
+    };
+
+    self.updateFielders = function(){
+        updateFielders(currentGameSet.defenceLineup);
+        updateFieldersClick();
     };
 
     self.updateBatters = function(){
         updateBatters();
         updateBattersClick();
+    };
+
+    self.updateLineup = function(){
+        $('.js-field').children('.ui-circle').remove();
+        self.updateFielders();
+        self.updateBatters();
     };
 
     self.markBatterBase = function(toBase, fromBase){
@@ -319,7 +336,7 @@ function FieldController(){
     };
 
     self.setCurrentBatter = function(batter){
-        currentBatters[0] = batter;
+        currentRunners[0] = batter.batter;
         self.updateBatters();
     };
 

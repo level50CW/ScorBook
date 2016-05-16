@@ -10,22 +10,22 @@ function BallInPlayController(){
 
         'F': 'out',
         'GO': 'out',
-        'SacF': 'out',
-        'SacB': 'out',
+        'SF': 'out',
+        'SH': 'out',
         'FO': 'out',
         'TO': 'out',
         'DP': 'out',
         'TP': 'out',
         'PO': 'out',
 
-        //'KL': 'strike',
-        //'KSW': 'strike',
+        //'KC': 'strike',
+        //'KS': 'strike',
 
         'ERR': 'error',
 
         'SB': 'misc',
         'CS': 'misc',
-        'WP': 'misc',
+        //'WP': 'misc',
 
         'AR1': 'advance',
         'AR2': 'advance',
@@ -65,11 +65,11 @@ function BallInPlayController(){
                     name: 'Ground Out',
                     callback: menuHandle
                 },
-                'SacF':{
+                'SF':{
                     name: 'Sac Fly',
                     callback: menuHandle
                 },
-                'SacB':{
+                'SH':{
                     name: 'Sac Bunt',
                     callback: menuHandle
                 },
@@ -95,11 +95,11 @@ function BallInPlayController(){
                     disabled: true
                 },
 
-                //'KL':{
+                //'KC':{
                 //    name: 'Strikeout Looking',
                 //    callback: menuHandle
                 //},
-                //'KSW':{
+                //'KS':{
                 //    name: 'Strikeout Swinging',
                 //    callback: menuHandle
                 //},
@@ -117,10 +117,10 @@ function BallInPlayController(){
                     name: 'Caught Stealing',
                     callback: menuHandle
                 },
-                'WP':{
-                    name: 'Wild Pitch',
-                    disabled: true
-                },
+                //'WP':{
+                //    name: 'Wild Pitch',
+                //    disabled: true
+                //},
 
                 'AR':{
                     name: 'Advanced Run',

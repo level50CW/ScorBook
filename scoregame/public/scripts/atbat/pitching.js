@@ -30,6 +30,7 @@ function PitchingController(){
             total: 0,
             strike: 0,
             ball: 0,
+            foul: 0,
             out: 0
         }; // state
         isEnabled = false;
@@ -110,7 +111,11 @@ function PitchingController(){
             type2: type
         });
 
-        $lastPoint.attr('color',pitchColors['hit']);
+        if ($lastPoint)
+            $lastPoint.attr('color',pitchColors['hit']);
+
+        if (isTrackerDisabled)
+            self.onPitch();
 
         isPitchingEvent = false;
         pitchingType = null;
@@ -122,6 +127,9 @@ function PitchingController(){
 
         if ($lastPoint) //if strikeout $lastPoint == null
             $lastPoint.attr('color',pitchColors['out']);
+
+        if (isTrackerDisabled && type != "KS" && type != "KC")
+            self.onPitch();
 
         isPitchingEvent = false;
         pitchingType = null;
@@ -278,6 +286,7 @@ function PitchingController(){
 
             //self.storage.newPitch();
             self.storage.updatePitch({
+
                 coordinatesCatch: {
                     x: x,
                     y: y
@@ -298,12 +307,12 @@ function PitchingController(){
     });
 
     $('.js-button-field-strike-looking').click(function(){
-        strikeType = 'KL';
+        strikeType = 'KC';
         tryAddPitchUi('strike');
     });
 
     $('.js-button-field-strike-swinging').click(function(){
-        strikeType = 'KSW';
+        strikeType = 'KS';
         tryAddPitchUi('strike');
     });
 
@@ -334,6 +343,7 @@ function PitchingController(){
     self.resetPitching = function(){
         pitchCounter.strike = 0;
         pitchCounter.ball = 0;
+        pitchCounter.foul = 0;
         pitchCounter.total = 0;
         updatePitchUi();
 

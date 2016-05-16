@@ -1,18 +1,18 @@
 <?php
 use \App\Models\Batter;
 
-$goTo = [
-        'home'=>'Visitor',
-        'visitor'=>'Home'
-];
+    $goTo = [
+            'home'=>'Visitor',
+            'visitor'=>'Home'
+    ];
 
-$title = [
-        'visitor'=>'Visiting Team Line Up &ndash; '.$lineup->team->Name,
-        'home'=>'Home Team Line Up &ndash; '.$lineup->team->Name
-];
+    $title = [
+            'visitor'=>'Visiting Team Line Up &ndash; '.$lineup->team->Name,
+            'home'=>'Home Team Line Up &ndash; '.$lineup->team->Name
+    ];
 
-$goTo = $goTo[$team];
-$title = $title[$team];
+    $goTo = $goTo[$team];
+    $title = $title[$team];
 ?>
 
 @extends('game.update')
@@ -48,30 +48,49 @@ $title = $title[$team];
 
 
                 @foreach($batters as $batter)
-                    <div class="ui-row ui-gray-player">
-                        {!! Form::hidden('BatterPosition[]',$batter->BatterPosition) !!}
-                        {!! Form::text('Number[]', $batter->Number, ['class'=>'ui-small', 'maxlength'=>2]) !!}
+                    <?php
+                        $inning = ($batter->Inning >> 3).( ($batter->Inning & 7) > 0? '.'.($batter->Inning & 7) : '');
+                    ?>
+                    @if (($batter->Inning >> 3) <= $game->last_inning)
+                        <div class="ui-row ui-gray-player">
+                            {!! Form::hidden('BatterPosition[]',$batter->BatterPosition) !!}
+                            {!! Form::hidden('UserChange[]',0) !!}
+                            {!! Form::text('Number[]', $batter->Number, ['class'=>'ui-small js-input-player-number', 'maxlength'=>2, 'readonly'=>true]) !!}
 
-                        <div class="ui-gray-player-name">
-                            {!! Form::select('player[]',$players,$batter->player->idplayer,['class'=>'ui-large']) !!}
+                            <div class="ui-gray-player-name">
+                                {!! Form::hidden('player[]',$batter->player->idplayer, ['class'=>'js-select-player']) !!}
+                                {!! Form::text('_[]', $players[$batter->player->idplayer], ['class'=>'ui-large', 'readonly'=>true]) !!}
+                            </div>
+
+                            {!! Form::hidden('DefensePosition[]',$batter->DefensePosition, ['class'=>'js-defense-position']) !!}
+                            {!! Form::text('_[]', Batter::$defensePositions[$batter->DefensePosition], ['class'=>'ui-medium', 'readonly'=>true]) !!}
+
+                            {!! Form::text('Inning[]', $inning, ['class'=>'ui-small', 'maxlength'=>4, 'readonly'=>true]) !!}
+                            <div style="display: inline-block;"></div>
                         </div>
+                    @else
+                        <div class="ui-row ui-gray-player">
+                            {!! Form::hidden('BatterPosition[]',$batter->BatterPosition) !!}
+                            {!! Form::hidden('UserChange[]',1) !!}
+                            {!! Form::text('Number[]', $batter->Number, ['class'=>'ui-small js-input-player-number', 'maxlength'=>2, 'readonly'=>true]) !!}
 
-                        @if ($batter->BatterPosition == 10)
+                            <div class="ui-gray-player-name">
+                                {!! Form::select('player[]',$playersRemain,$batter->player->idplayer,['class'=>'ui-large js-select-player']) !!}
+                            </div>
+
                             {!! Form::select('DefensePosition[]',
-                                            [array_flip(Batter::$defensePositions)['P']=>'P'],
-                                            $batter->DefensePosition,
-                                            ['class'=>'js-defense-position ui-medium']) !!}
-                        @else
-                            {!! Form::select('DefensePosition[]',
-                                            Batter::$defensePositions,
-                                            $batter->DefensePosition,
-                                            ['class'=>'js-defense-position ui-medium']) !!}
-                        @endif
-                        {!! Form::text('Inning[]', $batter->Inning, ['class'=>'ui-small', 'maxlength'=>2]) !!}
-                        <div class="ui-remove-substitution">x</div>
-                    </div>
+                            Batter::$defensePositions,
+                            $batter->DefensePosition,
+                            ['class'=>'js-defense-position ui-medium']) !!}
+
+                            {!! Form::text('Inning[]', $inning, ['class'=>'ui-small', 'maxlength'=>4]) !!}
+                            <div class="ui-remove-substitution">x</div>
+                        </div>
+                    @endif
                 @endforeach
-                <a href="#" class="js-enter-substitution" style="color: #ADADAD;">Enter Substitution</a>
+                @if (count($playersRemain) > 0)
+                    <a href="#" class="js-enter-substitution" style="color: #ADADAD;">Enter Substitution</a>
+                @endif
             </div>
         @endforeach
 
@@ -84,22 +103,32 @@ $title = $title[$team];
     <div class="js-player-template" style="display: none">
         <div class="ui-row ui-gray-player">
             {!! Form::hidden('BatterPosition[]',0,['class'=>'js-batter-position']) !!}
-            {!! Form::text('Number[]', 1, ['class'=>'ui-small', 'maxlength'=>2]) !!}
+            {!! Form::hidden('UserChange[]',1) !!}
+            {!! Form::text('Number[]', 1, ['class'=>'ui-small js-input-player-number', 'maxlength'=>2, 'readonly'=>true]) !!}
 
             <div class="ui-gray-player-name">
-                {!! Form::select('player[]',$players,null,['class'=>'ui-large']) !!}
+                {!! Form::select('player[]',$playersRemain,null,['class'=>'ui-large js-select-player']) !!}
             </div>
 
             {!! Form::select('DefensePosition[]',
                             Batter::$defensePositions,
                             null,
                             ['class'=>'js-defense-position ui-medium']) !!}
-            {!! Form::text('Inning[]', 1, ['class'=>'ui-small', 'maxlength'=>2]) !!}
+            {!! Form::text('Inning[]', $game->last_inning + 1, ['class'=>'ui-small', 'maxlength'=>4]) !!}
             <div class="ui-remove-substitution">x</div>
         </div>
     </div>
 @stop
 
 @section('script')
+    <script>
+        G = {
+            playerNumbers: {
+                @foreach($numbers as $pid=>$number)
+                    '{{$pid}}': {{$number}},
+                @endforeach
+            }
+        };
+    </script>
     {!! Html::script('/scripts/update/lineup.js') !!}
 @stop

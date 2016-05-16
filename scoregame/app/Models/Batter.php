@@ -12,7 +12,8 @@ class Batter extends Model
         'Number',
         'BatterPosition',
         'Inning',
-        'Players_idplayer'
+        'Players_idplayer',
+        'SubOrder'
     ];
 
     public static $defensePositions = [

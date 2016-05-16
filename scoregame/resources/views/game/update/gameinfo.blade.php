@@ -99,3 +99,7 @@ $umpires = ['1B', '2B', '3B', 'LF line', 'RF line'];
     {!!Form::close()!!}
 </div>
 @stop
+
+@section('script')
+    {!! Html::script('/scripts/update/gameinfo.js') !!}
+@stop

@@ -60,4 +60,15 @@ class AtBatApiController extends Controller
 
         return Response::json(['storage'=>$storage->storage]);
     }
+
+    public function postLastInning()
+    {
+        $data = Request::all();
+        $game = Game::findOrFail($data['_id']);
+
+        $game->last_inning = $data['data']['inning'];
+        $game->save();
+
+        return Response::json(['success'=>true]);
+    }
 }

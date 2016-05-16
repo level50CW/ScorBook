@@ -56,7 +56,14 @@ class GameController extends Controller
                 ->withErrors($validator);
         }
 
-        $game->update(array_except($request->all(),['_token']));
+        if ($input['status'] == 0)
+            $input['last_inning'] = 0;
+
+        $game->update(array_except($input,['_token']));
+
+        if (isset($input['redirect']))
+            return redirect($input['redirect']);
+
         return redirect(action('LineupController@edit',['id'=>$id, 'team'=>'home']));
     }
 }

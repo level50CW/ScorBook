@@ -16,11 +16,11 @@ function MiscController(){
                 'CS':{
                     name: 'Caught Stealing',
                     callback: menuHandle
-                },
-                'WP':{
-                    name: 'Wild Pitch',
-                    disabled: true
                 }
+                //'WP':{
+                //    name: 'Wild Pitch',
+                //    disabled: true
+                //}
             }
         });
 

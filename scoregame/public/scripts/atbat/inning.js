@@ -1,4 +1,4 @@
-function InningController(lineups){
+function InningController(){
     var self = this;
 
     var $lineups,
@@ -66,10 +66,12 @@ function InningController(lineups){
             pitchers: {}
         };
 
+
         function addBatters(team){
-            for(var pi in lineups[team].batters){
-                var player = lineups[team].batters[pi];
-                $scoring.batters[player.id] = $lineups[team].find('.js-lineup-batter[batter='+player.batter+']');
+            var batters = self.players.getPlayers(team,'batters');
+            for(var pi in batters){
+                var player = batters[pi];
+                $scoring.batters[player.id] = $lineups[team].find('.js-lineup-batter[player='+player.id+']');
                 $scoring.batters[player.id].children('td[type]').text(0);
                 scoring.batters[player.id] = {
                     player: player,
@@ -85,9 +87,10 @@ function InningController(lineups){
 
         function addPitchers(team){
             var teamOpponent = (team == 'home')? 'visitor' : 'home';
-            for(var pi in lineups[team].pitchers){
-                var player = lineups[team].pitchers[pi];
-                $scoring.pitchers[player.id] = $lineups[teamOpponent].find('.js-lineup-pitcher[batter='+player.batter+']');
+            var pitchers = self.players.getPlayers(team,'pitchers');
+            for(var pi in pitchers){
+                var player = pitchers[pi];
+                $scoring.pitchers[player.id] = $lineups[teamOpponent].find('.js-lineup-pitcher[player='+player.id+']');
                 $scoring.pitchers[player.id].children('td[type]').text(0);
                 scoring.pitchers[player.id] = {
                     player: player,
@@ -113,10 +116,9 @@ function InningController(lineups){
             state: function(o){
                 for(var sc in o.state.playerScores){
                     var score = o.state.playerScores[sc];
-                    var val = ++scoring[score.type][score.id][score.score];
-                    $scoring[score.type][score.id]
-                        .children('td[type='+score.score+']')
-                        .text(val);
+                    scoring[score.type][score.id] = scoring[score.type][score.id] || {};
+                    scoring[score.type][score.id][score.score] = scoring[score.type][score.id][score.score] || 0;
+                    scoring[score.type][score.id][score.score]++;
                 }
             }
         });
@@ -140,6 +142,11 @@ function InningController(lineups){
         $lineups['visitor'] = $lineups.eq(0);
         $lineups['home'] = $lineups.eq(1);
 
+        var lineups = {
+            home: self.players.getInningLineup('home',currentInning),
+            visitor: self.players.getInningLineup('visitor',currentInning)
+        };
+
         var state = self.storage.getState();
         if (state.offence && state.defence){
 
@@ -148,7 +155,7 @@ function InningController(lineups){
             $defenceLineup = $lineups[state.defence];
             $offenceLineup = $lineups[state.offence];
 
-            currentPitcher = defenceLineup.getPlayer(state.pitcher, 'pitchers');
+            currentPitcher = defenceLineup.pitchers[0];
 
         } else {
 
@@ -192,7 +199,7 @@ function InningController(lineups){
             },
 
             inningAfter: function(o){
-                updateScoreUi(o.i+1);
+                updateTeamScoreUi(o.i+1);
             }
         });
     }
@@ -227,18 +234,22 @@ function InningController(lineups){
     }
 
     function switchLineups(){
-        var buff = defenceLineup;
-        defenceLineup = offenceLineup;
-        offenceLineup = buff;
-        buff = $defenceLineup;
+
+        self.storage.updateState({
+            offence: defenceLineup.type,
+            defence: offenceLineup.type
+        });
+
+        var buffer = self.players.getInningLineup(defenceLineup.type,currentInning);
+        defenceLineup = self.players.getInningLineup(offenceLineup.type,currentInning);
+        offenceLineup = buffer;
+        buffer = $defenceLineup;
         $defenceLineup = $offenceLineup;
-        $offenceLineup = buff;
+        $offenceLineup = buffer;
 
         currentPitcher = defenceLineup.pitchers[0];
 
         self.storage.updateState({
-            offence: offenceLineup.type,
-            defence: defenceLineup.type,
             pitcher: currentPitcher.id
         });
     }
@@ -246,7 +257,7 @@ function InningController(lineups){
     function nextInning(){
         resetInningCounter();
         currentInning++;
-        updateScoreUi(currentInning);
+        updateTeamScoreUi(currentInning);
     }
 
     function updateHeader(){
@@ -277,11 +288,15 @@ function InningController(lineups){
 
     function updateInningBatterUi(){
         $('.js-lineup-batter').removeAttr('selected');
+        $('.js-lineup-pitcher').removeAttr('selected');
         $('.js-batting-batside').html();
 
         if (currentBatter) {
-            $('.js-lineup-batter[batter=' + currentBatter.batter + ']', $offenceLineup).attr('selected', 1);
+            $('.js-lineup-batter[player=' + currentBatter.id + ']', $offenceLineup).attr('selected', 1);
+            $('.js-lineup-pitcher[player=' + currentPitcher.id + ']', $offenceLineup).attr('selected', 1);
+
             $('.js-label-atbat').text(currentBatter.name);
+
             if (nextBatter == null)
                 $('.js-label-ondeck').text('');
             else
@@ -296,7 +311,7 @@ function InningController(lineups){
         }
     }
 
-    function updateScoreUi(inning){
+    function updateTeamScoreUi(inning){
         $('.js-inning-visitor').eq(inning-1).text(inningCounter.visitor);
         $('.js-inning-home').eq(inning-1).text(inningCounter.home);
         $('.js-inning-visitor-r').text(inningTotal.visitor.R);
@@ -305,6 +320,27 @@ function InningController(lineups){
         $('.js-inning-home-r').text(inningTotal.home.R);
         $('.js-inning-home-h').text(inningTotal.home.H);
         $('.js-inning-home-e').text(inningTotal.home.E);
+    }
+
+    function updateLineupScoreUi(){
+        function _byPlayersType(players, type){
+            for(var p in players){
+                var player = players[p];
+                var $tds = $scoring[type][player.id].children('td');
+                var counter = 2;
+                for (var s in scoring[type][player.id]){
+                    if (s != 'player'){
+                        $tds.eq(counter).text(scoring[type][player.id][s]);
+                        counter++;
+                    }
+                }
+            }
+        }
+
+        _byPlayersType(self.players.getPlayers('visitor','batters'),'batters');
+        _byPlayersType(self.players.getPlayers('home','batters'),'batters');
+        _byPlayersType(self.players.getPlayers('visitor','pitchers'),'pitchers');
+        _byPlayersType(self.players.getPlayers('home','pitchers'),'pitchers');
     }
 
     function getWinner(){
@@ -363,8 +399,12 @@ function InningController(lineups){
         self.onBatterReady(currentBatter);
         updateHeader();
         updateInningTableHead();
+        updateLineupScoreUi();
     }
 
+    /** @type PlayerController */
+    self.players = null;
+    /** @type StorageController */
     self.storage = null;
 
     self.onBatterReady = function(){
@@ -385,7 +425,7 @@ function InningController(lineups){
 
         self.storage.addInningScore(lineupType,'R');
 
-        updateScoreUi(currentInning);
+        updateTeamScoreUi(currentInning);
     };
 
     self.addInningHitScore = function(){
@@ -394,7 +434,7 @@ function InningController(lineups){
 
         self.storage.addInningScore(lineupType,'H');
 
-        updateScoreUi(currentInning);
+        updateTeamScoreUi(currentInning);
     };
 
     self.addInningErrorScore = function(){
@@ -403,7 +443,7 @@ function InningController(lineups){
 
         self.storage.addInningScore(lineupType,'E');
 
-        updateScoreUi(currentInning);
+        updateTeamScoreUi(currentInning);
     };
 
     self.addBothScore = function(scoretype){
@@ -461,6 +501,26 @@ function InningController(lineups){
         outs3 = true;
     };
 
+    self.updateLineup = function(){
+        defenceLineup = self.players.getInningLineup(defenceLineup.type,currentInning);
+        offenceLineup = self.players.getInningLineup(offenceLineup.type,currentInning);
+        currentPitcher = defenceLineup.pitchers[0];
+
+        self.storage.updateState({
+            pitcher: currentPitcher.id
+        });
+
+        updateInningBatterUi();
+        updateLineupScoreUi();
+    };
+
+    self.updatePitchActors = function(){
+        self.storage.updatePitch({
+            pitcher: currentPitcher.id,
+            batter: currentBatter.id
+        });
+    };
+
     self.startGame = function(){
         if (gameStarted)
             location.reload(); // TODO: Replace from here
@@ -471,10 +531,11 @@ function InningController(lineups){
         initScoring();
         updateHeader();
         updateInningTableHead();
+        updateLineupScoreUi();
         self.onNextGameSet();
 
         resetInningCounter();
-        updateScoreUi(currentInning);
+        updateTeamScoreUi(currentInning);
 
 
         setCurrentBatter(1);
@@ -501,6 +562,7 @@ function InningController(lineups){
         restoreScoring();
         updateHeader();
         updateInningTableHead();
+        updateLineupScoreUi();
 
         restoreInningCounters();
         restoreCurrentBatter();

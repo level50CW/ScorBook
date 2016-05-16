@@ -27,11 +27,27 @@ function StorageController(){
         return state.pitches[self.currentPitch];
     }
 
+    function getBaseState(i,s,p){
+        for (var b = self.innings[i].bases.length-1; b>=0; b--){
+            var base = self.innings[i].bases[b];
+            if (base.id<=s*100+p){
+                return self.innings[i].bases.filter(function(e){return e.id == base.id;});
+            }
+        }
+        return null;
+    }
+
     self.currentInning = 0;
     self.currentState = 0;
     self.currentPitch = -1;
 
     self.innings = [];
+
+    self.request = null;
+
+
+    self.onUpdatePitch = function(){};
+    self.onUpdateState = function(){};
 
     self.getInning = function(){
         getStateObject();
@@ -68,12 +84,8 @@ function StorageController(){
     };
 
     self.getBaseState = function(){
-        for (var b = self.innings[self.currentInning].bases.length-1; b>=0; b--){
-            var base = self.innings[self.currentInning].bases[b];
-            if (base.id<=self.currentState*100+self.currentPitch)
-                return base;
-        }
-        return null;
+        var arr = getBaseState(self.currentInning,self.currentState,self.currentPitch);
+        return arr? arr[arr.length - 1] : null;
     };
 
     self.addInningScore = function(teamType,scoreType){
@@ -128,6 +140,8 @@ function StorageController(){
         self.currentPitch = -1;
         self.currentState = 0;
         self.currentInning++;
+
+        self.request.setGameInning(self.currentInning);
     };
 
     self.undoBy = function(type){
@@ -137,7 +151,7 @@ function StorageController(){
         }
 
         function predicateBases(x) {
-            return x.id < self.currentState * 100 + self.currentPitch;
+            return x.id < self.currentState * 100 + self.currentPitch || x.id == -1;
         }
 
         switch(type){
@@ -194,12 +208,41 @@ function StorageController(){
                     self.currentPitch = -1;
 
                     self.innings.pop();
+
+                    self.request.setGameInning(self.currentInning);
                 }
 
                 return;
         }
     };
 
+    /**
+     *
+     * @param types ['inning', 'state', 'pitch']
+     * @param callbacks Object as
+     *                  {pitch: function,
+     *                  state: function,
+     *                  stateAfter: function,
+     *                  inning: function,
+     *                  inningAfter: function}
+     *                  function is {
+                            i: number,
+                            s: number,
+                            p: number,
+                            inning: object,
+                            state: object,
+                            pitch: object,
+                            base: object,
+                            abort: false
+                        }
+
+     var base = o.base;
+     var pitch = o.pitch;
+     var state = o.state;
+     var inning = o.inning;
+
+
+     */
     self.forEach = function(types,callbacks){
         callbacks.pitch = callbacks.pitch || function(){};
         callbacks.state = callbacks.state || function(){};
@@ -264,7 +307,8 @@ function StorageController(){
                         p: p,
                         inning: self.innings[i],
                         state: self.innings[i].state[s],
-                        pitch: self.innings[i].state[s].pitches[p]
+                        pitch: self.innings[i].state[s].pitches[p],
+                        base: getBaseState(i,s,p)
                     });
                 });
 
@@ -300,7 +344,14 @@ function StorageController(){
         }
     };
 
-    self.onUpdatePitch = function(){};
+    self.storeState = function(callback){
+        self.request.setStorage(self.getData(),callback);
+    };
 
-    self.onUpdateState = function(){};
+    self.restoreState = function(callback){
+        self.request.getStorage(function(data){
+            self.setData(data);
+            callback();
+        });
+    };
 }

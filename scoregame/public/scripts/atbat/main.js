@@ -9,7 +9,7 @@ $('body').ready(function(){
     $scorepads['home'] = $scorepads.eq(1);
 
     var pitcherController = new PitchingController();
-    var inningController = new InningController(G.lineups,1);
+    var inningController = new InningController();
     var fielderController = new FieldController();
     var hitController = new HitController();
     var graphicsController = new GraphicsController();
@@ -22,21 +22,32 @@ $('body').ready(function(){
     var storageController = new StorageController();
     var ballInPlayController = new BallInPlayController();
     var gameLogController = new GameLogController();
+    var playerController = new PlayerController();
+    var scorepadController = new ScorePadController();
+
+
+    requestController.register(storageController);
 
     storageController.register(pitcherController);
     storageController.register(inningController);
     storageController.register(fielderController);
     storageController.register(hitController);
     storageController.register(graphicsController);
-    storageController.register(requestController);
     storageController.register(strikeController);
     storageController.register(outController);
     storageController.register(miscController);
     storageController.register(gameLogController);
+    storageController.register(playerController);
+    storageController.register(scorepadController);
 
-    //G._debug = {
-    //    storageController: storageController
-    //};
+    playerController.register(inningController);
+    playerController.register(fielderController);
+    playerController.register(gameLogController);
+
+    G._debug = {
+        storageController: storageController,
+        fielderController: fielderController
+    };
 
 
     var sleepData = {
@@ -86,6 +97,10 @@ $('body').ready(function(){
         $('.js-button-container[type=lineup]').click();
     }
 
+    function initScrollBar(){
+        $('.js-container-scrollbar').height($('.js-table-left-div').height()-52);
+    }
+
     function selectLineup(type){
         if (type == 'home')
             $('.js-button-lineup[team=home]').click();
@@ -113,8 +128,16 @@ $('body').ready(function(){
         sleep(function(){
             fielderController.clearMarks();
             inningController.nextBatter();
+
+            inningController.updateLineup();
+            var gameSet = inningController.getGameSet();
+            fielderController.setGameSet(gameSet);
+            fielderController.updateLineup();
+
+            scorepadController.update();
+
             // TODO: Fix this
-            requestController.storeState(function(){});
+            storageController.storeState(function(){});
         });
     }
 
@@ -127,12 +150,14 @@ $('body').ready(function(){
         fielderController.restore(gameSet);
         gameLogController.restore();
 
+        scorepadController.restore();
+
         selectLineup(gameSet.offenceLineup.type);
     }
 
     function tryRestoreFromServer(){
         if (G.gameStatus == 1) {
-            requestController.restoreState(function () {
+            storageController.restoreState(function () {
                 restore();
             });
         }
@@ -163,10 +188,14 @@ $('body').ready(function(){
 
     pitcherController.onBeforePitch = function(){
         miscController.enable(true);
+        hitController.enableParticular(true);
     };
 
     pitcherController.onPitch = function(){
+        inningController.updatePitchActors();
         inningController.addPitchScore('PC');
+        gameLogController.addPitchCount();
+        gameLogController.update();
         miscController.enable(false);
     };
 
@@ -204,7 +233,7 @@ $('body').ready(function(){
 
         requestController.setGameStatus(status, function(data){
             if (data.success){
-                requestController.storeState(function(){
+                storageController.storeState(function(){
                     if (!winner)
                         alert('The winner is undefined');
                     else if (winner == 'deadheat')
@@ -246,13 +275,20 @@ $('body').ready(function(){
         sleepNextBatter();
     };
 
-    hitController.onHitByPitch = function(){
-        inningController.addPitchScore('ER');
-        fielderController.doAutoBatterBase();
-        pitcherController.addHitPitch('HBP');
+    hitController.onPitchError = function(type){
+        if (type != 'CI')
+            inningController.addPitchScore('ER');
+        pitcherController.addHitPitch(type);
+        // TODO: Incorrect behavior: addHitPitch should call before doAutoBatterBase (onUpdatePitch)
+
+        if (type == 'BK')
+            fielderController.doBatterBaseForce(3,0);
+        else
+            fielderController.doAutoBatterBase();
+
         pitcherController.enable(false);
         enableButtons(false);
-        graphicsController.drawLabel('HBP');
+        graphicsController.drawLabel(type);
         sleepNextBatter();
     };
 
@@ -280,7 +316,7 @@ $('body').ready(function(){
         pitcherController.addOutPitch(type);
         hitController.enable(false);
 
-        if (type != 'SacF' && type != 'SacB')
+        if (type != 'SF' && type != 'SH')
             inningController.addBatterScore('AB');
 
         if (batters.length > 0) {
@@ -314,7 +350,7 @@ $('body').ready(function(){
         fielderController.storeBaseState([]);
         sleep(function(){
             if (inningController.tryDoNextGameSet())
-                requestController.storeState(function(){});
+                storageController.storeState(function(){});
         });
     };
 
@@ -377,7 +413,8 @@ $('body').ready(function(){
                             if (data.success){
                                 G.gameStatus = 1;
                                 inningController.startGame();
-                                requestController.storeState(function () {});
+                                scorepadController.restore();
+                                storageController.storeState(function () {});
                             }
                         });
                     }
@@ -429,9 +466,9 @@ $('body').ready(function(){
     };
 
     G.onRedirect = function(url){
-        if (G.gameStatus == 1) { // game in progress
+        if (G.gameStatus && G.gameStatus == 1) { // game in progress
             if (sleepData.lastHandle == -1) // not wait next
-                requestController.storeState(function () {
+                storageController.storeState(function () {
                     location = url;
                 });
         } else {
@@ -441,6 +478,7 @@ $('body').ready(function(){
 
     initContainerSwitching();
     initLineupSwitching();
+    initScrollBar();
 
     tryRestoreFromServer();
 

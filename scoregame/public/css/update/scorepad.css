@@ -43,3 +43,17 @@ table.ui-score td a button.ui-button{
 table.ui-score td a button.ui-button:hover{
     background-color: #055D31;
 }
+
+.ui-scorepad-controls {
+    color: #FFFFFF;
+    font-size: 30px;
+    height: 0;
+    position: relative;
+    top: -14px;
+    left: 258px;
+}
+
+.ui-scorepad-controls div{
+    position: absolute;
+    cursor: pointer;
+}

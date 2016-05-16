@@ -15,8 +15,8 @@ function OutController(){
     var outTypePermission = {
         'F':1,
         'GO':1,
-        'SacF':1,
-        'SacB':1,
+        'SF':1,
+        'SH':1,
         'FO':1,
         'TO':1,
         'DP':2,
@@ -36,11 +36,11 @@ function OutController(){
                     name: 'Ground Out',
                     callback: menuHandle
                 },
-                'SacF':{
+                'SF':{
                     name: 'Sac Fly',
                     callback: menuHandle
                 },
-                'SacB':{
+                'SH':{
                     name: 'Sac Bunt',
                     callback: menuHandle
                 },
@@ -93,12 +93,12 @@ function OutController(){
             return;
         }
 
-        if ((item == 'SacF' || item == 'SacB') && !isSacrificeAllowed()){
+        if ((item == 'SF' || item == 'SH') && !isSacrificeAllowed()){
             alert('You can not do this action. There is no one to sacrifice for or the team has 2 outs.');
             return;
         }
 
-        if (item == 'SacF' && !isSacrificeFlyAllowed()){
+        if (item == 'SF' && !isSacrificeFlyAllowed()){
             alert('You can not do this action. There is no one at 3B.');
             return;
         }
@@ -146,12 +146,12 @@ function OutController(){
     function removeIgnored(){
         if (errorFielders.indexOf(selectedFielderPositions[0]) != -1 &&
             (outType == 'F' ||
-            outType == 'SacF' ||
-            outType == 'SacB')){
+            outType == 'SF' ||
+            outType == 'SH')){
             selectedBatterPositions = _.without(selectedBatterPositions,0);
         }
 
-        if (errorFielders.indexOf(selectedFielderPositions[1]) != -1 && outType == 'SacB')
+        if (errorFielders.indexOf(selectedFielderPositions[1]) != -1 && outType == 'SH')
             selectedBatterPositions = _.without(selectedBatterPositions,0);
 
         selectedBatterPositions = _.difference(selectedBatterPositions, ignoredBatters);
@@ -184,6 +184,12 @@ function OutController(){
     function endOutFinished(){
         userShouldSelectType = false;
         isCoordinatesSet = false;
+
+        self.storage.updatePitch({
+            fielders: selectedFielderPositions,
+            batters: selectedBatterPositions
+        });
+
         self.onOut(outType, selectedFielderPositions, selectedBatterPositions);
         outType = null;
         self.enable(false);
@@ -262,24 +268,24 @@ function OutController(){
                 if (!!obj.object.attr('error'))
                     errorFielders.push(obj.position);
 
-                if ((outType == 'SacB') && selectedFielderPositions[0] !=3 ){
+                if ((outType == 'SH') && selectedFielderPositions[0] !=3 ){
                     selectedFielderPositions.push(3);
 
                     if (!!$('.ui-field-element[fielder][position="3"]').attr('error'))
                         errorFielders.push(3);
                 }
 
-                if (outType == 'SacB'){
+                if (outType == 'SH'){
                     self.onBatterBase();
                 }
 
-                if (outType == 'SacF'){
+                if (outType == 'SF'){
                     self.onBatterBase(3);
                 }
 
                 if (    outType == 'F' ||
-                        outType == 'SacF' ||
-                        outType == 'SacB'){
+                        outType == 'SF' ||
+                        outType == 'SH'){
                     selectedBatterPositions.push(0); // current batter
 
                     if (!!$('.ui-field-element[batter][position="0"]').attr('advanced'))

@@ -51,6 +51,12 @@ class Team extends Model
         })->toArray());
     }
 
+    public function getPlayerNumbers()
+    {
+        $players = $this->players;
+        return array_combine($players->pluck('idplayer')->toArray(), $players->pluck('Number')->toArray());
+    }
+
     public function getSimpleName()
     {
         return collect(mb_split(' ',$this->Name))->last();

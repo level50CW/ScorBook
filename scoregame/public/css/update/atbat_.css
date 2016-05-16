@@ -318,6 +318,10 @@ td.ui-table-command-player {
     text-align: left;
 }
 
+td.ui-table-command-player[substitution] {
+    padding-left: 24px;
+}
+
 .ui-table-command th:not(.ui-table-command-header) {
     width: 30px;
 }
@@ -839,4 +843,27 @@ div.ui-errors {
     height: 65px;
     background: #074B24;
     border: 1px solid #DB881F;
+}
+
+.ui-scorepad-controls {
+    color: #17A2F4;
+    font-size: 30px;
+    height: 0;
+    position: relative;
+    top: -5px;
+    left: 232px;
+}
+
+.ui-scorepad-controls div{
+    position: absolute;
+    cursor: pointer;
+}
+
+div.jspDrag{
+    background-color: #313131;
+    cursor: default;
+}
+
+div.jspTrack{
+    background-color: #202020;
 }

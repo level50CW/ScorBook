@@ -8,11 +8,11 @@ function StrikeController(){
             selector: '.js-button-k',
             trigger: 'left',
             items:{
-                'KL':{
+                'KC':{
                     name: 'Strikeout Looking',
                     callback: menuHandle
                 },
-                'KSW':{
+                'KS':{
                     name: 'Strikeout Swinging',
                     callback: menuHandle
                 }
